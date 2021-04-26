@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wirelessindustry",
+  "name": "Wireless Industry",
+  "description": "Wireless EU energy transfer, and some cool things",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ultramarine11"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

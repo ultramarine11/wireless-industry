@@ -1,0 +1,14 @@
+package ru.wirelesstools.item;
+
+import net.minecraft.item.Item;
+import ru.wirelesstools.MainWI;
+
+public class ItemGoldenWrench extends Item {
+
+	public ItemGoldenWrench() {
+		this.setCreativeTab(MainWI.tabwi);
+		this.setUnlocalizedName("goldenWrench");
+		this.setTextureName("wirelessvajra:itemGoldenWrench");
+		this.setMaxStackSize(64);
+	}
+}

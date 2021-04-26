@@ -1,0 +1,14 @@
+package ru.wirelesstools.item;
+
+import net.minecraft.item.Item;
+import ru.wirelesstools.MainWI;
+
+public class ItemEnderModule extends Item {
+	
+	public ItemEnderModule() {
+		this.setCreativeTab(MainWI.tabwi);
+		this.setUnlocalizedName("endermodule");
+		this.setTextureName("wirelessvajra:module_teleportation");
+		this.setMaxStackSize(64);
+	}
+}
