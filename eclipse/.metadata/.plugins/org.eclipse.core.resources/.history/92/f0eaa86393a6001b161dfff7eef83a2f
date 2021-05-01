@@ -1,0 +1,18 @@
+package ru.wirelesstools.container;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+
+public class ContainerXPSender extends Container {
+
+	public ContainerXPSender() {
+		
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+		
+		return false;
+	}
+
+}

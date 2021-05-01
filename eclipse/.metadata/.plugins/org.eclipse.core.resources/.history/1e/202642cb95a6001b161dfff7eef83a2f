@@ -1,0 +1,18 @@
+package ru.wirelesstools.gui;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+
+public class GuiXPSender extends GuiContainer {
+
+	public GuiXPSender() {
+		super();
+		
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		
+		
+	}
+
+}

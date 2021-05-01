@@ -171,8 +171,8 @@ public class MainWI {
 	public static Item endermodule;
 	public static Item wirelessmodule;
 	public static int hudPos = 1;
-	public static TickHandlerLV th;
-	public static CreativeTabLV tabwi = new CreativeTabLV();
+	public static TickHandlerWI th;
+	public static CreativeTabWI tabwi = new CreativeTabWI();
 
 	public static class FluidXP {
 
@@ -464,8 +464,9 @@ public class MainWI {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		th = new TickHandlerLV();
 		WIPacketHandler.load();
+		th = new TickHandlerWI();
+
 		ServerProxy.Init();
 		ClientProxy.Init();
 

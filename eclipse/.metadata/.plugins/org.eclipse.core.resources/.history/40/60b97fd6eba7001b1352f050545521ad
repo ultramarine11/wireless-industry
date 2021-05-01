@@ -1,0 +1,194 @@
+package ru.wirelesstools.tiles;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.tile.IEnergyStorage;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class TileWirelessMachinesChargerSelective extends TileEntity implements IEnergySink, IInventory {
+
+	public int[] chargecoords1 = new int[3];
+	public int[] chargecoords2 = new int[3];
+	public int[] chargecoords3 = new int[3];
+	public int[] chargecoords4 = new int[3];
+	public int[] chargecoords5 = new int[3];
+	public int[] chargecoords6 = new int[3];
+	public int[] chargecoords7 = new int[3];
+	public int[] chargecoords8 = new int[3];
+	
+	public List<IEnergySink> listofsinks = new ArrayList<>();
+
+	protected double maxStorage;
+	public double energy;
+	protected int tier;
+	public final String chargername;
+
+	public TileWirelessMachinesChargerSelective(int maxStorage, int tier, String name) {
+		this.energy = 0.0D;
+		this.maxStorage = maxStorage;
+		this.chargername = name;
+		this.tier = tier;
+
+	}
+	
+	public void addSinkToList(IEnergySink sink) {
+		
+		
+	}
+
+	public boolean setConnectorArrayToThis(int[] connectorarray) {
+		if (this.chargecoords1[0] == 0 && this.chargecoords1[1] == 0 && this.chargecoords1[2] == 0) {
+			this.chargecoords1 = connectorarray;
+			return true;
+		} else if (this.chargecoords2[0] == 0 && this.chargecoords2[1] == 0 && this.chargecoords2[2] == 0) {
+			this.chargecoords2 = connectorarray;
+			return true;
+		} else if (this.chargecoords3[0] == 0 && this.chargecoords3[1] == 0 && this.chargecoords3[2] == 0) {
+			this.chargecoords3 = connectorarray;
+			return true;
+		} else if (this.chargecoords4[0] == 0 && this.chargecoords4[1] == 0 && this.chargecoords4[2] == 0) {
+			this.chargecoords4 = connectorarray;
+			return true;
+		} else if (this.chargecoords5[0] == 0 && this.chargecoords5[1] == 0 && this.chargecoords5[2] == 0) {
+			this.chargecoords5 = connectorarray;
+			return true;
+		} else if (this.chargecoords6[0] == 0 && this.chargecoords6[1] == 0 && this.chargecoords6[2] == 0) {
+			this.chargecoords6 = connectorarray;
+			return true;
+		} else if (this.chargecoords7[0] == 0 && this.chargecoords7[1] == 0 && this.chargecoords7[2] == 0) {
+			this.chargecoords7 = connectorarray;
+			return true;
+		} else if (this.chargecoords8[0] == 0 && this.chargecoords8[1] == 0 && this.chargecoords8[2] == 0) {
+			this.chargecoords8 = connectorarray;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public int[] getCoordArrays(int number) {
+		switch (number) {
+		case 1:
+			return this.chargecoords1;
+		case 2:
+			return this.chargecoords2;
+		case 3:
+			return this.chargecoords3;
+		case 4:
+			return this.chargecoords4;
+		case 5:
+			return this.chargecoords5;
+		case 6:
+			return this.chargecoords6;
+		case 7:
+			return this.chargecoords7;
+		case 8:
+			return this.chargecoords8;
+		default:
+			return new int[0];
+		}
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity arg0, ForgeDirection arg1) {
+
+		return true;
+	}
+
+	@Override
+	public int getSizeInventory() {
+
+		return 0;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int p_70301_1_) {
+
+		return null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+
+		return null;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+
+	}
+
+	@Override
+	public String getInventoryName() {
+
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+
+		return 0;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+
+		return player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public void openInventory() {
+
+	}
+
+	@Override
+	public void closeInventory() {
+
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+
+		return true;
+	}
+
+	@Override
+	public double getDemandedEnergy() {
+
+		return (double) this.maxStorage - this.energy;
+	}
+
+	@Override
+	public int getSinkTier() {
+
+		return this.tier;
+	}
+
+	@Override
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+		if (this.energy >= (double) this.maxStorage) {
+			return amount;
+		}
+		this.energy += amount;
+		return 0.0;
+	}
+
+}

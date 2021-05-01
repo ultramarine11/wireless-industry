@@ -189,7 +189,7 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
 
-		return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
+		return player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override

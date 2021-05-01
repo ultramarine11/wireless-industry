@@ -23,37 +23,25 @@ import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 public class WirelessUtil {
 
 	public static void chargeItemEU(EntityPlayer player, IWirelessCharger tile, ItemStack currentItemStackEU) {
-
-		tile.decreaseEnergy(ElectricItem.manager.charge(currentItemStackEU, tile.getCurrentEnergyInCharger(),
-				Integer.MAX_VALUE, false, false));
+		if (ElectricItem.manager.charge(currentItemStackEU, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true,
+				true) > 0) {
+			tile.decreaseEnergy(ElectricItem.manager.charge(currentItemStackEU, tile.getCurrentEnergyInCharger(),
+					Integer.MAX_VALUE, false, false));
+		}
 	}
 
 	public static void chargeItemRF(EntityPlayer player, IWirelessCharger tile, ItemStack currentItemStackRF) {
 		IEnergyContainerItem item = (IEnergyContainerItem) currentItemStackRF.getItem();
 		int amountRfCanBeReceived = item.receiveEnergy(currentItemStackRF, Integer.MAX_VALUE, true);
-		double chargeOfTileRF = tile.getCurrentEnergyInCharger() * ConfigWI.EuToRfmultiplier;
+		if (amountRfCanBeReceived > 0) {
+			double chargeOfTileRF = tile.getCurrentEnergyInCharger() * ConfigWI.EuToRfmultiplier;
 
-		double realSentEnergyRF = Math.min(chargeOfTileRF, amountRfCanBeReceived);
-		double drainedFromTile = realSentEnergyRF / ConfigWI.EuToRfmultiplier;
+			double realSentEnergyRF = Math.min(chargeOfTileRF, amountRfCanBeReceived);
+			double drainedFromTile = realSentEnergyRF / ConfigWI.EuToRfmultiplier;
 
-		item.receiveEnergy(currentItemStackRF, (int) realSentEnergyRF, false);
-		tile.decreaseEnergy(drainedFromTile);
-	}
-
-	private static void sendEnergyToElectricIC2Machine(IWirelessMachineCharger charger,
-			TileEntityElectricMachine machine) {
-		double sentreal = Math.min(EnergyNet.instance.getPowerFromTier(machine.getSinkTier()),
-				charger.getChargerEnergy());
-		machine.energy += sentreal;
-		charger.decreaseEnergy(sentreal);
-	}
-
-	private static void sendEnergyToElectricIUStorage(IWirelessMachineCharger charger,
-			TileEntityElectricBlock storage) {
-		double sentreal = Math.min(EnergyNet.instance.getPowerFromTier(storage.getSinkTier()),
-				charger.getChargerEnergy());
-		storage.energy += sentreal;
-		charger.decreaseEnergy(sentreal);
+			item.receiveEnergy(currentItemStackRF, (int) realSentEnergyRF, false);
+			tile.decreaseEnergy(drainedFromTile);
+		}
 	}
 
 	private static void sendEnergyToEnergySink(IWirelessMachineCharger charger, IEnergySink sink) {
@@ -85,25 +73,6 @@ public class WirelessUtil {
 		}
 
 		return ret;
-	}
-
-	public static void iterateIEnergySinkTilesQGen(WirelessQuantumGeneratorBase qgen) {
-		if (!qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap.isEmpty()) {
-			for (TileEntity tile : (Collection<TileEntity>) qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
-					qgen.zCoord).chunkTileEntityMap.values()) {
-				if (tile != null && tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
-					IEnergySink sink = (IEnergySink) tile;
-					if (sink.getDemandedEnergy() > 0) {
-						sink.injectEnergy(ForgeDirection.UNKNOWN,
-								EnergyNet.instance.getPowerFromTier(sink.getSinkTier()), 1);
-					}
-
-				}
-
-			}
-
-		}
-
 	}
 
 	public static void iterateIEnergySinkTiles(TileWirelessMachinesChargerBase charger) {

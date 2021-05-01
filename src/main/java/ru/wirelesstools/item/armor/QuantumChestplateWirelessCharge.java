@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
+import ru.wirelesstools.utils.MiscUtils;
 
 public class QuantumChestplateWirelessCharge extends ItemArmor implements IElectricItem, IMetalArmor, ISpecialArmor {
 
@@ -148,24 +149,14 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 			if (current.getItem() instanceof QuantumChestplateWirelessCharge)
 				continue;
 			if (current.getItem() instanceof IElectricItem)
-				this.chargeEUItem(current, thisarmor);
+				MiscUtils.chargeEUItemFromArmor(current, thisarmor);
 		}
+
 		for (ItemStack current : player.inventory.mainInventory) {
 			if (current == null)
 				continue;
 			if (current.getItem() instanceof IElectricItem)
-				this.chargeEUItem(current, thisarmor);
-		}
-	}
-
-	private void chargeEUItem(ItemStack stackToCharge, ItemStack thisarmor) {
-		if (stackToCharge.getItem() == Ic2Items.debug.getItem())
-			return;
-
-		if (ElectricItem.manager.getCharge(thisarmor) > 0.0) {
-			ElectricItem.manager.discharge(thisarmor,
-					ElectricItem.manager.charge(stackToCharge, Double.MAX_VALUE, Integer.MAX_VALUE, false, false),
-					Integer.MAX_VALUE, true, false, false);
+				MiscUtils.chargeEUItemFromArmor(current, thisarmor);
 		}
 	}
 

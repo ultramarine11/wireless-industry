@@ -96,6 +96,7 @@ key_key.placeItem:25
 key_key.toolConfig:46
 key_key.toolProfileChange:43
 key_key.toggleFlight:0
+key_key.GuiWC.gui1:21
 key_key.cofh.empower:47
 key_key.cofh.multimode:46
 soundCategory_master:1.0

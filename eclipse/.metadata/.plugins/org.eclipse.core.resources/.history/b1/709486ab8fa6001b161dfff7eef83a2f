@@ -1,0 +1,9 @@
+package ru.wirelesstools.gui;
+
+public class GuiXPSender {
+
+	public GuiXPSender() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

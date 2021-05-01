@@ -1,0 +1,9 @@
+package ru.wirelesstools.container;
+
+public class ContainerXPSender {
+
+	public ContainerXPSender() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
