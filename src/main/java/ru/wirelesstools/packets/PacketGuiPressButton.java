@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-public class PacketGuiPressButton extends IPacketLV {
+public class PacketGuiPressButton extends IPacketWI {
 
 	public int dimID;
 	public int x;
@@ -42,7 +42,7 @@ public class PacketGuiPressButton extends IPacketLV {
 		pgpb.z = te.zCoord;
 		pgpb.dimID = (te.getWorldObj()).provider.dimensionId;
 		pgpb.buttonID = buttonID;
-		LVPacketHandler.sendToServer(pgpb);
+		WIPacketHandler.sendToServer(pgpb);
 	}
 
 	public void execute() {

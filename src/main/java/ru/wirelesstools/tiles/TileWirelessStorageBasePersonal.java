@@ -28,12 +28,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import ru.wirelesstools.IWirelessReciever;
 import ru.wirelesstools.container.ContainerWSBPersonal;
 import ru.wirelesstools.packets.IHasButton;
 
-public class TileWirelessStorageBasePersonal extends TileEntity implements IEnergyStorage, IEnergySource,
-		IWirelessReciever, IHasButton, IPersonalBlock, IWirelessStorage, INetworkDataProvider, INetworkUpdateListener {
+public class TileWirelessStorageBasePersonal extends TileEntity implements IEnergyStorage, IEnergySource, IHasButton,
+		IPersonalBlock, IWirelessStorage, INetworkDataProvider, INetworkUpdateListener {
 
 	public int maxStorage;
 	public double energy;
@@ -123,7 +122,7 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 
 			this.markDirty();
 		}
-		
+
 		this.markDirty();
 
 	}
@@ -148,7 +147,7 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 		if (this.loaded) {
 			this.onUnloaded();
 		}
-		
+
 		this.isconnected = false;
 		super.invalidate();
 	}
@@ -235,7 +234,7 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 
 	@Override
 	public void drawEnergy(double amount) {
-		
+
 		this.energy -= amount;
 	}
 

@@ -70,11 +70,7 @@ public class TileXPSenderElectric extends TileEntity implements IEnergySink, IIn
 
 		if (this.worldObj.getTotalWorldTime() % 20 == 0) {
 
-			if (this.energy > this.getTotalSpentEUValue()) {
-
-				ExperienceUtils.sendXPToPlayersAround(this, this.xradius, this.yradius, this.zradius, this.pointsxp);
-				this.energy -= this.getTotalSpentEUValue();
-			}
+			this.sendXPToPlayersAround(maxStorage, energyperpoint, zradius, pointsxp);
 		}
 	}
 

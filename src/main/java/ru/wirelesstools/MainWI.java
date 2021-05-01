@@ -87,7 +87,7 @@ import ru.wirelesstools.itemblock.ItemBlockWSingSPPersonal;
 import ru.wirelesstools.itemblock.ItemBlockWSpSPPersonal;
 import ru.wirelesstools.itemblock.ItemBlockWUHSP;
 import ru.wirelesstools.itemblock.ItemBlockWirelessStoragePersonal;
-import ru.wirelesstools.packets.LVPacketHandler;
+import ru.wirelesstools.packets.WIPacketHandler;
 import ru.wirelesstools.proxy.ClientProxy;
 import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.TileEntityWirelessChargerPrivate;
@@ -165,7 +165,7 @@ public class MainWI {
 	public static Block wirelessmachinescharger;
 
 	public static Block expgen;
-	
+
 	public static Block blockwirelessqgen;
 
 	public static Item endermodule;
@@ -275,10 +275,11 @@ public class MainWI {
 			ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver (Storage)", "Storage", 100000000)
 					.getInt(100000000);
 			ConfigWI.wstoragetier = config.get("Wireless Receiver (Storage)", "Tier", 4).getInt(4);
-			
+
 			ConfigWI.wirelessqgenoutput = config.get("Wireless Quantum Generator", "Output", 32768).getInt(32768);
 			ConfigWI.wirelessqgentier = config.get("Wireless Quantum Generator", "Tier", 4).getInt(4);
-			ConfigWI.wirelessqgentransfer = config.get("Wireless Quantum Generator", "Wireless transfer limit", 32768).getInt(32768);
+			ConfigWI.wirelessqgentransfer = config.get("Wireless Quantum Generator", "Wireless transfer limit", 32768)
+					.getInt(32768);
 
 			ConfigWI.chargerpublicradius = config
 					.get("Wireless Chargers", "Radius of wireless charging (public), blocks", 25).getInt(25);
@@ -360,20 +361,30 @@ public class MainWI {
 		blockcreativepedestal = new BlockCreativePedestal("creativepedestal", Material.rock);
 
 		wirelessmachinescharger = new BlockMachinesCharger("machinescharger");
-		
+
 		blockwirelessqgen = new BlockWirelessQuantumGenerator("wirelessqgen");
 
 		expgen = new BlockExpGen("expGen", Material.rock);
 		iridMach = new BlockIridiumMachine();
 
-		if (!Loader.isModLoaded("OpenBlocks")) {
+		/*
+		 * if (!Loader.isModLoaded("OpenBlocks")) {
+		 * 
+		 * FluidRegistry.registerFluid(FluidXP.xpJuice);
+		 * FluidXP.xpJuice.setIcons(TextureHooks.Icons.xpJuiceStill,
+		 * TextureHooks.Icons.xpJuiceFlowing);
+		 * 
+		 * } else {
+		 * 
+		 * FluidXP.xpJuice = FluidRegistry.getFluid("xpjuice"); }
+		 */
+		if (FluidRegistry.isFluidRegistered("xpjuice")) {
+
+			FluidXP.xpJuice = FluidRegistry.getFluid("xpjuice");
+		} else {
 
 			FluidRegistry.registerFluid(FluidXP.xpJuice);
 			FluidXP.xpJuice.setIcons(TextureHooks.Icons.xpJuiceStill, TextureHooks.Icons.xpJuiceFlowing);
-
-		} else {
-
-			FluidXP.xpJuice = FluidRegistry.getFluid("xpjuice");
 		}
 
 		GameRegistry.registerBlock(wirelessasppersonal, ItemBlockWASP.class, "WASPPersonal");
@@ -411,7 +422,7 @@ public class MainWI {
 		GameRegistry.registerBlock(blockcreativepedestal, ItemBlockCreativePedestal.class, "CreativePedestal");
 
 		GameRegistry.registerBlock(wirelessmachinescharger, ItemBlockMachCharger.class, "MachinesCharger");
-		
+
 		GameRegistry.registerBlock(blockwirelessqgen, ItemBlockWQGen.class, "WirelessQGen");
 
 		GameRegistry.registerBlock(expgen, ItemBlockEG.class, "ExpGen");
@@ -425,7 +436,7 @@ public class MainWI {
 		GameRegistry.registerTileEntity(TileWirelessStoragePersonal1.class, "TileStorageWireless1Personal");
 
 		GameRegistry.registerTileEntity(TileMachinesCharger.class, "TileEntityMachinesCharger");
-		
+
 		GameRegistry.registerTileEntity(WirelessQGen.class, "TileEntityWirelessQGen");
 
 		GameRegistry.registerTileEntity(TileWirelessASP.class, "TileWirelessASPPersonal");
@@ -444,17 +455,17 @@ public class MainWI {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 	}
-	
+
 	@EventHandler
-    public void serverStart(FMLServerStartingEvent event) {
-		
+	public void serverStart(FMLServerStartingEvent event) {
+
 		proxy.serverStart(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		th = new TickHandlerLV();
-		LVPacketHandler.load();
+		WIPacketHandler.load();
 		ServerProxy.Init();
 		ClientProxy.Init();
 
@@ -601,12 +612,10 @@ public class MainWI {
 				new Object[] { " A ", "BCB", " A ", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
 						IC2Items.getItem("advancedCircuit"), Character.valueOf('C'),
 						IC2Items.getItem("iridiumPlate") });
-		
+
 		GameRegistry.addRecipe(new ItemStack(quantumVampBowEu, 1),
-				new Object[] { " A ", "BCB", " A ",
-						Character.valueOf('A'), IC2Items.getItem("advancedCircuit"),
-						Character.valueOf('B'), new ItemStack(endermodule),
-						Character.valueOf('C'),	Items.bow });
+				new Object[] { " A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedCircuit"),
+						Character.valueOf('B'), new ItemStack(endermodule), Character.valueOf('C'), Items.bow });
 
 		GameRegistry.addRecipe(new ItemStack(enderQuantumHelmet, 1, OreDictionary.WILDCARD_VALUE),
 				new Object[] { "   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(

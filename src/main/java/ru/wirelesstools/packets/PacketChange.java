@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class PacketChange extends IPacketLV {
+public class PacketChange extends IPacketWI {
 
 	private int x;
 	private int y;
@@ -66,7 +66,7 @@ public class PacketChange extends IPacketLV {
 		changeState.eventID = eventID;
 		changeState.nbtData = nbtData;
 
-		LVPacketHandler.sendToAllPlayers(changeState);
+		WIPacketHandler.sendToAllPlayers(changeState);
 
 	}
 

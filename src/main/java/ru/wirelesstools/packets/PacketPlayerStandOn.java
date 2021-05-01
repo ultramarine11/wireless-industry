@@ -8,7 +8,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import ru.wirelesstools.fluidmachines.TileExpGen;
 
-public class PacketPlayerStandOn extends IPacketLV {
+public class PacketPlayerStandOn extends IPacketWI {
 
 	public int dimID;
 	public int x;
@@ -43,7 +43,7 @@ public class PacketPlayerStandOn extends IPacketLV {
 		pgpb.z = te.zCoord;
 		pgpb.dimID = (te.getWorldObj()).provider.dimensionId;
 		pgpb.active = bool;
-		LVPacketHandler.sendToServer(pgpb);
+		WIPacketHandler.sendToServer(pgpb);
 	}
 
 	public void execute() {
