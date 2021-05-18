@@ -1,10 +1,12 @@
 package ru.wirelesstools.tiles;
 
+import ru.wirelesstools.config.ConfigWI;
+
 public class TileXPSender extends TileXPSenderElectric {
 
 	public TileXPSender() {
-		super(2000000, 4, "xpsenderbase", 2, 10000);
-		
+		super(ConfigWI.maxstorageXPSender, ConfigWI.tierXPSender, "xpsender1.name", ConfigWI.amountXPsent, ConfigWI.energyperxppointXPSender);
+
 	}
 
 }

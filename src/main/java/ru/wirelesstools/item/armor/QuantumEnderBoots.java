@@ -107,7 +107,6 @@ public class QuantumEnderBoots extends ItemArmor implements IElectricItem, IMeta
 									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared"),
 							new Object[0]));
 				}
-
 			}
 		}
 		return stack;
@@ -178,6 +177,14 @@ public class QuantumEnderBoots extends ItemArmor implements IElectricItem, IMeta
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner2"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.you.can.clear"));
+			if (player.worldObj.provider.dimensionId == 1) {
+				list.add(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
+						+ String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
+			} else {
+				list.add(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
+			}
 		}
 	}
 
@@ -191,20 +198,22 @@ public class QuantumEnderBoots extends ItemArmor implements IElectricItem, IMeta
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
-    public void onEntityLivingFallEvent(LivingFallEvent event) {
-        EntityLivingBase entity;
-        ItemStack armor;
-        if (IC2.platform.isSimulating() && event.entity instanceof EntityLivingBase && (armor = (entity = (EntityLivingBase)event.entity).getEquipmentInSlot(1)) != null && armor.getItem() == this) {
-            int fallDamage = Math.max((int)event.distance - 10, 0);
-            double energyCost = this.getEnergyPerDamage() * fallDamage / 2;
-            if (energyCost <= ElectricItem.manager.getCharge(armor)) {
-                ElectricItem.manager.discharge(armor, energyCost, Integer.MAX_VALUE, true, false, false);
-                event.setCanceled(true);
-            }
-        }
-    }
+	public void onEntityLivingFallEvent(LivingFallEvent event) {
+		EntityLivingBase entity;
+		ItemStack armor;
+		if (IC2.platform.isSimulating() && event.entity instanceof EntityLivingBase
+				&& (armor = (entity = (EntityLivingBase) event.entity).getEquipmentInSlot(1)) != null
+				&& armor.getItem() == this) {
+			int fallDamage = Math.max((int) event.distance - 10, 0);
+			double energyCost = this.getEnergyPerDamage() * fallDamage / 2;
+			if (energyCost <= ElectricItem.manager.getCharge(armor)) {
+				ElectricItem.manager.discharge(armor, energyCost, Integer.MAX_VALUE, true, false, false);
+				event.setCanceled(true);
+			}
+		}
+	}
 
 	public boolean isRepairable() {
 
@@ -331,7 +340,7 @@ public class QuantumEnderBoots extends ItemArmor implements IElectricItem, IMeta
 	@Override
 	public GameProfile getArmorOwner(ItemStack stack) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		
+
 		return NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"));
 	}
 

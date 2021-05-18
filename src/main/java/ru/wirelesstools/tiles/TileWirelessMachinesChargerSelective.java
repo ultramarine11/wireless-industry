@@ -9,24 +9,16 @@ import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileWirelessMachinesChargerSelective extends TileEntity implements IEnergySink, IInventory {
 
-	public int[] chargecoords1 = new int[3];
-	public int[] chargecoords2 = new int[3];
-	public int[] chargecoords3 = new int[3];
-	public int[] chargecoords4 = new int[3];
-	public int[] chargecoords5 = new int[3];
-	public int[] chargecoords6 = new int[3];
-	public int[] chargecoords7 = new int[3];
-	public int[] chargecoords8 = new int[3];
+	private List<TileEntity> listofsinks = new ArrayList<>();
 
-	public List<TileEntity> listofsinks = new ArrayList<>();
-
-	protected double maxStorage;
+	protected int maxStorage;
 	public double energy;
 	protected int tier;
 	public final String chargername;
@@ -36,74 +28,45 @@ public class TileWirelessMachinesChargerSelective extends TileEntity implements 
 		this.maxStorage = maxStorage;
 		this.chargername = name;
 		this.tier = tier;
-
 	}
 
-	public boolean tryAddMachineToList(World world, int x, int y, int z) {
-		if (this.listofsinks.size() < 16) {
+	public enum AddResult {
+		ADDED, ALREADY_EXIST, NO_FREE_SLOT;
+	}
+
+	public AddResult tryAddMachineToList(World world, int x, int y, int z) {
+		if (this.listofsinks.isEmpty()) {
+			this.listofsinks.add(world.getTileEntity(x, y, z));
+			return AddResult.ADDED;
+		} else if (this.listofsinks.size() < 16) {
 			for (TileEntity tileinlist : this.listofsinks) {
-				if (tileinlist.xCoord != x && tileinlist.yCoord != y && tileinlist.zCoord != z) {
-					continue;
+				if (tileinlist != null) {
+					if (tileinlist.xCoord != x || tileinlist.yCoord != y || tileinlist.zCoord != z) {
+						continue;
+					}
+					return AddResult.ALREADY_EXIST;
 				}
-				this.listofsinks.add(world.getTileEntity(x, y, z));
-				return true;
 			}
-		}
-
-		return false;
-	}
-
-	public boolean setConnectorArrayToThis(int[] connectorarray) {
-		if (this.chargecoords1[0] == 0 && this.chargecoords1[1] == 0 && this.chargecoords1[2] == 0) {
-			this.chargecoords1 = connectorarray;
-			return true;
-		} else if (this.chargecoords2[0] == 0 && this.chargecoords2[1] == 0 && this.chargecoords2[2] == 0) {
-			this.chargecoords2 = connectorarray;
-			return true;
-		} else if (this.chargecoords3[0] == 0 && this.chargecoords3[1] == 0 && this.chargecoords3[2] == 0) {
-			this.chargecoords3 = connectorarray;
-			return true;
-		} else if (this.chargecoords4[0] == 0 && this.chargecoords4[1] == 0 && this.chargecoords4[2] == 0) {
-			this.chargecoords4 = connectorarray;
-			return true;
-		} else if (this.chargecoords5[0] == 0 && this.chargecoords5[1] == 0 && this.chargecoords5[2] == 0) {
-			this.chargecoords5 = connectorarray;
-			return true;
-		} else if (this.chargecoords6[0] == 0 && this.chargecoords6[1] == 0 && this.chargecoords6[2] == 0) {
-			this.chargecoords6 = connectorarray;
-			return true;
-		} else if (this.chargecoords7[0] == 0 && this.chargecoords7[1] == 0 && this.chargecoords7[2] == 0) {
-			this.chargecoords7 = connectorarray;
-			return true;
-		} else if (this.chargecoords8[0] == 0 && this.chargecoords8[1] == 0 && this.chargecoords8[2] == 0) {
-			this.chargecoords8 = connectorarray;
-			return true;
+			this.listofsinks.add(world.getTileEntity(x, y, z));
+			return AddResult.ADDED;
 		} else {
-			return false;
+			return AddResult.NO_FREE_SLOT;
 		}
 	}
-
-	public int[] getCoordArrays(int number) {
-		switch (number) {
-		case 1:
-			return this.chargecoords1;
-		case 2:
-			return this.chargecoords2;
-		case 3:
-			return this.chargecoords3;
-		case 4:
-			return this.chargecoords4;
-		case 5:
-			return this.chargecoords5;
-		case 6:
-			return this.chargecoords6;
-		case 7:
-			return this.chargecoords7;
-		case 8:
-			return this.chargecoords8;
-		default:
-			return new int[0];
-		}
+	
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setDouble("energy", this.energy);
+	}
+	
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		this.energy = nbttagcompound.getDouble("energy");
+	}
+	
+	public int getTileElectricCount() {
+		
+		return this.listofsinks.size();
 	}
 
 	@Override

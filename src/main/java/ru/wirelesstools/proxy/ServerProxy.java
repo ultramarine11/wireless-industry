@@ -13,6 +13,7 @@ import ru.wirelesstools.tiles.TileVajraChargerElectric;
 import ru.wirelesstools.tiles.TileWPBasePersonal;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
 import ru.wirelesstools.tiles.TileWirelessStorageBasePersonal;
+import ru.wirelesstools.tiles.TileXPSenderElectric;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public class ServerProxy implements IGuiHandler {
@@ -53,7 +54,7 @@ public class ServerProxy implements IGuiHandler {
 
 			if (te instanceof TileEntityWirelessCharger) {
 
-				return ((TileEntityWirelessCharger) te).getGuiContainer(player.inventory);
+				return ((TileEntityWirelessCharger) te).getGuiContainer(player);
 			}
 
 			if (te instanceof TileWirelessMachinesChargerBase) {
@@ -64,6 +65,11 @@ public class ServerProxy implements IGuiHandler {
 			if (te instanceof WirelessQuantumGeneratorBase) {
 
 				return ((WirelessQuantumGeneratorBase) te).getGuiContainer(player.inventory);
+			}
+			
+			if(te instanceof TileXPSenderElectric) {
+				
+				return ((TileXPSenderElectric) te).getGuiContainer(player);
 			}
 
 		}

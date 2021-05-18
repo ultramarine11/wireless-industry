@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="ru.wirelesstools.tiles.TileWirelessMachinesChargerSelective.AddResult"/>
+    <fullyQualifiedTypeName name="ic2.core.ContainerFullInv"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="ic2.core.GuiIC2"/>
+    <fullyQualifiedTypeName name="org.lwjgl.opengl.GL11"/>
+    <fullyQualifiedTypeName name="net.minecraft.util.StatCollector"/>
+    <fullyQualifiedTypeName name="ic2.core.IHasGui"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.gui.GuiXPSenderNew"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.container.ContainerXPSenderNew"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.tiles.TileXPSenderElectric"/>
+    <fullyQualifiedTypeName name="net.minecraft.block.BlockContainer"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.blocks.BlockXPSenderElectric"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.itemblock.ItemBlockXPSender"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.tiles.TileXPSender"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.gui.GuiButton"/>
+    <fullyQualifiedTypeName name="ic2.core.IC2"/>
+    <fullyQualifiedTypeName name="ic2.api.network.INetworkClientTileEntityEventListener"/>
+    <fullyQualifiedTypeName name="ic2.core.block.invslot.InvSlot"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.item.ItemPlayerModule"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.tiles.TileEntityWirelessCharger"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.gui.GuiWChargerNew"/>
+    <fullyQualifiedTypeName name="ru.wirelesstools.container.ContainerWChargerNew"/>
+    <fullyQualifiedTypeName name="net.minecraft.util.EnumChatFormatting"/>
+</qualifiedTypeNameHistroy>

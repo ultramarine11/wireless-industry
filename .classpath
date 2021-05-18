@@ -315,9 +315,9 @@
 	<classpathentry kind="lib" path="libs/CoFHCore-[1.7.10]3.1.4-329 (1)-deobf.jar"/>
 	<classpathentry kind="lib" path="libs/Draconic-Evolution-1.7.10-1.0.2h-deobf.jar"/>
 	<classpathentry kind="lib" path="libs/GraviSuite-1.7.10-2.0.3-deobf.jar"/>
-	<classpathentry kind="lib" path="libs/IndustrialUpgrade-1.5RC5-latest-deobf.jar"/>
 	<classpathentry kind="lib" path="libs/NotEnoughItems-1.7.10-2.0.0-GTNH-universal-deobf.jar"/>
 	<classpathentry kind="lib" path="libs/RedstoneArsenal-[1.7.10]1.1.2-92-deobf.jar"/>
 	<classpathentry kind="lib" path="libs/EnergyAdditions_3.4.2-deobf.jar"/>
+	<classpathentry kind="lib" path="libs/IndustrialUpgrade-1.5RC6-deobf.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

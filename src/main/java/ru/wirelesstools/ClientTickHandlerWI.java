@@ -19,7 +19,6 @@ public class ClientTickHandlerWI {
 	public static Minecraft mc = FMLClientHandler.instance().getClient();
 
 	public static void onTickRender() {
-
 		EntityClientPlayerMP entityClientPlayer = mc.thePlayer;
 		if (mc.theWorld != null && mc.inGameHasFocus && !mc.gameSettings.showDebugInfo) {
 			ItemStack stack = entityClientPlayer.getHeldItem();

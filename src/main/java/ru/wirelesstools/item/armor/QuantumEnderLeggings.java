@@ -33,7 +33,8 @@ import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 
-public class QuantumEnderLeggings extends ItemArmor implements IElectricItem, IMetalArmor, ISpecialArmor, IPrivateArmor {
+public class QuantumEnderLeggings extends ItemArmor
+		implements IElectricItem, IMetalArmor, ISpecialArmor, IPrivateArmor {
 
 	public double maxCharge;
 	protected double transferLimit;
@@ -123,11 +124,10 @@ public class QuantumEnderLeggings extends ItemArmor implements IElectricItem, IM
 					ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
 				}
 			}
-		}
-		else {
+		} else {
 			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) != null
 					&& NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-				
+
 				if (ElectricItem.manager.canUse(stack, 1000.0) && (player.onGround || player.isInWater())
 						&& IC2.keyboard.isForwardKeyDown(player)
 						&& (player.isSprinting() || IC2.keyboard.isBoostKeyDown(player))) {
@@ -168,6 +168,14 @@ public class QuantumEnderLeggings extends ItemArmor implements IElectricItem, IM
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner2"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.you.can.clear"));
+			if (player.worldObj.provider.dimensionId == 1) {
+				list.add(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
+						+ String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
+			} else {
+				list.add(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
+			}
 		}
 	}
 
@@ -219,7 +227,7 @@ public class QuantumEnderLeggings extends ItemArmor implements IElectricItem, IM
 		int energyPerDamage = this.getEnergyPerDamage();
 		int damageLimit = Integer.MAX_VALUE;
 		if (energyPerDamage > 0) {
-			damageLimit = (int)Math.min(damageLimit, 25.0 * ElectricItem.manager.getCharge(armor) / energyPerDamage);
+			damageLimit = (int) Math.min(damageLimit, 25.0 * ElectricItem.manager.getCharge(armor) / energyPerDamage);
 		}
 		if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
 				|| (player instanceof EntityPlayer && !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
@@ -301,7 +309,7 @@ public class QuantumEnderLeggings extends ItemArmor implements IElectricItem, IM
 	@Override
 	public GameProfile getArmorOwner(ItemStack stack) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		
+
 		return NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"));
 	}
 

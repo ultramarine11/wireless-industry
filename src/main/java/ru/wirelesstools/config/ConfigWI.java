@@ -94,5 +94,11 @@ public class ConfigWI {
 	public static int wirelessqgentier;
 	public static int wirelessqgenoutput;
 	public static int wirelessqgentransfer;
+	
+	public static int secondsXPSender;
+	public static int amountXPsent;
+	public static int maxstorageXPSender;
+	public static int energyperxppointXPSender;
+	public static int tierXPSender;
 
 }

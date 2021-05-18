@@ -17,6 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerSelective;
+import ru.wirelesstools.tiles.TileWirelessMachinesChargerSelective.AddResult;
 
 public class WirelessConnector extends Item {
 
@@ -51,38 +52,6 @@ public class WirelessConnector extends Item {
 		if (!world.isRemote) {
 			NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
 			TileEntity te = world.getTileEntity(x, y, z);
-			/*
-			 * if (te != null && te instanceof TileEntityElectricMachine) {
-			 * TileEntityElectricMachine tileelectric = (TileEntityElectricMachine) te;
-			 * int[] arraycoord = { tileelectric.xCoord, tileelectric.yCoord,
-			 * tileelectric.zCoord }; nbt.setIntArray("coordarray", arraycoord);
-			 * player.addChatMessage(new
-			 * ChatComponentTranslation(EnumChatFormatting.DARK_GRAY +
-			 * StatCollector.translateToLocal("chat.message.connector.te.binded"), new
-			 * Object[0])); return true; }
-			 */
-			if (te != null && te instanceof TileWirelessMachinesChargerSelective) {
-				TileWirelessMachinesChargerSelective charger = (TileWirelessMachinesChargerSelective) te;
-				int[] arraycoordlocal = nbt.getIntArray("coordarray");
-				if (arraycoordlocal.length == 3) {
-					if (this.checkIsPresentTE(charger, arraycoordlocal[0], arraycoordlocal[1], arraycoordlocal[2])) {
-						player.addChatMessage(new ChatComponentTranslation(
-								StatCollector.translateToLocal("chat.message.connector.te.already.exists"),
-								new Object[0]));
-						return true;
-					}
-
-					if (charger.setConnectorArrayToThis(arraycoordlocal)) {
-						player.addChatMessage(new ChatComponentTranslation(
-								StatCollector.translateToLocal("chat.message.connected.successfully"), new Object[0]));
-					} else {
-						player.addChatMessage(new ChatComponentTranslation(
-								StatCollector.translateToLocal("chat.message.connector.no.free.slot"), new Object[0]));
-					}
-					return true;
-				}
-			}
-
 			if (te != null && te instanceof TileEntityElectricMachine) {
 				TileEntityElectricMachine machine = (TileEntityElectricMachine) te;
 				nbt.setInteger("xcoord", machine.xCoord);
@@ -95,45 +64,24 @@ public class WirelessConnector extends Item {
 
 			if (te != null && te instanceof TileWirelessMachinesChargerSelective) {
 				TileWirelessMachinesChargerSelective charger = (TileWirelessMachinesChargerSelective) te;
-				if (charger.tryAddMachineToList(world, nbt.getInteger("xcoord"), nbt.getInteger("ycoord"),
+				switch (charger.tryAddMachineToList(world, nbt.getInteger("xcoord"), nbt.getInteger("ycoord"),
 						nbt.getInteger("zcoord"))) {
+				case ADDED:
 					player.addChatMessage(new ChatComponentTranslation(
 							StatCollector.translateToLocal("chat.message.connected.successfully"), new Object[0]));
+					break;
+				case ALREADY_EXIST:
+					player.addChatMessage(new ChatComponentTranslation(
+							StatCollector.translateToLocal("chat.message.connector.te.already.exists"), new Object[0]));
+					break;
+				case NO_FREE_SLOT:
+					player.addChatMessage(new ChatComponentTranslation(
+							StatCollector.translateToLocal("chat.message.connector.no.slot"), new Object[0]));
+					break;
 				}
-
 			}
 		}
 
-		return false;
-	}
-
-	private int[] findNextFreeArrayCoord(TileWirelessMachinesChargerSelective te) {
-		for (int i = 0; i < 8; i++) {
-			int[] arraylocal = te.getCoordArrays(i + 1);
-			if (arraylocal.length == 3) {
-				if (arraylocal[0] != 0 && arraylocal[1] != 0 && arraylocal[2] != 0)
-					continue;
-				return arraylocal;
-			}
-		}
-		return new int[0];
-	}
-	
-	private boolean checkIsPresentTEInCharger(TileWirelessMachinesChargerSelective te, int x, int y, int z) {
-		
-		
-		return false;
-	}
-
-	private boolean checkIsPresentTE(TileWirelessMachinesChargerSelective te, int x, int y, int z) {
-		for (int i = 0; i < 8; i++) {
-			int[] arraylocal = te.getCoordArrays(i + 1);
-			if (arraylocal.length == 3) {
-				if (arraylocal[0] != x || arraylocal[1] != y || arraylocal[2] != z)
-					continue;
-				return true;
-			}
-		}
 		return false;
 	}
 

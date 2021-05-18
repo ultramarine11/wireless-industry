@@ -2,8 +2,6 @@ package ru.wirelesstools.utils;
 
 import java.util.Collection;
 
-import com.Denfop.tiles.base.TileEntityElectricBlock;
-
 import cofh.api.energy.IEnergyContainerItem;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;

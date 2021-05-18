@@ -47,6 +47,7 @@ import ru.wirelesstools.blocks.BlockWirelessQuantumGenerator;
 import ru.wirelesstools.blocks.BlockWirelessSingSPPersonal;
 import ru.wirelesstools.blocks.BlockWirelessSpSPPersonal;
 import ru.wirelesstools.blocks.BlockWirelessUHSP;
+import ru.wirelesstools.blocks.BlockXPSenderElectric;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.entity.arrow.ArrowVampEUNew;
 import ru.wirelesstools.fluidmachines.BlockExpGen;
@@ -56,6 +57,7 @@ import ru.wirelesstools.fluidmachines.TileXPGenPublic;
 import ru.wirelesstools.handlerwireless.WirelessChargerHandler;
 import ru.wirelesstools.handlerwireless.WirelessTransmitHandler;
 import ru.wirelesstools.item.ItemEnderModule;
+import ru.wirelesstools.item.ItemPlayerModule;
 import ru.wirelesstools.item.ItemWirelessModule;
 import ru.wirelesstools.item.armor.ItemSolarWirelessEURFHelmet;
 import ru.wirelesstools.item.armor.QuantumChestplateWirelessCharge;
@@ -87,6 +89,7 @@ import ru.wirelesstools.itemblock.ItemBlockWSingSPPersonal;
 import ru.wirelesstools.itemblock.ItemBlockWSpSPPersonal;
 import ru.wirelesstools.itemblock.ItemBlockWUHSP;
 import ru.wirelesstools.itemblock.ItemBlockWirelessStoragePersonal;
+import ru.wirelesstools.itemblock.ItemBlockXPSender;
 import ru.wirelesstools.packets.WIPacketHandler;
 import ru.wirelesstools.proxy.ClientProxy;
 import ru.wirelesstools.proxy.ServerProxy;
@@ -106,6 +109,7 @@ import ru.wirelesstools.tiles.TileWirelessSingSPPersonal;
 import ru.wirelesstools.tiles.TileWirelessSpSPPersonal;
 import ru.wirelesstools.tiles.TileWirelessStoragePersonal1;
 import ru.wirelesstools.tiles.TileWirelessUHSP;
+import ru.wirelesstools.tiles.TileXPSender;
 import ru.wirelesstools.tiles.WirelessQGen;
 import ru.wirelesstools.utils.RecipeUtil;
 import scala.actors.threadpool.Arrays;
@@ -119,11 +123,16 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.6", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.7-fix", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
 	@SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
 	public static ServerProxy proxy;
+	
+	public static final String categoryOTHER = "Other";
+	public static final String categoryXPSENDER = "XPSender";
+	public static final String categoryVAMPIREWEAPONS = "Vampire Weapons";
+	public static final String categoryWIRELESSCHARGER = "Wireless Chargers";
 
 	public static Item saber5;
 	public static Item saber3;
@@ -142,7 +151,11 @@ public class MainWI {
 
 	public static final EnumRarity RARITY_RF = EnumHelper.addRarity("RF Wirelessly", EnumChatFormatting.GOLD,
 			"Wireless RF Transmission");
-
+	
+	public static Block blockxpsender;
+	
+	public static Item playermodule;
+	
 	public static Block blockvajracharger;
 	public static Block blockwirelessreceiverpersonal;
 	public static Block armorcharger;
@@ -271,26 +284,58 @@ public class MainWI {
 			ConfigWI.wneuspstorage = config.get("Neutron Solar", "Storage", 200000000).getInt(200000000);
 			ConfigWI.wneusptransfer = config.get("Neutron Solar", "Wireless Transfer", 3145728).getInt(3145728);
 
-			ConfigWI.wstorageoutput = config.get("Wireless Receiver (Storage)", "Output", 16384).getInt(16384);
-			ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver (Storage)", "Storage", 100000000)
+			ConfigWI.wstorageoutput = config.get("Wireless Receiver Storage", "Output", 16384).getInt(16384);
+			ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver Storage", "Storage", 100000000)
 					.getInt(100000000);
-			ConfigWI.wstoragetier = config.get("Wireless Receiver (Storage)", "Tier", 4).getInt(4);
+			ConfigWI.wstoragetier = config.get("Wireless Receiver Storage", "Tier", 4).getInt(4);
 
 			ConfigWI.wirelessqgenoutput = config.get("Wireless Quantum Generator", "Output", 32768).getInt(32768);
 			ConfigWI.wirelessqgentier = config.get("Wireless Quantum Generator", "Tier", 4).getInt(4);
 			ConfigWI.wirelessqgentransfer = config.get("Wireless Quantum Generator", "Wireless transfer limit", 32768)
 					.getInt(32768);
 
+			/*
 			ConfigWI.chargerpublicradius = config
-					.get("Wireless Chargers", "Radius of wireless charging (public), blocks", 25).getInt(25);
+					.get(categoryWIRELESSCHARGER, "Radius of wireless charging (public), blocks", 25).getInt(25);
 			ConfigWI.chargerprivateradius = config
-					.get("Wireless Chargers", "Radius of wireless charging (private), blocks", 25).getInt(25);
+					.get(categoryWIRELESSCHARGER, "Radius of wireless charging (private), blocks", 25).getInt(25);
+			*/
 			ConfigWI.maxstorageofchargers = config
-					.get("Wireless Chargers", "Maximum storage of wireless chargers (EU)", 50000000).getInt(50000000);
-			ConfigWI.tierofchargers = config.get("Wireless Chargers", "Tier of wireless chargers", 10).getInt(10);
+					.get(categoryWIRELESSCHARGER, "Maximum storage of wireless chargers (EU)", 50000000)
+					.getInt(50000000);
+			ConfigWI.tierofchargers = config.get(categoryWIRELESSCHARGER, "Tier of wireless chargers", 10).getInt(10);
+
+			int secondslocal = config.get(categoryXPSENDER, "Interval in seconds to send xp to players", 1).getInt(1);
+
+			if (secondslocal < 1) {
+
+				ConfigWI.secondsXPSender = 1;
+			} else {
+
+				ConfigWI.secondsXPSender = secondslocal;
+			}
+
+			int xpgivenlocal = config.get(categoryXPSENDER, "XP amount given to player per 1 operation", 2).getInt(2);
+
+			if (xpgivenlocal < 1) {
+
+				ConfigWI.amountXPsent = 1;
+			} else {
+
+				ConfigWI.amountXPsent = xpgivenlocal;
+			}
+
+			ConfigWI.maxstorageXPSender = config.get(categoryXPSENDER, "Maximum storage of energy", 40000000)
+					.getInt(40000000);
+			ConfigWI.energyperxppointXPSender = config.get(categoryXPSENDER, "EU energy consumed per 1 xp point", 10000)
+					.getInt(10000);
+			
+			ConfigWI.tierXPSender = config.get(categoryXPSENDER, "Tier of XP Sender", 7)
+					.getInt(7);
 
 			int stolenEUlocal = config
-					.get("Vampire Weapons", "Stolen amount of EU energy from player armor part", 100000).getInt(100000);
+					.get(categoryVAMPIREWEAPONS, "Stolen amount of EU energy from player armor part", 100000)
+					.getInt(100000);
 			if (stolenEUlocal > 0) {
 
 				ConfigWI.stolenEnergyEUFromArmor = stolenEUlocal;
@@ -300,7 +345,7 @@ public class MainWI {
 			}
 
 			int chargevaluelocal = config
-					.get("Other", "Value of Ender Quamtum Armor self-charging, not more than 16", 8).getInt(8);
+					.get(categoryOTHER, "Ender Quamtum Armor self-charging EU/t amount, not more than 16", 8).getInt(8);
 			if (chargevaluelocal > 16) {
 
 				ConfigWI.enderChargeArmorValue = 16;
@@ -339,9 +384,12 @@ public class MainWI {
 
 		wirelessmodule = new ItemWirelessModule();
 		endermodule = new ItemEnderModule();
+		playermodule = new ItemPlayerModule();
 
 		blockvajracharger = new BlockVajraCharger("vajracharger", Material.rock);
 		armorcharger = new BlockArmorCharger("creativearmorcharger", Material.rock);
+		
+		blockxpsender = new BlockXPSenderElectric("electricxpsender");
 
 		wirelessasppersonal = new BlockWirelessASP("wirelessAdvancedPanelPersonal");
 		wirelesshsppersonal = new BlockWirelessHSP("wirelessHybridPanelPersonal");
@@ -407,6 +455,7 @@ public class MainWI {
 
 		GameRegistry.registerItem(wirelessmodule, "WirelessModule");
 		GameRegistry.registerItem(endermodule, "EnderModule");
+		GameRegistry.registerItem(playermodule, "PlayerModule");
 
 		GameRegistry.registerItem(wirelessEuRfHelmet, "WirelessHelmet");
 		GameRegistry.registerItem(wirelessChestPlate, "WirelessChestPlate");
@@ -425,6 +474,8 @@ public class MainWI {
 
 		GameRegistry.registerBlock(blockwirelessqgen, ItemBlockWQGen.class, "WirelessQGen");
 
+		GameRegistry.registerBlock(blockxpsender, ItemBlockXPSender.class, "ExpSender1");
+		
 		GameRegistry.registerBlock(expgen, ItemBlockEG.class, "ExpGen");
 		GameRegistry.registerBlock(iridMach, ItBlIridMach.class, "IridMach");
 		GameRegistry.registerBlock(blockvajracharger, ItemBlockVCh.class, "WCh");
@@ -438,6 +489,8 @@ public class MainWI {
 		GameRegistry.registerTileEntity(TileMachinesCharger.class, "TileEntityMachinesCharger");
 
 		GameRegistry.registerTileEntity(WirelessQGen.class, "TileEntityWirelessQGen");
+		
+		GameRegistry.registerTileEntity(TileXPSender.class, "TileEntityXPSender");
 
 		GameRegistry.registerTileEntity(TileWirelessASP.class, "TileWirelessASPPersonal");
 		GameRegistry.registerTileEntity(TileWirelessHSP.class, "TileWirelessHSPPersonal");
@@ -613,6 +666,11 @@ public class MainWI {
 				new Object[] { " A ", "BCB", " A ", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
 						IC2Items.getItem("advancedCircuit"), Character.valueOf('C'),
 						IC2Items.getItem("iridiumPlate") });
+		
+		GameRegistry.addRecipe(new ItemStack(playermodule, 1),
+				new Object[] { " A ", "BCB", " A ", Character.valueOf('A'), Items.paper, Character.valueOf('B'),
+						IC2Items.getItem("advancedCircuit"), Character.valueOf('C'),
+						IC2Items.getItem("advancedAlloy") });
 
 		GameRegistry.addRecipe(new ItemStack(quantumVampBowEu, 1),
 				new Object[] { " A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedCircuit"),
@@ -656,6 +714,12 @@ public class MainWI {
 						!OreDictionary.getOres("mechanismAdvMatter").isEmpty()
 								? OreDictionary.getOres("mechanismAdvMatter").get(0)
 								: IC2Items.getItem("massFabricator") });
+		GameRegistry.addRecipe(new ItemStack(blockxpsender, 1),////////
+				new Object[] { "BAB", "BCB", "BAB", Character.valueOf('A'), new ItemStack(expgen),
+						Character.valueOf('B'), Blocks.redstone_block, Character.valueOf('C'),
+						!OreDictionary.getOres("mechanismAdvMatter").isEmpty()
+								? OreDictionary.getOres("mechanismAdvMatter").get(0)
+								: IC2Items.getItem("teleporter") });
 
 		GameRegistry.addRecipe(new ItemStack(blockcreativepedestal, 1),
 				new Object[] { " A ", "AAA", " A ", Character.valueOf('A'), Blocks.bedrock });

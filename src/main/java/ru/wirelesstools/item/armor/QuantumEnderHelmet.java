@@ -205,6 +205,14 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner2"));
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.you.can.clear"));
+			if (player.worldObj.provider.dimensionId == 1) {
+				list.add(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
+						+ String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
+			} else {
+				list.add(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.ITALIC.toString()
+						+ StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
+			}
 		}
 	}
 
@@ -339,7 +347,7 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
 	@Override
 	public GameProfile getArmorOwner(ItemStack stack) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		
+
 		return NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"));
 	}
 

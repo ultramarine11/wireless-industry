@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.core.IC2;
@@ -206,6 +208,7 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 		return false;
 	}
 
+	@SideOnly(value = Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			info.add(I18n.format("about.ench1"));

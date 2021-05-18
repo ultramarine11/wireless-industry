@@ -15,7 +15,6 @@ import ru.wirelesstools.fluidmachines.TileExpGen;
 import ru.wirelesstools.fluidmachines.TileXPGenPublic;
 import ru.wirelesstools.gui.GuiExpGen;
 import ru.wirelesstools.gui.GuiVajraCharger;
-import ru.wirelesstools.gui.GuiWCharger;
 import ru.wirelesstools.gui.GuiWPPersonal;
 import ru.wirelesstools.gui.GuiWSBPersonal;
 import ru.wirelesstools.gui.GuiWirelessMachinesCharger;
@@ -25,6 +24,7 @@ import ru.wirelesstools.tiles.TileVajraChargerElectric;
 import ru.wirelesstools.tiles.TileWPBasePersonal;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
 import ru.wirelesstools.tiles.TileWirelessStorageBasePersonal;
+import ru.wirelesstools.tiles.TileXPSenderElectric;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public class ClientProxy extends ServerProxy {
@@ -67,7 +67,7 @@ public class ClientProxy extends ServerProxy {
 
 			if (te instanceof TileEntityWirelessCharger) {
 
-				return new GuiWCharger(player.inventory, (TileEntityWirelessCharger) te);
+				return ((TileEntityWirelessCharger) te).getGui(player, false);
 
 			}
 
@@ -79,6 +79,11 @@ public class ClientProxy extends ServerProxy {
 			if (te instanceof WirelessQuantumGeneratorBase) {
 
 				return new GuiWirelessQGen(player.inventory, (WirelessQuantumGeneratorBase) te);
+			}
+			
+			if (te instanceof TileXPSenderElectric) {
+				
+				return ((TileXPSenderElectric) te).getGui(player, false);
 			}
 
 		}

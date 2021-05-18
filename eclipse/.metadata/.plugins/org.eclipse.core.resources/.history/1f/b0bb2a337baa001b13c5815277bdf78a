@@ -1,5 +1,0 @@
-package ru.wirelesstools.tiles;
-
-public interface IWirelessReciever {
-
-}

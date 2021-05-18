@@ -5,7 +5,7 @@ import ru.wirelesstools.config.ConfigWI;
 public class TileEntityWirelessChargerPublic extends TileEntityWirelessCharger {
 
 	public TileEntityWirelessChargerPublic() {
-		super("wirelesschargerpublic.name", false, ConfigWI.maxstorageofchargers, ConfigWI.chargerpublicradius, ConfigWI.tierofchargers);
+		super("wirelesschargerpublic.name", false, ConfigWI.maxstorageofchargers, ConfigWI.tierofchargers);
 		
 	}
 
