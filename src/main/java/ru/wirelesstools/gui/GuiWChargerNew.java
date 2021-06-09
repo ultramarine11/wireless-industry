@@ -1,15 +1,12 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import ic2.core.ContainerBase;
 import ic2.core.GuiIC2;
 import ic2.core.IC2;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerWChargerNew;
 import ru.wirelesstools.utils.UtilFormatGUI;
@@ -38,22 +35,20 @@ public class GuiWChargerNew extends GuiIC2 {
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		String ownername = this.container.base.getOwnerCharger().getName();
 
-		String tileentityname = I18n.format(this.container.base.chargerName, new Object[0]);
-		String storageString = I18n.format("gui.wirind.wirelesschargerstorage", new Object[0]) + ": ";
-		String explainstring1 = I18n.format("gui.wirind.wirelesscharger.about1", new Object[0]);
-		String explainstring2 = I18n.format("gui.wirind.wirelesscharger.about2", new Object[0]);
+		String tileentityname = I18n.format(this.container.base.chargerName);
+		String storageString = I18n.format("gui.wirind.wirelesschargerstorage") + ": ";
+		String explainstring1 = I18n.format("gui.wirind.wirelesscharger.about1");
+		String explainstring2 = I18n.format("gui.wirind.wirelesscharger.about2");
 		String energyformatted = UtilFormatGUI.formatNumber(this.container.base.energy);
 		String maxstorageformatted = UtilFormatGUI.formatNumber((double) this.container.base.maxStorage);
-		String tileowner = I18n.format("gui.wirind.wirelesscharger.owner", new Object[0]) + ": ";
-		String numplayersString = I18n.format("gui.wirind.numberplayers", new Object[0]) + ": ";
-		String radiusString = I18n.format("gui.wirind.radiusofcharge", new Object[0]) + ": ";
-		// String blocksname = I18n.format("gui.wirind.wirelesscharger.blocks", new
-		// Object[0]);
-		String noownerwhy = I18n.format("gui.wirind.noowner.why", new Object[0]);
+		String tileowner = I18n.format("gui.wirind.wirelesscharger.owner") + ": ";
+		String numplayersString = I18n.format("gui.wirind.numberplayers") + ": ";
+		String radiusString = I18n.format("gui.wirind.radiusofcharge") + ": ";
+		String noownerwhy = I18n.format("gui.wirind.noowner.why");
 
 		String stringEnergyAll = storageString + energyformatted + " / " + maxstorageformatted + " EU";
 		String radiusAll = radiusString + this.container.base.getRadiusOfCharge();
-		String playercountStringAll = I18n.format("gui.wirind.numberplayers", new Object[0]) + ": "
+		String playercountStringAll = I18n.format("gui.wirind.numberplayers") + ": "
 				+ this.container.base.playercount;
 		String ownerAll = tileowner + ownername;
 

@@ -4,7 +4,7 @@ public class TileVajraCharger extends TileVajraChargerElectric {
 
 	public TileVajraCharger() {
 
-		super(4, 0, 30000000);
+		super(5, 0, 30000000);
 	}
 
 }

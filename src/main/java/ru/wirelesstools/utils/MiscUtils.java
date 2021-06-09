@@ -2,10 +2,7 @@ package ru.wirelesstools.utils;
 
 import cofh.api.energy.IEnergyContainerItem;
 import ic2.api.item.ElectricItem;
-import ic2.core.Ic2Items;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import ru.wirelesstools.MainWI;
 import ru.wirelesstools.config.ConfigWI;
 
 public class MiscUtils {
@@ -26,9 +23,6 @@ public class MiscUtils {
 	}
 	
 	public static void chargeEUItemFromArmor(ItemStack stackToCharge, ItemStack thisarmor) {
-		if (stackToCharge.getItem() == Ic2Items.debug.getItem())
-			return;
-		
 		if (ElectricItem.manager.getCharge(thisarmor) > 0.0) {
 			if (ElectricItem.manager.charge(stackToCharge, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true,
 					true) > 0) {
@@ -38,4 +32,5 @@ public class MiscUtils {
 			}
 		}
 	}
+
 }

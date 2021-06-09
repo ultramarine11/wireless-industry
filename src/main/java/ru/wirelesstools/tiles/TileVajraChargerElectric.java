@@ -1,14 +1,9 @@
 package ru.wirelesstools.tiles;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergyTile;
-import ic2.api.network.INetworkClientTileEntityEventListener;
 import ic2.api.tile.IEnergyStorage;
-import ic2.core.IC2;
-import ic2.core.block.TileEntityBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -106,11 +101,6 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 		super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setDouble("energy", this.energy);
-	}
-
-	public boolean isAddedToEnergyNet() {
-
-		return this.addedToEnergyNet;
 	}
 
 	@Override

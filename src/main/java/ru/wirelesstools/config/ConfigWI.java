@@ -101,4 +101,8 @@ public class ConfigWI {
 	public static int energyperxppointXPSender;
 	public static int tierXPSender;
 
+	public static int vampBowShotEnergyCost;
+	public static int vampBowMaxCharge;
+	public static int vampBowXPVampiredAmount;
+
 }

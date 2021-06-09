@@ -1,18 +1,9 @@
 package ru.wirelesstools.item.tool;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.lwjgl.input.Keyboard;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
-import ic2.core.IC2;
 import ic2.core.util.StackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -32,10 +23,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.tiles.TileVajraCharger;
-import scala.swing.event.Key;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class LuckyVajra extends ItemTool implements IElectricItem {
 
@@ -45,8 +40,8 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 	protected int energyPerOperation;
 	protected double transferLimit;
 
-	public LuckyVajra(ToolMaterial mater) {
-		super(0.0F, mater, new HashSet());
+	public LuckyVajra(ToolMaterial material) {
+		super(0.0F, material, new HashSet());
 		this.setUnlocalizedName("wirelessvajra");
 		this.setTextureName(Reference.PathTex + "itemVajraLucky");
 		this.setCreativeTab(MainWI.tabwi);
@@ -102,14 +97,12 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 				TileVajraCharger tilewch = (TileVajraCharger) te;
 				int sentEnergy = 0;
 				if (tilewch.getStored() > 0) {
-					sentEnergy = (int) ElectricItem.manager.charge(itemstack, (double) tilewch.getStored(),
+					sentEnergy = (int) ElectricItem.manager.charge(itemstack, tilewch.getStored(),
 							Integer.MAX_VALUE, false, false);
 					tilewch.addEnergy(-sentEnergy);
 					entityplayer.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.BLUE + StatCollector.translateToLocal("chat.message.luckyvajra.charged")
-									+ " " + String.valueOf(sentEnergy) + " EU",
-							new Object[0]));
-
+									+ " " + String.valueOf(sentEnergy) + " EU"));
 				}
 				return true;
 			}
@@ -124,27 +117,19 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 			if (player.isSneaking()) {
 				boolean modenew = !nbt.getBoolean("vajramode");
 				nbt.setBoolean("vajramode", modenew);
-
 				if (modenew) {
-
 					Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 					enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
 					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
 					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.fortune.active"),
-							new Object[0]));
-					// IC2.platform.messagePlayer(player, EnumChatFormatting.AQUA +
-					// StatCollector.translateToLocal("chat.message.fortune.active"), new
-					// Object[0]);
+							EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.fortune.active")
+					));
 				} else {
-
 					Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 					enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
 					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
 					player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_PURPLE
-							+ StatCollector.translateToLocal("chat.message.fortune.none"), new Object[0]));
-					// IC2.platform.messagePlayer(player, EnumChatFormatting.DARK_PURPLE +
-					// StatCollector.translateToLocal("chat.message.fortune.none"), new Object[0]);
+							+ StatCollector.translateToLocal("chat.message.fortune.none")));
 				}
 			}
 		}
@@ -165,10 +150,8 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 	}
 
 	public boolean canHarvestBlock(Block block, ItemStack stack) {
-		if (block != Blocks.bedrock)
-			return true;
 
-		return false;
+		return block != Blocks.bedrock;
 	}
 
 	public float getDigSpeed(ItemStack tool, Block block, int meta) {

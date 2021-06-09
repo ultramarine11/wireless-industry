@@ -13,7 +13,7 @@ public class CreativeTabWI extends CreativeTabs {
 	@Override
 	public Item getTabIconItem() {
 
-		return Item.getItemFromBlock(MainWI.wirelessspsppersonal);
+		return Item.getItemFromBlock(MainWI.blockwirelessqgen);
 	}
 
 }

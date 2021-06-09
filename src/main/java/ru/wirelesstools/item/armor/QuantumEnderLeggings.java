@@ -1,9 +1,6 @@
 package ru.wirelesstools.item.armor;
 
-import java.util.List;
-
 import com.mojang.authlib.GameProfile;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
@@ -20,7 +17,6 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
@@ -32,6 +28,8 @@ import net.minecraftforge.common.ISpecialArmor;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
+
+import java.util.List;
 
 public class QuantumEnderLeggings extends ItemArmor
 		implements IElectricItem, IMetalArmor, ISpecialArmor, IPrivateArmor {
@@ -173,7 +171,7 @@ public class QuantumEnderLeggings extends ItemArmor
 						+ StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
 						+ String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
 			} else {
-				list.add(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.ITALIC.toString()
+				list.add(EnumChatFormatting.GOLD.toString() + EnumChatFormatting.ITALIC.toString()
 						+ StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
 			}
 		}

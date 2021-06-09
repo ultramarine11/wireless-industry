@@ -1,7 +1,5 @@
 package ru.wirelesstools.item;
 
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.core.util.StackUtil;
@@ -16,6 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
+import java.util.List;
 
 public class ItemPlayerModule extends Item {
 
@@ -35,10 +34,8 @@ public class ItemPlayerModule extends Item {
 			info.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("info.playermodule.owner.is") + ": "
 					+ NBTUtil.func_152459_a(nbt.getCompoundTag("playerModulegameprofile")).getName());
 		}
-
 		info.add(StatCollector.translateToLocal("info.playermodule.howto.use"));
 		info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.hint.wip"));
-
 	}
 
 	@Override
@@ -55,18 +52,15 @@ public class ItemPlayerModule extends Item {
 				nbt.setTag("playerModulegameprofile", ownerNbt);
 				player.addChatMessage(new ChatComponentTranslation(
 						EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("chat.message.module.player.set")
-								+ ": " + playertarget.getGameProfile().getName(),
-						new Object[0]));
+								+ ": " + playertarget.getGameProfile().getName()));
 				return true;
 			} else {
 				player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.LIGHT_PURPLE
-						+ StatCollector.translateToLocal("chat.message.module.only.player"), new Object[0]));
-
+						+ StatCollector.translateToLocal("chat.message.module.only.player")));
 			}
 		} else {
 			player.addChatMessage(new ChatComponentTranslation(
-					EnumChatFormatting.RED + StatCollector.translateToLocal("chat.message.module.sneak"),
-					new Object[0]));
+					EnumChatFormatting.RED + StatCollector.translateToLocal("chat.message.module.sneak")));
 		}
 		return false;
 	}

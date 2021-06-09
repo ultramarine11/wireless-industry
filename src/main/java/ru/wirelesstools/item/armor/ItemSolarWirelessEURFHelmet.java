@@ -1,9 +1,5 @@
 package ru.wirelesstools.item.armor;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import cofh.api.energy.IEnergyContainerItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,27 +8,17 @@ import ic2.api.item.IElectricItem;
 import ic2.api.item.IMetalArmor;
 import ic2.core.IC2;
 import ic2.core.IC2Potion;
-import ic2.core.Ic2Items;
 import ic2.core.util.StackUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import ru.wirelesstools.MainWI;
@@ -40,22 +26,20 @@ import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.utils.MiscUtils;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricItem, IMetalArmor, ISpecialArmor {
 
 	public double maxenergyEU;
 	protected double transferLimit;
 	protected int tier;
-
-//	private boolean sunIsUp;
-//	private boolean skyIsVisible;
-//	private boolean noSunWorld;
-//	private boolean wetBiome;
-
-//	private int generating;
 	private final int genDay;
 	private final int genNight;
 
-	protected static final Map<Integer, Integer> potionRemovalCost = new HashMap<Integer, Integer>();
+	protected static final Map<Integer, Integer> potionRemovalCost = new HashMap<>();
 
 	public ItemSolarWirelessEURFHelmet(String name) {
 		super(ArmorMaterial.DIAMOND, 0, 0);
@@ -74,6 +58,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		potionRemovalCost.put(Potion.hunger.id, 200);
 		potionRemovalCost.put(Potion.confusion.id, 200);
 		potionRemovalCost.put(Potion.blindness.id, 200);
+		potionRemovalCost.put(Potion.harm.id, 200);
 		potionRemovalCost.put(IC2Potion.radiation.id, 200);
 	}
 
@@ -90,18 +75,20 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 	@SideOnly(value = Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		String isonoff = nbt.getBoolean("active") ? "info.helmet.yes" : "info.helmet.no";
+		String isonoff = nbt.getBoolean("active") ? EnumChatFormatting.GREEN
+				+ StatCollector.translateToLocal("info.helmet.yes") : EnumChatFormatting.RED
+				+ StatCollector.translateToLocal("info.helmet.no");
 		int nmode = nbt.getInteger("NightVisMode");
 		String strmode = "";
 		switch (nmode) {
 		case 0:
-			strmode = "info.helmet.nightmode.off";
+			strmode = EnumChatFormatting.RED + StatCollector.translateToLocal("info.helmet.nightmode.off");
 			break;
 		case 1:
-			strmode = "info.helmet.nightmode.auto";
+			strmode = EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.helmet.nightmode.auto");
 			break;
 		case 2:
-			strmode = "info.helmet.nightmode.on";
+			strmode = EnumChatFormatting.GREEN + StatCollector.translateToLocal("info.helmet.nightmode.on");
 			break;
 		}
 		list.add(StatCollector.translateToLocal("info.wirelesshelmet.about"));
@@ -109,19 +96,18 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		list.add(StatCollector.translateToLocal("info.wirelesshelmet.selfcharge"));
 		if (org.lwjgl.input.Keyboard.isKeyDown(org.lwjgl.input.Keyboard.KEY_LSHIFT)) {
 			list.add(StatCollector.translateToLocal("info.wirelesshelmet.mode") + ": "
-					+ StatCollector.translateToLocal(isonoff));
+					+ isonoff);
 			list.add(StatCollector.translateToLocal("info.wirelesshelmet.nightmode") + ": "
-					+ StatCollector.translateToLocal(strmode));
-			list.add(StatCollector.translateToLocal("info.wirelesshelmet.radius") + ": " + String.valueOf(15) + " "
+					+ strmode);
+			list.add(StatCollector.translateToLocal("info.wirelesshelmet.radius") + ": " + EnumChatFormatting.DARK_GREEN + String.valueOf(15) + " "
 					+ StatCollector.translateToLocal("info.wirelesscharge.blocks"));
-			list.add(StatCollector.translateToLocal("info.helmet.sneak.press.mode.key") + " " + "IC2 Mode Switch Key"
+			list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.helmet.sneak.press.mode.key") + " " + "IC2 Mode Switch Key"
 					+ " " + StatCollector.translateToLocal("info.helmet.to.switch"));
-			list.add(StatCollector.translateToLocal("info.helmet.sneak.press.altmode.key") + " " + "IC2 Alt Key" + " + "
+			list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.helmet.sneak.press.altmode.key") + " " + "IC2 Alt Key" + " + "
 					+ "Mode Switch Key" + " " + StatCollector.translateToLocal("info.helmet.to.switch.nv"));
 		} else {
-			list.add(StatCollector.translateToLocal("info.wirelesshelmet.press.lshift"));
+			list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.wirelesshelmet.press.lshift"));
 		}
-
 	}
 
 	@SideOnly(value = Side.CLIENT)
@@ -157,35 +143,26 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				int id = ((PotionEffect) effect).getPotionID();
 				Integer cost = potionRemovalCost.get(id);
 				if (cost == null || !ElectricItem.manager.canUse(stack,
-						(double) (cost = Integer.valueOf(cost * (((PotionEffect) effect).getAmplifier() + 1)))
-								.intValue()))
+						cost = cost * (((PotionEffect) effect).getAmplifier() + 1)))
 					continue;
-				ElectricItem.manager.use(stack, (double) cost.intValue(), player);
+				ElectricItem.manager.use(stack, cost.intValue(), player);
 				IC2.platform.removePotion(player, id);
 			}
 
 			if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().needFood()) {
-				int slot = -1;
-				for (int i = 0; i < player.inventory.mainInventory.length; ++i) {
-					if (player.inventory.mainInventory[i] == null
-							|| !(player.inventory.mainInventory[i].getItem() instanceof ItemFood))
-						continue;
-					slot = i;
-					break;
-				}
-
-				if (slot > -1) {
-					ItemStack stack1 = player.inventory.mainInventory[slot];
-					ItemFood can = (ItemFood) stack1.getItem();
-					stack1 = can.onEaten(stack1, world, player);
-					if (stack1.stackSize <= 0) {
-						player.inventory.mainInventory[slot] = null;
+				for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+					if(player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].getItem() instanceof ItemFood) {
+						ItemStack stack1 = player.inventory.mainInventory[i];
+						ItemFood can = (ItemFood) stack1.getItem();
+						stack1 = can.onEaten(stack1, world, player);
+						if (stack1.stackSize <= 0) {
+							player.inventory.mainInventory[i] = null;
+						}
+						ElectricItem.manager.use(stack, 1000.0, null);
+						player.inventoryContainer.detectAndSendChanges();
 					}
-					ElectricItem.manager.use(stack, 1000.0, null);
-					player.inventoryContainer.detectAndSendChanges();
 				}
 			} else if (player.getFoodStats().getFoodLevel() <= 0) {
-
 				IC2.achievements.issueAchievement(player, "starveWithQHelmet");
 			}
 
@@ -202,10 +179,8 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				if (st2 == null)
 					continue;
 				if (st2.getItem() instanceof IEnergyContainerItem) {
-					if (ElectricItem.manager.getCharge(stack) > 0.0) {
-
+					if (ElectricItem.manager.getCharge(stack) > 0.0)
 						MiscUtils.chargeRFItemFromArmor(stack, st2);
-					}
 				}
 			}
 		}
@@ -213,36 +188,15 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		if (player.isSneaking() && IC2.keyboard.isAltKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player)
 				&& toggleTimer == 0) {
 			toggleTimer = 10;
-			nightvisionmode += 1;
+			nightvisionmode++;
 			if (nightvisionmode > 2) {
 				nightvisionmode = 0;
 			}
 
-			if (IC2.platform.isSimulating()) {
+			if (IC2.platform.isSimulating())
 				nbt.setInteger("NightVisMode", nightvisionmode);
-				/*
-				 * switch (nightvisionmode) { case 0: player.addChatMessage(new
-				 * ChatComponentTranslation( EnumChatFormatting.RED +
-				 * StatCollector.translateToLocal("chat.message.nightvision.off"), new
-				 * Object[0])); // IC2.platform.messagePlayer(player, EnumChatFormatting.RED +
-				 * // StatCollector.translateToLocal("chat.message.nightvision.off"), new //
-				 * Object[0]); break; case 1: player.addChatMessage(new
-				 * ChatComponentTranslation(EnumChatFormatting.DARK_AQUA +
-				 * StatCollector.translateToLocal("chat.message.nightvision.auto"), new
-				 * Object[0])); // IC2.platform.messagePlayer(player,
-				 * EnumChatFormatting.DARK_AQUA + //
-				 * StatCollector.translateToLocal("chat.message.nightvision.auto"), new //
-				 * Object[0]); break; case 2: player.addChatMessage(new
-				 * ChatComponentTranslation( EnumChatFormatting.GREEN +
-				 * StatCollector.translateToLocal("chat.message.nightvision.on"), new
-				 * Object[0])); // IC2.platform.messagePlayer(player, EnumChatFormatting.GREEN +
-				 * // StatCollector.translateToLocal("chat.message.nightvision.on"), new //
-				 * Object[0]);
-				 * 
-				 * }
-				 */
-			}
 		}
+
 		if (player.isSneaking() && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
 			toggleTimer = 10;
 			active = !active;
@@ -251,22 +205,19 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				if (active) {
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_GREEN
-									+ StatCollector.translateToLocal("chat.message.wirelesschargerf.on"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.wirelesschargerf.on")));
 				} else {
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.wirelesschargerf.off"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.wirelesschargerf.off")));
 				}
 			}
-
 		}
 
 		if (nightvisionmode == 1 && IC2.platform.isSimulating()) {
-			int x = MathHelper.floor_double((double) player.posX);
-			int z = MathHelper.floor_double((double) player.posZ);
-			int y = MathHelper.floor_double((double) player.posY);
+			int x = MathHelper.floor_double(player.posX);
+			int y = MathHelper.floor_double(player.posY);
+			int z = MathHelper.floor_double(player.posZ);
 			int skylight = player.worldObj.getBlockLightValue(x, y, z);
 			if (skylight > 8) {
 				IC2.platform.removePotion(player, Potion.nightVision.id);
@@ -280,21 +231,17 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		}
 
 		if (!world.isRemote) {
-			if (active) {
-
+			if (active)
 				this.checkPlayers(player, world, stack);
-			}
 		}
 
 		if (IC2.platform.isSimulating() && toggleTimer > 0) {
-			toggleTimer = (byte) (toggleTimer - 1);
+			toggleTimer--;
 			nbt.setByte("toggleTimer", toggleTimer);
 		}
 
-		if (player.isBurning()) {
+		if (player.isBurning())
 			player.extinguish();
-		}
-
 	}
 
 	protected void checkPlayers(EntityPlayer player, World world, ItemStack thisarmor) {
@@ -304,10 +251,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		for (Entity entityinlist : list) {
 			if (entityinlist instanceof EntityPlayer) {
 				EntityPlayer player1 = (EntityPlayer) entityinlist;
-				if (player1 != null) {
-
-					this.checkPlayerInventories(player1, thisarmor);
-				}
+				this.checkPlayerInventories(player1, thisarmor);
 			}
 		}
 	}
@@ -316,19 +260,15 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		for (ItemStack current : player.inventory.armorInventory) {
 			if (current == null)
 				continue;
-			if (current.getItem() instanceof IEnergyContainerItem) {
-
+			if (current.getItem() instanceof IEnergyContainerItem)
 				MiscUtils.chargeRFItemFromArmor(thisarmor, current);
-			}
 		}
 
 		for (ItemStack current : player.inventory.mainInventory) {
 			if (current == null)
 				continue;
-			if (current.getItem() instanceof IEnergyContainerItem) {
-
+			if (current.getItem() instanceof IEnergyContainerItem)
 				MiscUtils.chargeRFItemFromArmor(thisarmor, current);
-			}
 		}
 	}
 
@@ -367,15 +307,6 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		nbt1.setBoolean("Nosunworld", noSunWorld1);
 		nbt1.setBoolean("Sunisup", sunIsUp1);
 		nbt1.setBoolean("Skyisvisible", skyIsVisible1);
-		// this.wetBiome =
-		// player.worldObj.getWorldChunkManager().getBiomeGenAt((int)player.posX,
-		// (int)player.posZ).getIntRainfall() > 0;
-		// this.noSunWorld = player.worldObj.provider.hasNoSky;
-		// boolean rainWeather = this.wetBiome && (player.worldObj.isRaining() ||
-		// player.worldObj.isThundering());
-		// this.sunIsUp = player.worldObj.isDaytime() && !rainWeather;
-		// this.skyIsVisible = player.worldObj.canBlockSeeTheSky((int)player.posX,
-		// (int)player.posY + 1, (int)player.posZ) && !this.noSunWorld;
 	}
 
 	public int getEnergyPerDamage() {
@@ -425,7 +356,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
 
-		ElectricItem.manager.discharge(stack, (double) (damage * this.getEnergyPerDamage()), Integer.MAX_VALUE, true,
+		ElectricItem.manager.discharge(stack, damage * this.getEnergyPerDamage(), Integer.MAX_VALUE, true,
 				false, false);
 	}
 

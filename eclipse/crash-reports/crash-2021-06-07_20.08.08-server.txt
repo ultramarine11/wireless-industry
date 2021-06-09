@@ -1,0 +1,87 @@
+---- Minecraft Crash Report ----
+// Daisy, daisy...
+
+Time: 07.06.21 20:08
+Description: Ticking memory connection
+
+java.lang.NullPointerException: Ticking memory connection
+	at com.denfop.block.base.BlockSSPSolarPanel.onBlockPlacedBy(BlockSSPSolarPanel.java:228)
+	at net.minecraft.item.ItemBlock.placeBlockAt(ItemBlock.java:239)
+	at net.minecraft.item.ItemBlock.onItemUse(ItemBlock.java:116)
+	at net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(ForgeHooks.java:507)
+	at net.minecraft.item.ItemStack.tryPlaceItemIntoWorld(ItemStack.java:142)
+	at net.minecraft.server.management.ItemInWorldManager.activateBlockOrUseItem(ItemInWorldManager.java:422)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:593)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at com.denfop.block.base.BlockSSPSolarPanel.onBlockPlacedBy(BlockSSPSolarPanel.java:228)
+	at net.minecraft.item.ItemBlock.placeBlockAt(ItemBlock.java:239)
+	at net.minecraft.item.ItemBlock.onItemUse(ItemBlock.java:116)
+	at net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(ForgeHooks.java:507)
+	at net.minecraft.item.ItemStack.tryPlaceItemIntoWorld(ItemStack.java:142)
+	at net.minecraft.server.management.ItemInWorldManager.activateBlockOrUseItem(ItemInWorldManager.java:422)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:593)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+
+-- Ticking connection --
+Details:
+	Connection: net.minecraft.network.NetworkManager@5f63dbb8
+Stacktrace:
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_291, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 1224413040 bytes (1167 MB) / 1687158784 bytes (1609 MB) up to 3801088000 bytes (3625 MB)
+	JVM Flags: 0 total; 
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 11, tcache: 0, allocated: 13, tallocated: 95
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1614 15 mods loaded, 15 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1614} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCHIJAAAA	NotEnoughItems{2.0.0-GTNH} [Not Enough Items] (NotEnoughItems-1.7.10-2.0.0-GTNH-universal-deobf.jar) 
+	UCHIJAAAA	CodeChickenCore{1.0.7.47} [CodeChicken Core] (minecraft.jar) 
+	UCHIJAAAA	<CoFH ASM>{000} [CoFH ASM] (minecraft.jar) 
+	UCHIJAAAA	CoFHCore{1.7.10R3.1.4} [CoFH Core] (CoFHCore-[1.7.10]3.1.4-329 (1)-deobf.jar) 
+	UCHIJAAAA	BrandonsCore{1.0.0.12} [Brandon's Core] (BrandonsCore-1.7.10-1.0.0.12-deobf.jar) 
+	UCHIJAAAA	DraconicEvolution{1.0.2h} [Draconic Evolution] (Draconic-Evolution-1.7.10-1.0.2h-deobf.jar) 
+	UCHIJAAAA	EnergyAdditions{3.4.2_Stable} [EnergyAdditions] (EnergyAdditions_3.4.2-deobf.jar) 
+	UCHIJAAAA	IC2{2.2.827-experimental} [IndustrialCraft 2] (industrialcraft-2-2.2.827-experimental_1912-deobf.jar) 
+	UCHIJAAAA	GraviSuite{1.7.10-2.0.3} [Graviation Suite] (GraviSuite-1.7.10-2.0.3-deobf.jar) 
+	UCHIJAAAA	industrialupgrade{1.5RC6} [Industrial Upgrade] (IndustrialUpgrade-1.5RC6-deobf.jar) 
+	UCHIJAAAA	RedstoneArsenal{1.7.10R1.1.2} [Redstone Arsenal] (RedstoneArsenal-[1.7.10]1.1.2-92-deobf.jar) 
+	UCHIJAAAA	wirelessindustry{0.7.8-fix2} [Wireless Industry] (wirelessindustry-0.7.8.jar) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	CoFHCore: -[1.7.10]3.1.4-329
+	RedstoneArsenal: -[1.7.10]1.1.2-92
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 1 / 8; [EntityPlayerMP['Player652'/199, l='Новый мир', x=180,48, y=68,00, z=144,47]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

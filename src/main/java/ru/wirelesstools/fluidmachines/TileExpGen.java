@@ -1,9 +1,5 @@
 package ru.wirelesstools.fluidmachines;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Vector;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -11,15 +7,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.network.INetworkClientTileEntityEventListener;
-import ic2.api.network.INetworkDataProvider;
-import ic2.api.network.INetworkUpdateListener;
 import ic2.api.tile.IEnergyStorage;
-import ic2.core.IC2;
 import ic2.core.util.EntityIC2FX;
-import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -30,20 +20,15 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.container.ContainerExpGen;
-import ru.wirelesstools.packets.PacketPlayerStandOn;
 import ru.wirelesstools.utils.ExperienceUtils;
+
+import java.util.Random;
 
 public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorage, IInventory, IFluidHandler {
 
@@ -174,7 +159,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 		if (fluid != null && fluid.isFluidEqual(new FluidStack(MainWI.FluidXP.xpJuice, 0))) {
 			if (fluid.amount > 0) {
 
-				// вместо 4 было requiredXPJuice
+				// пїЅпїЅпїЅпїЅпїЅпїЅ 4 пїЅпїЅпїЅпїЅ requiredXPJuice
 				int actuallydrained = Math.min(fluid.amount, 4);
 				FluidStack drained = this.fluidTank.drain(actuallydrained, true);
 				if (drained != null) {
@@ -251,6 +236,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 
 	@Override
 	public double getDemandedEnergy() {
+
 		return (double) this.maxEnergy - this.energy;
 	}
 
@@ -262,10 +248,12 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		if (this.energy >= this.maxEnergy) {
+		if (amount == 0D)
+			return 0;
+		if (this.energy >= this.maxEnergy)
 			return amount;
-		}
-		this.energy += amount;
+
+		this.energy += Math.min(amount, this.getDemandedEnergy());
 		return 0.0D;
 	}
 

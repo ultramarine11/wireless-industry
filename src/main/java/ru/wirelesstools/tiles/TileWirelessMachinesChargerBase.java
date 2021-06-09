@@ -1,12 +1,9 @@
 package ru.wirelesstools.tiles;
 
-import java.util.Collection;
-
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.tile.IEnergyStorage;
-import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,7 +11,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerWirelessMachinesCharger;
@@ -132,11 +128,13 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		if (this.energy >= (double) this.maxStorage) {
+		if (amount == 0D)
+			return 0;
+		if (this.energy >= this.maxStorage)
 			return amount;
-		}
-		this.energy += amount;
-		return 0.0;
+
+		this.energy += Math.min(amount, this.getDemandedEnergy());
+		return 0.0D;
 	}
 
 	@Override

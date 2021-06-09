@@ -1,10 +1,10 @@
 invertYMouse:false
 mouseSensitivity:0.5
-fov:0.375
+fov:0.5
 gamma:1.0
 saturation:0.0
 renderDistance:12
-guiScale:3
+guiScale:2
 particles:1
 bobView:false
 anaglyph3d:false
@@ -14,7 +14,7 @@ fboEnable:true
 difficulty:2
 fancyGraphics:true
 ao:2
-clouds:true
+clouds:false
 resourcePacks:[]
 lastServer:
 lang:ru_RU
@@ -102,7 +102,7 @@ key_key.toggleFlight:0
 key_key.GuiWC.gui1:21
 key_key.cofh.empower:47
 key_key.cofh.multimode:46
-soundCategory_master:1.0
+soundCategory_master:0.75827813
 soundCategory_music:0.0
 soundCategory_record:1.0
 soundCategory_weather:1.0

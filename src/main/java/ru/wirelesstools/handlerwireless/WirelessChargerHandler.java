@@ -1,17 +1,15 @@
 package ru.wirelesstools.handlerwireless;
 
-import java.util.List;
-
 import cofh.api.energy.IEnergyContainerItem;
-import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import ru.wirelesstools.MainWI;
 import ru.wirelesstools.tiles.IWirelessCharger;
 import ru.wirelesstools.utils.WirelessUtil;
+
+import java.util.List;
 
 public class WirelessChargerHandler implements IWirelessChargerHandler {
 
@@ -44,12 +42,8 @@ public class WirelessChargerHandler implements IWirelessChargerHandler {
 					this.checkPlayerInventory(localplayer, tile);
 				}
 			}
-			int j = 0;
-			for (int i = 0, sizelist = list.size(); i < sizelist; i++) {
-				if (list.get(i) != null)
-					j++;
-			}
-			return j;
+
+			return list.size();
 		}
 		return 0;
 	}

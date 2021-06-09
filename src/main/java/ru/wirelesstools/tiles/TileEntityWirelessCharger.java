@@ -1,11 +1,6 @@
 package ru.wirelesstools.tiles;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -19,11 +14,8 @@ import ic2.core.ContainerBase;
 import ic2.core.IC2;
 import ic2.core.IHasGui;
 import ic2.core.block.personal.IPersonalBlock;
-import ic2.core.network.NetworkManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +26,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerWChargerNew;
 import ru.wirelesstools.gui.GuiWChargerNew;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
+
+import java.util.List;
+import java.util.Vector;
 
 public class TileEntityWirelessCharger extends TileEntity
 		implements IEnergySink, IEnergyStorage, IPersonalBlock, IWirelessCharger, IInventory, INetworkDataProvider,
@@ -184,11 +179,13 @@ public class TileEntityWirelessCharger extends TileEntity
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		if (this.energy >= (double) this.maxStorage) {
+		if (amount == 0D)
+			return 0;
+		if (this.energy >= this.maxStorage)
 			return amount;
-		}
-		this.energy += amount;
-		return 0.0;
+
+		this.energy += Math.min(amount, this.getDemandedEnergy());
+		return 0.0D;
 	}
 
 	@Override

@@ -1,19 +1,14 @@
 package ru.wirelesstools.item.armor;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.api.item.IMetalArmor;
 import ic2.core.IC2;
-import ic2.core.Ic2Items;
+import ic2.core.item.tool.ItemDebug;
 import ic2.core.util.StackUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,16 +18,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.utils.MiscUtils;
+
+import java.util.List;
 
 public class QuantumChestplateWirelessCharge extends ItemArmor implements IElectricItem, IMetalArmor, ISpecialArmor {
 
@@ -67,12 +60,11 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 				nbt.setBoolean("active", active);
 				if (active) {
 					player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_GREEN
-							+ StatCollector.translateToLocal("chat.message.wirelesscharge.on"), new Object[0]));
+							+ StatCollector.translateToLocal("chat.message.wirelesscharge.on")));
 				} else {
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.wirelesscharge.off"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.wirelesscharge.off")));
 				}
 			}
 		}
@@ -93,7 +85,6 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 				} else {
 					IC2.platform.messagePlayer(player, "Quantum Hover Mode disabled.", new Object[0]);
 				}
-
 			}
 
 			if (IC2.keyboard.isBoostKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
@@ -105,17 +96,14 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 				} else {
 					IC2.platform.messagePlayer(player, "Quantum Jetpack disabled.", new Object[0]);
 				}
-
 			}
 
 			if (jetpack && (IC2.keyboard.isJumpKeyDown(player) || hoverMode && player.motionY < -0.03)) {
 				jetpackUsed = this.useJetpack(player, hoverMode);
 			}
 
-			if (jetpackUsed) {
-
+			if (jetpackUsed)
 				player.inventoryContainer.detectAndSendChanges();
-			}
 		}
 
 		if (IC2.platform.isSimulating() && toggleTimer > 0) {
@@ -125,7 +113,6 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 
 		if (player.isBurning())
 			player.extinguish();
-
 	}
 
 	protected void checkPlayers(EntityPlayer player, World world, ItemStack thisarmor) {
@@ -135,16 +122,14 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 		for (Entity entityinlist : list) {
 			if (entityinlist instanceof EntityPlayer) {
 				EntityPlayer player1 = (EntityPlayer) entityinlist;
-				if (player1 != null) {
-					this.checkInvPlayer(player1, thisarmor);
-				}
+				this.checkInvPlayer(player1, thisarmor);
 			}
 		}
 	}
 
 	protected void checkInvPlayer(EntityPlayer player, ItemStack thisarmor) {
 		for (ItemStack current : player.inventory.armorInventory) {
-			if (current == null)
+			if (current == null || current.getItem() instanceof ItemDebug)
 				continue;
 			if (current.getItem() instanceof QuantumChestplateWirelessCharge)
 				continue;
@@ -153,7 +138,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 		}
 
 		for (ItemStack current : player.inventory.mainInventory) {
-			if (current == null)
+			if (current == null || current.getItem() instanceof ItemDebug)
 				continue;
 			if (current.getItem() instanceof IElectricItem)
 				MiscUtils.chargeEUItemFromArmor(current, thisarmor);
@@ -206,9 +191,8 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 			}
 		}
 		double consume = 8.0;
-		if (hoverMode) {
+		if (hoverMode)
 			consume = 10.0;
-		}
 		ElectricItem.manager.discharge(jetpack, consume, Integer.MAX_VALUE, true, false, false);
 		player.fallDistance = 0.0f;
 		player.distanceWalkedModified = 0.0f;
@@ -219,13 +203,16 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 	@SideOnly(value = Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		String isonoff = nbt.getBoolean("active") ? "info.yes" : "info.no";
-		list.add(StatCollector.translateToLocal("info.wirelesscharge.mode") + ": "
-				+ StatCollector.translateToLocal(isonoff));
+		String isonoff = nbt.getBoolean("active") ? EnumChatFormatting.GREEN
+				+ StatCollector.translateToLocal("info.yes") : EnumChatFormatting.RED
+				+ StatCollector.translateToLocal("info.no");
 		list.add(StatCollector.translateToLocal("info.wirelesscharge.about"));
-		list.add(StatCollector.translateToLocal("info.wirelesscharge.radius") + ": " + String.valueOf(15) + " "
+		list.add(StatCollector.translateToLocal("info.wirelesscharge.mode") + ": "
+				+ isonoff);
+		list.add(StatCollector.translateToLocal("info.wirelesscharge.radius") + ": "
+				+ EnumChatFormatting.DARK_GREEN + String.valueOf(15) + " "
 				+ StatCollector.translateToLocal("info.wirelesscharge.blocks"));
-		list.add(StatCollector.translateToLocal("info.equip.and.press.key") + " " + "IC2 Mode Switch Key" + " "
+		list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.equip.and.press.key") + " " + "IC2 Mode Switch Key" + " "
 				+ StatCollector.translateToLocal("info.to.switch"));
 	}
 

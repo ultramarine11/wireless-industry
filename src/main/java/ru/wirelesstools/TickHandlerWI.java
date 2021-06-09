@@ -11,16 +11,12 @@ public class TickHandlerWI {
 	public TickHandlerWI() {
 
 		FMLCommonHandler.instance().bus().register(this);
-
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void renderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase != TickEvent.Phase.START) {
+		if (event.phase != TickEvent.Phase.START)
 			ClientTickHandlerWI.onTickRender();
-
-		}
-
 	}
 }

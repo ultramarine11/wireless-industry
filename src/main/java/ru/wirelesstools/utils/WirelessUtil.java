@@ -1,22 +1,20 @@
 package ru.wirelesstools.utils;
 
-import java.util.Collection;
-
 import cofh.api.energy.IEnergyContainerItem;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.item.ElectricItem;
-import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import ru.wirelesstools.MainWI;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.tiles.IWirelessCharger;
 import ru.wirelesstools.tiles.IWirelessMachineCharger;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
+
+import java.util.Collection;
 
 public class WirelessUtil {
 
@@ -63,11 +61,8 @@ public class WirelessUtil {
 						sink.injectEnergy(ForgeDirection.UNKNOWN,
 								EnergyNet.instance.getPowerFromTier(sink.getSinkTier()), 1);
 					}
-
 				}
-
 			}
-
 		}
 
 		return ret;
