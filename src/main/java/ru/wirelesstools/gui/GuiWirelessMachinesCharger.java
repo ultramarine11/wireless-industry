@@ -1,12 +1,10 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerWirelessMachinesCharger;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
@@ -14,7 +12,7 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWirelessMachinesCharger extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME,
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME,
 			"textures/gui/GuiWirelessMachinesCharger.png");
 
 	private TileWirelessMachinesChargerBase tile;
@@ -47,10 +45,10 @@ public class GuiWirelessMachinesCharger extends GuiContainer {
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
-		String tileentityname = I18n.format(this.tile.chargername, new Object[0]);
-		String storageString = I18n.format("gui.wirind.wirelessmachineschargerstorage", new Object[0]) + ": ";
+		String tileentityname = I18n.format(this.tile.chargername);
+		String storageString = I18n.format("gui.wirind.wirelessmachineschargerstorage") + ": ";
 		String energyformatted = UtilFormatGUI.formatNumber(this.tile.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber((double) this.tile.getCapacity());
+		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tile.getCapacity());
 
 		String stringEnergyAll = storageString + energyformatted + " / " + maxstorageformatted + " EU";
 

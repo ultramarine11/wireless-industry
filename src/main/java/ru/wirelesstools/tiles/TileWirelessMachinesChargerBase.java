@@ -151,7 +151,7 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
 	@Override
 	public int addEnergy(int amount) {
-		this.energy += (double) amount;
+		this.energy += amount;
 		return amount;
 	}
 

@@ -1,12 +1,10 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerVajraCharger;
 import ru.wirelesstools.tiles.TileVajraChargerElectric;
@@ -14,8 +12,8 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiVajraCharger extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiVajraCharger.png");
-	private TileVajraChargerElectric tileentity;
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiVajraCharger.png");
+	private final TileVajraChargerElectric tileentity;
 
 	public GuiVajraCharger(InventoryPlayer inventoryplayer, TileVajraChargerElectric tile) {
 		super(new ContainerVajraCharger(inventoryplayer, tile));
@@ -47,12 +45,12 @@ public class GuiVajraCharger extends GuiContainer {
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
-		String tileentityname = I18n.format("gui.wirind.vajrachargername", new Object[0]);
-		String storageString = I18n.format("gui.wirind.vajrachargerstorage", new Object[0]) + ": ";
-		String aboutstring = I18n.format("gui.wirind.vajracharger.about", new Object[0]);
+		String tileentityname = I18n.format("gui.wirind.vajrachargername");
+		String storageString = I18n.format("gui.wirind.vajrachargerstorage") + ": ";
+		String aboutstring = I18n.format("gui.wirind.vajracharger.about");
 
 		String energyformatted = UtilFormatGUI.formatNumber(this.tileentity.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber((double) this.tileentity.maxStorage);
+		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tileentity.maxStorage);
 
 		int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
 		int nmPos2 = (this.xSize

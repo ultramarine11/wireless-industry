@@ -1,13 +1,13 @@
 package ru.wirelesstools.packets;
 
+import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 public class WIChannelHandler extends FMLIndexedMessageToMessageCodec<IPacketWI> {
 
@@ -21,7 +21,7 @@ public class WIChannelHandler extends FMLIndexedMessageToMessageCodec<IPacketWI>
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, IPacketWI msg, ByteBuf target) throws Exception {
+	public void encodeInto(ChannelHandlerContext ctx, IPacketWI msg, ByteBuf target) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			msg.write(new DataOutputStream(baos));

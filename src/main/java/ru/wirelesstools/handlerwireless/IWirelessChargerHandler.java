@@ -1,6 +1,5 @@
 package ru.wirelesstools.handlerwireless;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import ru.wirelesstools.tiles.IWirelessCharger;
 
@@ -18,6 +17,6 @@ public interface IWirelessChargerHandler {
 	 * @return the number of players are currently around block (size of the players
 	 *         list)
 	 */
-	public int checkPlayersAround(boolean isPrivate, IWirelessCharger tile, int radius, World world);
+	int checkPlayersAround(boolean isPrivate, IWirelessCharger tile, int radius, World world);
 
 }

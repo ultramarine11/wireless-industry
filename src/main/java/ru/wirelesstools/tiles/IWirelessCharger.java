@@ -5,18 +5,16 @@ import com.mojang.authlib.GameProfile;
 public interface IWirelessCharger {
 	
 	/** Мой метод, который уменьшает кол-во энергии в заряднике */
-	public void decreaseEnergy(double amount);
+	void decreaseEnergy(double amount);
+
+	double getCurrentEnergyInCharger();
 	
-	public double getMaxStorageOfCharger();
+	GameProfile getOwnerCharger();
 	
-	public double getCurrentEnergyInCharger();
+	int getXCoord();
 	
-	public GameProfile getOwnerCharger();
+	int getYCoord();
 	
-	public int getXCoord();
-	
-	public int getYCoord();
-	
-	public int getZCoord();
+	int getZCoord();
 
 }

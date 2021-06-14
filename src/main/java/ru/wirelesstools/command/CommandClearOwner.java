@@ -1,10 +1,5 @@
 package ru.wirelesstools.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ic2.api.item.ElectricItem;
-import ic2.api.item.IElectricItem;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -13,10 +8,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.WorldSettings.GameType;
-import ru.wirelesstools.MainWI;
 import ru.wirelesstools.item.armor.IPrivateArmor;
-import ru.wirelesstools.item.armor.QuantumEnderHelmet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandClearOwner extends CommandBase {
 
@@ -114,7 +109,7 @@ public class CommandClearOwner extends CommandBase {
 
 	@Override
 	public List<String> getCommandAliases() {
-		List<String> aliaseslist = new ArrayList<String>();
+		List<String> aliaseslist = new ArrayList<>();
 		aliaseslist.add(Alias1);
 
 		return aliaseslist;

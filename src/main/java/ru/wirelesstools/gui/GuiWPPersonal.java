@@ -1,26 +1,21 @@
 package ru.wirelesstools.gui;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerWPPersonal;
 import ru.wirelesstools.packets.PacketGuiPressButton;
 import ru.wirelesstools.tiles.TileWPBasePersonal;
+import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWPPersonal extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/wirelesssolarpanel.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/wirelesssolarpanel.png");
 
 	private TileWPBasePersonal tileentity;
 
@@ -55,7 +50,7 @@ public class GuiWPPersonal extends GuiContainer {
 			if (this.tileentity.sunIsUp) {
 
 				this.drawTexturedModalRect(h + 24, k + 42, 195, 15, 14, 14);
-			} else if (!this.tileentity.sunIsUp) {
+			} else {
 
 				this.drawTexturedModalRect(h + 24, k + 42, 210, 15, 14, 14);
 			}
@@ -65,24 +60,22 @@ public class GuiWPPersonal extends GuiContainer {
 	}
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-
 		this.owner = this.tileentity.getOwner();
-
-		String formatPanelName = I18n.format(this.tileentity.panelName, new Object[0]);
+		String formatPanelName = I18n.format(this.tileentity.panelName);
 		int nmPos = (this.xSize - this.fontRendererObj.getStringWidth(formatPanelName)) / 2;
 		this.fontRendererObj.drawString(formatPanelName, nmPos, 7, 7718655);
-		String storageString = I18n.format("gui.WP.storage", new Object[0]) + ": ";
-		String maxOutputString = I18n.format("gui.WP.maxOutput", new Object[0]) + ": ";
-		String generatingString = I18n.format("gui.WP.generating", new Object[0]) + ": ";
-		String energyPerTickString = I18n.format("gui.WP.energyPerTick", new Object[0]);
-		String channelString = I18n.format("gui.WPPersonal.channel", new Object[0]) + ": ";
-		String owner1 = I18n.format("gui.WPP.owner", new Object[0]) + ": ";
-
+		String storageString = I18n.format("gui.WP.storage") + ": ";
+		String maxOutputString = I18n.format("gui.WP.maxOutput") + ": ";
+		String generatingString = I18n.format("gui.WP.generating") + ": ";
+		String energyPerTickString = I18n.format("gui.WP.energyPerTick");
+		String channelString = I18n.format("gui.WPPersonal.channel") + ": ";
+		String owner1 = I18n.format("gui.WPP.owner") + ": ";
 		this.fontRendererObj.drawString(
-				storageString + (int) this.tileentity.storage + "/" + this.tileentity.maxStorage, 77, 22, 13487565);
-		this.fontRendererObj.drawString(maxOutputString + this.tileentity.production + " " + energyPerTickString, 77,
+				storageString + UtilFormatGUI.formatNumberPanel(this.tileentity.storage) + " / "
+						+ UtilFormatGUI.formatNumberPanel(this.tileentity.maxStorage), 77, 22, 13487565);
+		this.fontRendererObj.drawString(maxOutputString + UtilFormatGUI.formatNumberPanel(this.tileentity.production) + " " + energyPerTickString, 77,
 				32, 13487565);
-		this.fontRendererObj.drawString(generatingString + this.tileentity.generating + " " + energyPerTickString, 77,
+		this.fontRendererObj.drawString(generatingString + UtilFormatGUI.formatNumberPanel(this.tileentity.generating) + " " + energyPerTickString, 77,
 				42, 13487565);
 		if (this.owner != null) {
 
@@ -105,9 +98,9 @@ public class GuiWPPersonal extends GuiContainer {
 		// 5 аргумент - высота,
 		// 6 аргумент - текст.
 		this.buttonList.add(new GuiButton(2, xGuiPos + 18, yGuiPos + 62, 22, 12,
-				I18n.format("button.increment.channel", new Object[0])));
+				I18n.format("button.increment.channel")));
 		this.buttonList.add(new GuiButton(3, xGuiPos + 45, yGuiPos + 62, 22, 12,
-				I18n.format("button.decrement.channel", new Object[0])));
+				I18n.format("button.decrement.channel")));
 	}
 
 	protected void actionPerformed(GuiButton button) {

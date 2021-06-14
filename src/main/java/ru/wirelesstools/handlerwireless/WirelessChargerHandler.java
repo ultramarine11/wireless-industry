@@ -13,79 +13,68 @@ import java.util.List;
 
 public class WirelessChargerHandler implements IWirelessChargerHandler {
 
-	@Override
-	public int checkPlayersAround(boolean isPrivate, IWirelessCharger tile, int radius, World world) {
-		if (isPrivate) {
-			if (tile.getOwnerCharger() != null) {
-				AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
-						tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
-						tile.getYCoord() + radius, tile.getZCoord() + radius);
-				List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
-				for (EntityPlayer localplayer : list) {
-					if (localplayer != null) {
-						if (!localplayer.getGameProfile().equals(tile.getOwnerCharger()))
-							continue;
+    @Override
+    public int checkPlayersAround(boolean isPrivate, IWirelessCharger tile, int radius, World world) {
+        if (isPrivate) {
+            if (tile.getOwnerCharger() != null) {
+                AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
+                        tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
+                        tile.getYCoord() + radius, tile.getZCoord() + radius);
+                List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
+                for (EntityPlayer localplayer : list) {
+                    if (localplayer != null) {
+                        if (!localplayer.getGameProfile().equals(tile.getOwnerCharger()))
+                            continue;
 
-						this.checkPlayerInventory(localplayer, tile);
-						return 1;
-					}
-				}
-			}
-		} else {
-			AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
-					tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
-					tile.getYCoord() + radius, tile.getZCoord() + radius);
-			List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
-			for (EntityPlayer localplayer : list) {
-				if (localplayer != null) {
+                        this.checkPlayerInventory(localplayer, tile);
+                        return 1;
+                    }
+                }
+            }
+        } else {
+            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
+                    tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
+                    tile.getYCoord() + radius, tile.getZCoord() + radius);
+            List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
+            for (EntityPlayer localplayer : list) {
+                if (localplayer != null)
+                    this.checkPlayerInventory(localplayer, tile);
+            }
+            return list.size();
+        }
+        return 0;
+    }
 
-					this.checkPlayerInventory(localplayer, tile);
-				}
-			}
+    private void checkPlayerInventory(EntityPlayer player, IWirelessCharger tile) {
+        for (ItemStack currentstackarmor : player.inventory.armorInventory) {
+            if (currentstackarmor == null)
+                continue;
 
-			return list.size();
-		}
-		return 0;
-	}
+            if (currentstackarmor.getItem() instanceof IElectricItem) {
+                if (tile.getCurrentEnergyInCharger() > 0.0)
+                    WirelessUtil.chargeItemEU(tile, currentstackarmor);
+            }
 
-	private void checkPlayerInventory(EntityPlayer player, IWirelessCharger tile) {
-		for (ItemStack currentstackarmor : player.inventory.armorInventory) {
-			if (currentstackarmor == null)
-				continue;
+            if (currentstackarmor.getItem() instanceof IEnergyContainerItem) {
+                if (tile.getCurrentEnergyInCharger() > 0.0)
+                    WirelessUtil.chargeItemRF(tile, currentstackarmor);
+            }
+        }
 
-			if (currentstackarmor.getItem() instanceof IElectricItem) {
-				if (tile.getCurrentEnergyInCharger() > 0.0) {
+        for (ItemStack currentstackinventory : player.inventory.mainInventory) {
+            if (currentstackinventory == null)
+                continue;
 
-					WirelessUtil.chargeItemEU(player, tile, currentstackarmor);
-				}
-			}
+            if (currentstackinventory.getItem() instanceof IElectricItem) {
+                if (tile.getCurrentEnergyInCharger() > 0.0)
+                    WirelessUtil.chargeItemEU(tile, currentstackinventory);
+            }
 
-			if (currentstackarmor.getItem() instanceof IEnergyContainerItem) {
-				if (tile.getCurrentEnergyInCharger() > 0.0) {
-
-					WirelessUtil.chargeItemRF(player, tile, currentstackarmor);
-				}
-			}
-		}
-
-		for (ItemStack currentstackinventory : player.inventory.mainInventory) {
-			if (currentstackinventory == null)
-				continue;
-
-			if (currentstackinventory.getItem() instanceof IElectricItem) {
-				if (tile.getCurrentEnergyInCharger() > 0.0) {
-
-					WirelessUtil.chargeItemEU(player, tile, currentstackinventory);
-				}
-			}
-
-			if (currentstackinventory.getItem() instanceof IEnergyContainerItem) {
-				if (tile.getCurrentEnergyInCharger() > 0.0) {
-
-					WirelessUtil.chargeItemRF(player, tile, currentstackinventory);
-				}
-			}
-		}
-	}
+            if (currentstackinventory.getItem() instanceof IEnergyContainerItem) {
+                if (tile.getCurrentEnergyInCharger() > 0.0)
+                    WirelessUtil.chargeItemRF(tile, currentstackinventory);
+            }
+        }
+    }
 
 }

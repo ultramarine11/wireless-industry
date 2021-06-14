@@ -121,8 +121,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, axisalignedbb);
 		for (Entity entityinlist : list) {
 			if (entityinlist instanceof EntityPlayer) {
-				EntityPlayer player1 = (EntityPlayer) entityinlist;
-				this.checkInvPlayer(player1, thisarmor);
+				this.checkInvPlayer((EntityPlayer) entityinlist, thisarmor);
 			}
 		}
 	}

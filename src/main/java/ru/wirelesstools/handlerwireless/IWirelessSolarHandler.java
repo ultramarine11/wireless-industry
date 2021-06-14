@@ -11,8 +11,8 @@ public interface IWirelessSolarHandler {
 	 * 
 	 * @return transferred amount
 	 */
-	public double transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver);
+	double transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver);
 	
-	public void transmitEnergyWireleslyQGen(IWirelessStorage receiver, WirelessQuantumGeneratorBase qgen);
+	void transmitEnergyWireleslyQGen(IWirelessStorage receiver, WirelessQuantumGeneratorBase qgen);
 
 }

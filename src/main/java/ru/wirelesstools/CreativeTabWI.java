@@ -7,7 +7,6 @@ public class CreativeTabWI extends CreativeTabs {
 
 	public CreativeTabWI() {
 		super("WirelessSP");
-
 	}
 
 	@Override

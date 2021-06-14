@@ -135,7 +135,6 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		boolean active = nbt.getBoolean("active");
 		byte toggleTimer = nbt.getByte("toggleTimer");
 		int nightvisionmode = nbt.getInteger("NightVisMode");
-
 		if (!world.isRemote) {
 			this.gainFuel(player, world, stack);
 
@@ -180,7 +179,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 					continue;
 				if (st2.getItem() instanceof IEnergyContainerItem) {
 					if (ElectricItem.manager.getCharge(stack) > 0.0)
-						MiscUtils.chargeRFItemFromArmor(stack, st2);
+						MiscUtils.chargeRFItemFromArmor2(stack, st2);
 				}
 			}
 		}
@@ -231,7 +230,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		}
 
 		if (!world.isRemote) {
-			if (active)
+			if (active && ElectricItem.manager.getCharge(stack) > 0.0)
 				this.checkPlayers(player, world, stack);
 		}
 
@@ -250,8 +249,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, axisalignedbb);
 		for (Entity entityinlist : list) {
 			if (entityinlist instanceof EntityPlayer) {
-				EntityPlayer player1 = (EntityPlayer) entityinlist;
-				this.checkPlayerInventories(player1, thisarmor);
+				this.checkPlayerInventories((EntityPlayer) entityinlist, thisarmor);
 			}
 		}
 	}
@@ -261,14 +259,14 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 			if (current == null)
 				continue;
 			if (current.getItem() instanceof IEnergyContainerItem)
-				MiscUtils.chargeRFItemFromArmor(thisarmor, current);
+				MiscUtils.chargeRFItemFromArmor2(thisarmor, current);
 		}
 
 		for (ItemStack current : player.inventory.mainInventory) {
 			if (current == null)
 				continue;
 			if (current.getItem() instanceof IEnergyContainerItem)
-				MiscUtils.chargeRFItemFromArmor(thisarmor, current);
+				MiscUtils.chargeRFItemFromArmor2(thisarmor, current);
 		}
 	}
 

@@ -202,7 +202,7 @@ public class TileEntityWirelessCharger extends TileEntity
 
 	@Override
 	public int addEnergy(int amount) {
-		this.energy += (double) amount;
+		this.energy += amount;
 		return amount;
 	}
 
@@ -254,12 +254,6 @@ public class TileEntityWirelessCharger extends TileEntity
 	public GameProfile getOwner() {
 
 		return this.owner;
-	}
-
-	@Override
-	public double getMaxStorageOfCharger() {
-
-		return this.maxStorage;
 	}
 
 	@Override

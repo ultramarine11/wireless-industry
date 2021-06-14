@@ -89,26 +89,26 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
                 if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
 
                     player.addChatMessage(new ChatComponentTranslation(
-                            EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner"),
-                            new Object[0]));
+                            EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner")
+                    ));
                 } else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
                         .equals(player.getGameProfile())) {
 
                     player.addChatMessage(new ChatComponentTranslation(
                             EnumChatFormatting.DARK_RED
-                                    + StatCollector.translateToLocal("chat.message.you.cannot.clear.owner"),
-                            new Object[0]));
+                                    + StatCollector.translateToLocal("chat.message.you.cannot.clear.owner")
+                    ));
                     player.addChatMessage(new ChatComponentTranslation(
                             EnumChatFormatting.DARK_RED
-                                    + StatCollector.translateToLocal("chat.message.owner.can.clear.owner"),
-                            new Object[0]));
+                                    + StatCollector.translateToLocal("chat.message.owner.can.clear.owner")
+                    ));
                 } else {
 
                     nbt.removeTag("ownerGameProfile");
                     player.addChatMessage(new ChatComponentTranslation(
                             EnumChatFormatting.DARK_GREEN
-                                    + StatCollector.translateToLocal("chat.message.owner.successfully.cleared"),
-                            new Object[0]));
+                                    + StatCollector.translateToLocal("chat.message.owner.successfully.cleared")
+                    ));
                 }
 
             }
@@ -143,20 +143,17 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
                         case 0:
                             player.addChatMessage(new
                                     ChatComponentTranslation(EnumChatFormatting.RED +
-                                    StatCollector.translateToLocal("chat.message.nightvision.off"), new
-                                    Object[0]));
+                                    StatCollector.translateToLocal("chat.message.nightvision.off")));
                             break;
                         case 1:
                             player.addChatMessage(new
                                     ChatComponentTranslation(EnumChatFormatting.DARK_AQUA +
-                                    StatCollector.translateToLocal("chat.message.nightvision.auto"), new
-                                    Object[0]));
+                                    StatCollector.translateToLocal("chat.message.nightvision.auto")));
                             break;
                         case 2:
                             player.addChatMessage(new
                                     ChatComponentTranslation(EnumChatFormatting.GREEN +
-                                    StatCollector.translateToLocal("chat.message.nightvision.on"), new
-                                    Object[0]));
+                                    StatCollector.translateToLocal("chat.message.nightvision.on")));
                             break;
                     }
                 }
@@ -233,7 +230,7 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
         } else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
             list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner1"));
             list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner2"));
-            list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
+            list.add(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
                     + NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).getName());
         } else {
             list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));

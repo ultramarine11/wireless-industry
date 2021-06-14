@@ -81,26 +81,26 @@ public class QuantumEnderLeggings extends ItemArmor
 				if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
 
 					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner"),
-							new Object[0]));
+							EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner")
+					));
 				} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
 						.equals(player.getGameProfile())) {
 
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.you.cannot.clear.owner"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.you.cannot.clear.owner")
+					));
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.owner.can.clear.owner"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.owner.can.clear.owner")
+					));
 				} else {
 
 					nbt.removeTag("ownerGameProfile");
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_GREEN
-									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared")
+					));
 				}
 
 			}
@@ -140,12 +140,10 @@ public class QuantumEnderLeggings extends ItemArmor
 					if (player.isInWater()) {
 						speed = 0.1F;
 						if (IC2.keyboard.isJumpKeyDown(player)) {
-							player.motionY += (double) 0.1F;
+							player.motionY += 0.1F;
 						}
 					}
-					if (speed > 0.0F) {
-						player.moveFlying(0.0F, 1.0F, speed);
-					}
+					player.moveFlying(0.0F, 1.0F, speed);
 				}
 			}
 		}
@@ -160,7 +158,7 @@ public class QuantumEnderLeggings extends ItemArmor
 		} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
 			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner1"));
 			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner2"));
-			list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
+			list.add(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
 					+ NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).getName());
 		} else {
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));

@@ -34,7 +34,7 @@ public class TileXPSenderElectric extends TileEntity
     public String xpsendername;
     protected int sendradius = 5;
     protected int pointsxp;
-    private int energyperpoint;
+    private final int energyperpoint;
     protected int playercountinradius = 0;
 
     public TileXPSenderElectric(int maxstorage, int tier, String name, int xp, int energyperpoint) {
@@ -82,7 +82,7 @@ public class TileXPSenderElectric extends TileEntity
 
     protected void consumeEnergyXPSender() {
         double localenergy = this.energy;
-        localenergy -= (double) this.getTotalSpentEUValue();
+        localenergy -= this.getTotalSpentEUValue();
         if (localenergy < 0) {
             localenergy = 0;
         }
@@ -93,6 +93,11 @@ public class TileXPSenderElectric extends TileEntity
 
         return this.energyperpoint * this.pointsxp;
     }
+    
+    public int getXPPointsToSend() {
+    	
+    	return this.pointsxp;
+    }
 
     protected void countPlayers(int radius) {
         AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord - radius, this.yCoord - radius,
@@ -100,13 +105,13 @@ public class TileXPSenderElectric extends TileEntity
         List<EntityPlayer> list = this.getWorldObj().getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
         if ((this.worldObj.getTotalWorldTime() % (ConfigWI.secondsXPSender * 20)) == 0) {
 
-            this.sendXPToPlayersAround(radius, this.pointsxp, list);
+            this.sendXPToPlayersAround(this.pointsxp, list);
         }
 
         this.playercountinradius = list.size();
     }
 
-    protected void sendXPToPlayersAround(int radius, int points, List<EntityPlayer> list) {
+    protected void sendXPToPlayersAround(int points, List<EntityPlayer> list) {
         for (EntityPlayer player : list) {
             if (player != null) {
                 if (this.energy > this.getTotalSpentEUValue()) {

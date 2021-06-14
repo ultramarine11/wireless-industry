@@ -37,12 +37,9 @@ public class GuiWChargerNew extends GuiIC2 {
 
 		String tileentityname = I18n.format(this.container.base.chargerName);
 		String storageString = I18n.format("gui.wirind.wirelesschargerstorage") + ": ";
-		String explainstring1 = I18n.format("gui.wirind.wirelesscharger.about1");
-		String explainstring2 = I18n.format("gui.wirind.wirelesscharger.about2");
 		String energyformatted = UtilFormatGUI.formatNumber(this.container.base.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber((double) this.container.base.maxStorage);
+		String maxstorageformatted = UtilFormatGUI.formatNumber(this.container.base.maxStorage);
 		String tileowner = I18n.format("gui.wirind.wirelesscharger.owner") + ": ";
-		String numplayersString = I18n.format("gui.wirind.numberplayers") + ": ";
 		String radiusString = I18n.format("gui.wirind.radiusofcharge") + ": ";
 		String noownerwhy = I18n.format("gui.wirind.noowner.why");
 
@@ -54,8 +51,6 @@ public class GuiWChargerNew extends GuiIC2 {
 
 		int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
 		int nmPos2 = (this.xSize - this.fontRendererObj.getStringWidth(stringEnergyAll)) / 2;
-		int nmPos31 = (this.xSize - this.fontRendererObj.getStringWidth(explainstring1)) / 2;
-		int nmPos32 = (this.xSize - this.fontRendererObj.getStringWidth(explainstring2)) / 2;
 		int nmPos4 = (this.xSize - this.fontRendererObj.getStringWidth(radiusAll)) / 2;
 		int nmPos5 = (this.xSize - this.fontRendererObj.getStringWidth(playercountStringAll)) / 2;
 		int nmPos6 = (this.xSize - this.fontRendererObj.getStringWidth(ownerAll)) / 2;

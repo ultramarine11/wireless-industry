@@ -1,11 +1,8 @@
 package ru.wirelesstools.fluidmachines;
 
-import java.util.Random;
-
 import ic2.core.IC2;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +12,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.packets.PacketPlayerStandOn;
+
+import java.util.Random;
 
 public class BlockExpGen extends BlockContainer {
 
@@ -68,7 +66,6 @@ public class BlockExpGen extends BlockContainer {
 
 	public IIcon getIcon(IBlockAccess blockaccess, int x, int y, int z, int blockSide) {
 		int blockMeta = blockaccess.getBlockMetadata(x, y, z);
-		TileEntity te = blockaccess.getTileEntity(x, y, z);
 		if (this.isActive(blockaccess, x, y, z)) {
 
 			return this.icons[blockMeta][blockSide + 6];
@@ -94,9 +91,9 @@ public class BlockExpGen extends BlockContainer {
 	}
 
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		TileExpGen te = (TileExpGen) world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (entity instanceof EntityPlayer && te instanceof TileExpGen) {
-			te.isPlayerStandingOnBlock((EntityPlayer) entity, x, y, z, world);
+			((TileExpGen) te).isPlayerStandingOnBlock((EntityPlayer) entity);
 		}
 
 	}

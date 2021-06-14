@@ -1,11 +1,5 @@
 package ru.wirelesstools.item.weapon;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
@@ -18,7 +12,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,14 +28,16 @@ import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 
+import java.util.*;
+
 public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 
 	private IIcon[] textures;
 	public double maxenergy;
 	protected int tier;
 	private boolean isLooting5;
-	private double useamount;
-	private final Set<Object> whitelist = new HashSet<Object>(Arrays.asList(new Object[] { Blocks.web, Material.plants,
+	private final double useamount;
+	private final Set<Object> whitelist = new HashSet<>(Arrays.asList(new Object[] { Blocks.web, Material.plants,
 			Material.vine, Material.coral, Material.leaves, Material.gourd }));
 
 	public ItemCompositeSaber(String name, boolean isLootingV, double energymax, int tier, double useAmount) {
@@ -57,7 +52,6 @@ public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 	}
 
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
-
 		info.add(StatCollector.translateToLocal("press.rmb.saber"));
 		info.add(StatCollector.translateToLocal("item.lootsaber.energy.drain") + ": "
 				+ String.valueOf((int) this.useamount) + " Eu");

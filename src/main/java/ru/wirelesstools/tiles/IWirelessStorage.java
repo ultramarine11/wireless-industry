@@ -2,10 +2,10 @@ package ru.wirelesstools.tiles;
 
 public interface IWirelessStorage {
 
-	public double getMaxCapacityOfStorage();
+	double getMaxCapacityOfStorage();
 
-	public double getCurrentEnergyInStorage();
+	double getCurrentEnergyInStorage();
 
-	public void addEnergy(double amount);
+	void addEnergy(double amount);
 
 }

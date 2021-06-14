@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.item.ElectricItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -18,7 +17,7 @@ import java.util.Collection;
 
 public class WirelessUtil {
 
-	public static void chargeItemEU(EntityPlayer player, IWirelessCharger tile, ItemStack currentItemStackEU) {
+	public static void chargeItemEU(IWirelessCharger tile, ItemStack currentItemStackEU) {
 		if (ElectricItem.manager.charge(currentItemStackEU, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true,
 				true) > 0) {
 			tile.decreaseEnergy(ElectricItem.manager.charge(currentItemStackEU, tile.getCurrentEnergyInCharger(),
@@ -26,17 +25,13 @@ public class WirelessUtil {
 		}
 	}
 
-	public static void chargeItemRF(EntityPlayer player, IWirelessCharger tile, ItemStack currentItemStackRF) {
+	public static void chargeItemRF(IWirelessCharger tile, ItemStack currentItemStackRF) {
 		IEnergyContainerItem item = (IEnergyContainerItem) currentItemStackRF.getItem();
-		int amountRfCanBeReceived = item.receiveEnergy(currentItemStackRF, Integer.MAX_VALUE, true);
-		if (amountRfCanBeReceived > 0) {
-			double chargeOfTileRF = tile.getCurrentEnergyInCharger() * ConfigWI.EuToRfmultiplier;
-
-			double realSentEnergyRF = Math.min(chargeOfTileRF, amountRfCanBeReceived);
-			double drainedFromTile = realSentEnergyRF / ConfigWI.EuToRfmultiplier;
-
-			item.receiveEnergy(currentItemStackRF, (int) realSentEnergyRF, false);
-			tile.decreaseEnergy(drainedFromTile);
+		if (item.receiveEnergy(currentItemStackRF, Integer.MAX_VALUE, true) > 0) {
+			int euFinallySent = item.receiveEnergy(currentItemStackRF,
+					(int) (tile.getCurrentEnergyInCharger() * ConfigWI.EuToRfmultiplier),
+					false) / ConfigWI.EuToRfmultiplier;
+			tile.decreaseEnergy(euFinallySent);
 		}
 	}
 
@@ -54,7 +49,7 @@ public class WirelessUtil {
 		if (!qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap.isEmpty()) {
 			for (TileEntity tile : (Collection<TileEntity>) qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
 					qgen.zCoord).chunkTileEntityMap.values()) {
-				if (tile != null && tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
+				if (tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
 					IEnergySink sink = (IEnergySink) tile;
 					if (sink.getDemandedEnergy() > 0) {
 						ret = true;
@@ -64,7 +59,6 @@ public class WirelessUtil {
 				}
 			}
 		}
-
 		return ret;
 	}
 
@@ -73,15 +67,12 @@ public class WirelessUtil {
 				.isEmpty()) {
 			for (TileEntity tile : (Collection<TileEntity>) charger.getWorldObj()
 					.getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap.values()) {
-				if (tile != null && tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
+				if (tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
 					IEnergySink tileenergysink = (IEnergySink) tile;
 					WirelessUtil.sendEnergyToEnergySink(charger, tileenergysink);
 				}
-
 			}
-
 		}
-
 	}
 
 }

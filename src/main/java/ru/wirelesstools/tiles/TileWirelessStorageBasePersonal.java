@@ -1,35 +1,26 @@
 package ru.wirelesstools.tiles;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-import java.util.Vector;
-
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.eventhandler.Event;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.network.INetworkDataProvider;
 import ic2.api.network.INetworkUpdateListener;
 import ic2.api.tile.IEnergyStorage;
 import ic2.core.IC2;
 import ic2.core.block.personal.IPersonalBlock;
-import ic2.core.network.NetworkManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerWSBPersonal;
 import ru.wirelesstools.packets.IHasButton;
+
+import java.util.*;
 
 public class TileWirelessStorageBasePersonal extends TileEntity implements IEnergyStorage, IEnergySource, IHasButton,
 		IPersonalBlock, IWirelessStorage, INetworkDataProvider, INetworkUpdateListener {
@@ -39,9 +30,6 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 	public int output;
 	public int tier;
 	public boolean targetSet;
-	public int targetX;
-	public int targetY;
-	public int targetZ;
 
 	public String wsbPersName;
 
@@ -53,7 +41,6 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 	protected boolean isconnected;
 
 	public int channel = 0;
-	private UUID id = null;
 	private boolean isAddedToMap;
 
 	public static ArrayList<TileWirelessStorageBasePersonal> listofstorages = new ArrayList<>();
@@ -73,19 +60,9 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 		this.wsbPersName = name;
 	}
 
-	public void setID(UUID id) {
-
-		this.id = id;
-	}
-
 	public void setPlayerProfile(GameProfile profile) {
 		this.owner = profile;
 		IC2.network.get().updateTileEntityField(this, "owner");
-	}
-
-	public GameProfile getPlayerProfile() {
-
-		return owner;
 	}
 
 	public void updateEntity() {
@@ -95,12 +72,12 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 			return;
 		}
 
-		if (!this.initialized && this.worldObj != null) {
+		if (!this.initialized) {
 			intialize();
 		}
 
 		if ((!this.worldObj.isRemote) & (!this.isAddedToMap)) {
-			if (listofstorages.indexOf(this) < 0) {
+			if (!listofstorages.contains(this)) {
 
 				listofstorages.add(this);
 
@@ -332,7 +309,7 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 	@Override
 	public double getMaxCapacityOfStorage() {
 
-		return (double) this.maxStorage;
+		return this.maxStorage;
 	}
 
 	@Override

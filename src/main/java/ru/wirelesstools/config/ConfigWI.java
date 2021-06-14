@@ -72,12 +72,23 @@ public class ConfigWI {
 	public static int wneuspstorage;
 	public static int wneusptransfer;
 
+	public static int wadronspgenday;
+	public static int wadronspgennight;
+	public static int wadronspoutput;
+	public static int wadronsptier;
+	public static int wadronspstorage;
+	public static int wadronsptransfer;
+
+	public static int wbarionspgenday;
+	public static int wbarionspgennight;
+	public static int wbarionspoutput;
+	public static int wbarionsptier;
+	public static int wbarionspstorage;
+	public static int wbarionsptransfer;
+
 	public static int wstorageoutput;
 	public static int wstoragemaxstorage;
 	public static int wstoragetier;
-
-	public static int chargerprivateradius;
-	public static int chargerpublicradius;
 
 	public static int maxstorageofchargers;
 	public static int tierofchargers;
@@ -104,5 +115,8 @@ public class ConfigWI {
 	public static int vampBowShotEnergyCost;
 	public static int vampBowMaxCharge;
 	public static int vampBowXPVampiredAmount;
+
+	public static int maxVajraCharge;
+	public static int vajraEnergyPerOperation;
 
 }

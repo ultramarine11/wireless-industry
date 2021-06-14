@@ -1,11 +1,11 @@
 package ru.wirelesstools.packets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class PacketGuiPressButton extends IPacketWI {
 
@@ -50,7 +50,7 @@ public class PacketGuiPressButton extends IPacketWI {
 			WorldServer ws = DimensionManager.getWorld(this.dimID);
 			if (ws != null) {
 				TileEntity te = ws.getTileEntity(this.x, this.y, this.z);
-				if (te != null && te instanceof IHasButton)
+				if (te instanceof IHasButton)
 					((IHasButton) te).handleButtonClick(this.buttonID);
 			}
 		} catch (Throwable t) {

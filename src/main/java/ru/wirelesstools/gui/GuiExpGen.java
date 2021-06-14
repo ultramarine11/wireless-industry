@@ -1,26 +1,22 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import ic2.core.util.DrawUtil;
 import ic2.core.util.GuiTooltipHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerExpGen;
 import ru.wirelesstools.fluidmachines.TileExpGen;
-import ru.wirelesstools.fluidmachines.TileXPGenPublic;
 
 public class GuiExpGen extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GUIExpGen.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GUIExpGen.png");
 
 	public TileExpGen tileentity;
 
@@ -45,13 +41,13 @@ public class GuiExpGen extends GuiContainer {
 		}
 
 		this.fontRendererObj.drawString(
-				I18n.format("tile.xpgen.energy", new Object[0]) + ": " + (int) this.tileentity.energy + " Eu", 6, 40,
+				I18n.format("tile.xpgen.energy") + ": " + (int) this.tileentity.energy + " Eu", 6, 40,
 				4210752);
-		this.fontRendererObj.drawString(I18n.format("xpgen.amount.xp", new Object[0]) + ": " + this.xpamount + " mB", 6,
+		this.fontRendererObj.drawString(I18n.format("xpgen.amount.xp") + ": " + this.xpamount + " mB", 6,
 				30, 4210752);
 		if (fsamount != null) {
 
-			String tooltip = I18n.format(fsamount.getFluid().getName(), new Object[0]) + ": " + fsamount.amount + " mB";
+			String tooltip = I18n.format(fsamount.getFluid().getName()) + ": " + fsamount.amount + " mB";
 			GuiTooltipHelper.drawAreaTooltip(par1 - this.guiLeft, par2 - this.guiTop, tooltip, 99, 25, 112, 73);
 		}
 	}

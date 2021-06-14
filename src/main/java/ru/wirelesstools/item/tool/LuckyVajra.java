@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
+import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.tiles.TileVajraCharger;
 
 import java.util.HashSet;
@@ -36,7 +37,6 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 
 	public double maxCharge;
 	protected int tier;
-	protected float effPower;
 	protected int energyPerOperation;
 	protected double transferLimit;
 
@@ -46,11 +46,10 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 		this.setTextureName(Reference.PathTex + "itemVajraLucky");
 		this.setCreativeTab(MainWI.tabwi);
 		this.tier = 3;
-		this.maxCharge = 6000000.0D;
+		this.maxCharge = ConfigWI.maxVajraCharge;
 		this.transferLimit = 1000000.0D;
-		this.effPower = 20000F;
-		this.efficiencyOnProperMaterial = this.effPower;
-		this.energyPerOperation = 3000;
+		this.efficiencyOnProperMaterial = 20000F; //effective power
+		this.energyPerOperation = ConfigWI.vajraEnergyPerOperation;
 	}
 
 	@Override
@@ -95,7 +94,7 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 			TileEntity te = world.getTileEntity(i, j, k);
 			if (te instanceof TileVajraCharger) {
 				TileVajraCharger tilewch = (TileVajraCharger) te;
-				int sentEnergy = 0;
+				int sentEnergy;
 				if (tilewch.getStored() > 0) {
 					sentEnergy = (int) ElectricItem.manager.charge(itemstack, tilewch.getStored(),
 							Integer.MAX_VALUE, false, false);
@@ -117,15 +116,13 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 			if (player.isSneaking()) {
 				boolean modenew = !nbt.getBoolean("vajramode");
 				nbt.setBoolean("vajramode", modenew);
+				Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 				if (modenew) {
-					Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 					enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
 					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
 					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.fortune.active")
-					));
+							EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.fortune.active")));
 				} else {
-					Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 					enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
 					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
 					player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_PURPLE
@@ -133,7 +130,6 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 				}
 			}
 		}
-
 		return stack;
 	}
 
@@ -175,7 +171,6 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 				ElectricItem.manager.discharge(itemstack, this.energyPerOperation, this.tier, true, false, false);
 			}
 		}
-
 		return true;
 	}
 
@@ -194,10 +189,11 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 	@SideOnly(value = Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			info.add(I18n.format("about.ench1"));
+			info.add(I18n.format("about.ench1") + " " + EnumChatFormatting.AQUA
+					+ I18n.format("tooltip.fortune"));
 			info.add(I18n.format("about.ench2"));
 		} else {
-			info.add(I18n.format("press.lshift"));
+			info.add(EnumChatFormatting.ITALIC + I18n.format("press.lshift"));
 		}
 	}
 

@@ -1,12 +1,12 @@
 package ru.wirelesstools.packets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import ru.wirelesstools.fluidmachines.TileExpGen;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class PacketPlayerStandOn extends IPacketWI {
 
@@ -34,16 +34,6 @@ public class PacketPlayerStandOn extends IPacketWI {
 		bytes.writeInt(this.z);
 		bytes.writeBoolean(this.active);
 
-	}
-
-	public static void issue(TileExpGen te, boolean bool) {
-		PacketPlayerStandOn pgpb = new PacketPlayerStandOn();
-		pgpb.x = te.xCoord;
-		pgpb.y = te.yCoord;
-		pgpb.z = te.zCoord;
-		pgpb.dimID = (te.getWorldObj()).provider.dimensionId;
-		pgpb.active = bool;
-		WIPacketHandler.sendToServer(pgpb);
 	}
 
 	public void execute() {

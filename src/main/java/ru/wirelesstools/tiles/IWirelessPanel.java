@@ -1,13 +1,11 @@
 package ru.wirelesstools.tiles;
 
 public interface IWirelessPanel {
-	
-	public double getMaxStorageOfPanel();
 
-	public double getCurrentEnergyInPanel();
+	double getCurrentEnergyInPanel();
 
-	public int getWirelessTransferLimit();
+	int getWirelessTransferLimit();
 
-	public void extractEnergy(double amount);
+	void extractEnergy(double amount);
 
 }

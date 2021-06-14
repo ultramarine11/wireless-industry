@@ -1,7 +1,6 @@
 package ru.wirelesstools.fluidmachines;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -35,7 +34,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 	public double energy = 0D;
 	public int maxEnergy;
 	private boolean addedToEnergyNet = false;
-	private int tier;
+	private final int tier;
 	private boolean loaded;
 	public FluidTank fluidTank;
 	private EntityPlayer player = null;
@@ -99,7 +98,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 
 	public void onLoaded() {
 		if (!this.worldObj.isRemote) {
-			MinecraftForge.EVENT_BUS.post((Event) new EnergyTileLoadEvent(this));
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 			this.addedToEnergyNet = true;
 		}
 		this.loaded = true;
@@ -114,7 +113,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 
 	public void onUnloaded() {
 		if (!this.worldObj.isRemote && this.addedToEnergyNet) {
-			MinecraftForge.EVENT_BUS.post((Event) new EnergyTileUnloadEvent(this));
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			this.addedToEnergyNet = false;
 		}
 		this.loaded = false;
@@ -197,7 +196,7 @@ public class TileExpGen extends TileEntity implements IEnergySink, IEnergyStorag
 		return this.active;
 	}
 
-	public void isPlayerStandingOnBlock(EntityPlayer entity, int x, int y, int z, World world) {
+	public void isPlayerStandingOnBlock(EntityPlayer entity) {
 		if (this.player == null || this.player.getUniqueID() != entity.getUniqueID()) {
 			this.player = entity;
 			this.setActive(true);

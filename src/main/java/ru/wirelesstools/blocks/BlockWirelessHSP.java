@@ -12,7 +12,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.tiles.TileWirelessASP;
 import ru.wirelesstools.tiles.TileWirelessHSP;
 
 public class BlockWirelessHSP extends BlockContainer {
@@ -27,7 +26,6 @@ public class BlockWirelessHSP extends BlockContainer {
 	}
 
 	public void registerBlockIcons(IIconRegister reg) {
-
 		this.icons = new IIcon[3];
 		this.icons[0] = reg.registerIcon(Reference.PathTex + "all_bottom");
 		this.icons[1] = reg.registerIcon(Reference.PathTex + "hsp_top");
@@ -90,7 +88,6 @@ public class BlockWirelessHSP extends BlockContainer {
 		}
 
 		return true;
-
 	}
 
 }

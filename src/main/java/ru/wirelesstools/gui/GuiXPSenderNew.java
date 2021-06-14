@@ -1,16 +1,14 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import ic2.core.ContainerBase;
 import ic2.core.GuiIC2;
 import ic2.core.IC2;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
+import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerXPSenderNew;
 import ru.wirelesstools.utils.UtilFormatGUI;
 
@@ -36,13 +34,18 @@ public class GuiXPSenderNew extends GuiIC2 {
 	}
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		String tileentityname = I18n.format(this.container.base.xpsendername, new Object[0]);
-		String storageString = I18n.format("gui.wirind.xpsenderstorage", new Object[0]) + ": ";
+		String tileentityname = I18n.format(this.container.base.xpsendername);
+		String storageString = I18n.format("gui.wirind.xpsenderstorage") + ": ";
 		String energyformatted = UtilFormatGUI.formatNumber(this.container.base.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber((double) this.container.base.maxStorage);
-		String totalspentString = I18n.format("gui.wirind.xpsendertotalspent", new Object[0]) + ": ";
-		String spentPerPlayerString = I18n.format("gui.wirind.per.player", new Object[0]);
-		String radiusString = I18n.format("gui.wirind.radius.xp.send", new Object[0]) + ": ";
+		String maxstorageformatted = UtilFormatGUI.formatNumber(this.container.base.maxStorage);
+		String totalspentString = I18n.format("gui.wirind.xpsendertotalspent") + ": ";
+		String spentPerPlayerString = I18n.format("gui.wirind.per.player");
+		String radiusString = I18n.format("gui.wirind.radius.xp.send") + ": ";
+		String xppointsString = I18n.format("gui.wirind.points.xp");
+		String secondsString = I18n.format("gui.wirind.seconds");
+		
+		String xpAmountGiven = this.container.base.getXPPointsToSend() + " " + xppointsString
+				+ " / " + ConfigWI.secondsXPSender + " " + secondsString;
 		
 		String stringEnergyAll = storageString + energyformatted + " / " + maxstorageformatted + " EU";
 
@@ -50,7 +53,7 @@ public class GuiXPSenderNew extends GuiIC2 {
 
 		String totalSpentAll = totalspentString + totalspentamount + " EU " + spentPerPlayerString;
 		
-		String playercountStringAll = I18n.format("gui.wirind.xpsenderplayercount", new Object[0]) + ": "
+		String playercountStringAll = I18n.format("gui.wirind.xpsenderplayercount") + ": "
 				+ this.container.base.getPlayerCount();
 		String radiusAll = radiusString + this.container.base.getSendRadius();
 
@@ -59,13 +62,15 @@ public class GuiXPSenderNew extends GuiIC2 {
 		int nmPos3 = (this.xSize - this.fontRendererObj.getStringWidth(totalSpentAll)) / 2;
 		int nmPos4 = (this.xSize - this.fontRendererObj.getStringWidth(playercountStringAll)) / 2;
 		int nmPos5 = (this.xSize - this.fontRendererObj.getStringWidth(radiusAll)) / 2;
+		int nmPos6 = (this.xSize - this.fontRendererObj.getStringWidth(xpAmountGiven)) / 2;
 
 		this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 4210752);
-		this.fontRendererObj.drawString(stringEnergyAll, nmPos2, 17, 4210752);
+		this.fontRendererObj.drawString(stringEnergyAll, nmPos2, 16, 4210752);
 		
-		this.fontRendererObj.drawString(totalSpentAll, nmPos3, 29, 4210752);
-		this.fontRendererObj.drawString(playercountStringAll, nmPos4, 65, 4210752);
-		this.fontRendererObj.drawString(radiusAll, nmPos5, 52, 4210752);
+		this.fontRendererObj.drawString(totalSpentAll, nmPos3, 27, 4210752);
+		this.fontRendererObj.drawString(playercountStringAll, nmPos4, 66, 4210752);
+		this.fontRendererObj.drawString(radiusAll, nmPos5 + 26, 53, 4210752);
+		this.fontRendererObj.drawString(xpAmountGiven, nmPos6 + 53, 40, 4210752);
 
 	}
 
@@ -78,7 +83,7 @@ public class GuiXPSenderNew extends GuiIC2 {
 
 		if (this.container.base.energy > 0) {
 			int l = this.container.base.gaugeEnergyScaled(40);
-			this.drawTexturedModalRect(this.xoffset + 65, this.yoffset + 39, 177, 15, l + 1, 10);
+			this.drawTexturedModalRect(this.xoffset + 63, this.yoffset + 39, 177, 15, l + 1, 10);
 		}
 	}
 	
@@ -92,10 +97,10 @@ public class GuiXPSenderNew extends GuiIC2 {
 		// 4 аргумент - ширина,
 		// 5 аргумент - высота,
 		// 6 аргумент - текст.
-		this.buttonList.add(new GuiButton(0, xGuiPos + 140, yGuiPos + 50, 22, 12,
-				I18n.format("button.xpsender.increment", new Object[0])));
-		this.buttonList.add(new GuiButton(1, xGuiPos + 18, yGuiPos + 50, 22, 12,
-				I18n.format("button.xpsender.decrement", new Object[0])));
+		this.buttonList.add(new GuiButton(0, xGuiPos + 36, yGuiPos + 50, 22, 12,
+				I18n.format("button.xpsender.increment")));
+		this.buttonList.add(new GuiButton(1, xGuiPos + 7, yGuiPos + 50, 22, 12,
+				I18n.format("button.xpsender.decrement")));
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {

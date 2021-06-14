@@ -1,28 +1,21 @@
 package ru.wirelesstools.gui;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.container.ContainerWPPersonal;
 import ru.wirelesstools.container.ContainerWSBPersonal;
 import ru.wirelesstools.packets.PacketGuiPressButton;
-import ru.wirelesstools.tiles.TileWPBasePersonal;
 import ru.wirelesstools.tiles.TileWirelessStorageBasePersonal;
+import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWSBPersonal extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiTWSBPersonal.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiTWSBPersonal.png");
 
 	private TileWirelessStorageBasePersonal tileentity;
 
@@ -58,22 +51,20 @@ public class GuiWSBPersonal extends GuiContainer {
 	}
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-
 		this.owner = this.tileentity.getOwner();
-
-		String formatWSBName = I18n.format(this.tileentity.wsbPersName, new Object[0]);
+		String formatWSBName = I18n.format(this.tileentity.wsbPersName);
 		int nmPos = (this.xSize - this.fontRendererObj.getStringWidth(formatWSBName)) / 2;
 		this.fontRendererObj.drawString(formatWSBName, nmPos, 6, 4210752);
-		String storageString = I18n.format("gui.WSB.storage", new Object[0]) + ": ";
-		String maxOutputString = I18n.format("gui.WSBP.maxOutput", new Object[0]) + ": ";
-
-		String channelString = I18n.format("gui.WSBPersonal.channel", new Object[0]) + ": ";
-		String owner1 = I18n.format("gui.WSB.owner", new Object[0]) + ": ";
-
+		String storageString = I18n.format("gui.WSB.storage") + ": ";
+		String maxOutputString = I18n.format("gui.WSBP.maxOutput") + ": ";
+		String channelString = I18n.format("gui.WSBPersonal.channel") + ": ";
+		String owner1 = I18n.format("gui.WSB.owner") + ": ";
 		this.fontRendererObj.drawString(
-				storageString + (int) this.tileentity.energy + "/" + this.tileentity.maxStorage + " Eu", 40, 23,
+				storageString + UtilFormatGUI.formatNumberPanel(this.tileentity.energy) + " / "
+						+ UtilFormatGUI.formatNumberPanel(this.tileentity.maxStorage) + " Eu", 40, 23,
 				4210752);
-		this.fontRendererObj.drawString(maxOutputString + this.tileentity.output + " Eu/t", 40, 15, 4210752);
+		this.fontRendererObj.drawString(maxOutputString + UtilFormatGUI.formatNumberPanel(this.tileentity.output)
+				+ " Eu/t", 40, 15, 4210752);
 		if (this.owner != null) {
 
 			this.fontRendererObj.drawString(owner1 + this.owner.getName(), 77, 52, 4210752);
@@ -94,9 +85,9 @@ public class GuiWSBPersonal extends GuiContainer {
 		// 5 аргумент - высота,
 		// 6 аргумент - текст.
 		this.buttonList.add(new GuiButton(4, xGuiPos + 18, yGuiPos + 50, 22, 12,
-				I18n.format("button.increment.channel", new Object[0])));
+				I18n.format("button.increment.channel")));
 		this.buttonList.add(new GuiButton(5, xGuiPos + 50, yGuiPos + 50, 22, 12,
-				I18n.format("button.decrement.channel", new Object[0])));
+				I18n.format("button.decrement.channel")));
 	}
 
 	protected void actionPerformed(GuiButton button) {

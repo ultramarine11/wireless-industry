@@ -1,17 +1,12 @@
 package ru.wirelesstools.tiles;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.mojang.authlib.GameProfile;
-
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.network.INetworkDataProvider;
 import ic2.api.network.INetworkUpdateListener;
 import ic2.core.IC2;
-import ic2.core.network.NetworkManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -25,6 +20,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerQGenWireless;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
 import ru.wirelesstools.utils.WirelessUtil;
+
+import java.util.List;
+import java.util.Vector;
 
 public class WirelessQuantumGeneratorBase extends TileEntity
 		implements IEnergySource, INetworkDataProvider, INetworkUpdateListener, IInventory {
@@ -128,7 +126,7 @@ public class WirelessQuantumGeneratorBase extends TileEntity
 
 	private static boolean areSameOwners(GameProfile id1, GameProfile id2) {
 
-		return ((id1 != null) && (id2 != null) && (id1.equals(id2))) || (id1 == id2);
+		return ((id1 != null) && (id1.equals(id2))) || (id1 == id2);
 	}
 
 	public int getWirelessTransferLimitQGen() {

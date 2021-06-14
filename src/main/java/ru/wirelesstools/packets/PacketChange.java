@@ -1,8 +1,5 @@
 package ru.wirelesstools.packets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -11,6 +8,9 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class PacketChange extends IPacketWI {
 
@@ -58,23 +58,11 @@ public class PacketChange extends IPacketWI {
 
 	}
 
-	public static void issue(TileEntity te, int eventID, NBTTagCompound nbtData) {
-		PacketChange changeState = new PacketChange();
-		changeState.x = te.xCoord;
-		changeState.y = te.yCoord;
-		changeState.z = te.zCoord;
-		changeState.eventID = eventID;
-		changeState.nbtData = nbtData;
-
-		WIPacketHandler.sendToAllPlayers(changeState);
-
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void execute() {
 		WorldClient worldClient = (Minecraft.getMinecraft()).theWorld;
 		TileEntity te = worldClient.getTileEntity(this.x, this.y, this.z);
-		if (te != null && te instanceof IRecieveServerEvents) {
+		if (te instanceof IRecieveServerEvents) {
 
 			((IRecieveServerEvents) te).onServerEvent(this.eventID, this.nbtData);
 

@@ -19,26 +19,26 @@ public class ClientTickHandlerWI {
 		EntityClientPlayerMP entityClientPlayer = mc.thePlayer;
 		if (mc.theWorld != null && mc.inGameHasFocus && !mc.gameSettings.showDebugInfo) {
 			ItemStack itemvajra = entityClientPlayer.getHeldItem();
-			ItemStack itemarmor = entityClientPlayer.inventory.armorItemInSlot(2);
+			ItemStack itemarmorchest = entityClientPlayer.inventory.armorItemInSlot(2);
 			ItemStack itemarmorhelmet = entityClientPlayer.inventory.armorItemInSlot(3);
 			int xPos1 = 0;
 			int yPos1 = 0;
 			int xPos2 = 0;
 			if (itemvajra != null && itemvajra.getItem() == MainWI.luckyVajra) {
 				String scharge = UtilFormatGUI.formatNumber(ElectricItem.manager.getCharge(itemvajra));
-				String elevelname = I18n.format("message.text.vajra.energyLevel", new Object[0]) + ": ";
+				String elevelname = I18n.format("message.text.vajra.energyLevel") + ": ";
 				String stringCharge = elevelname + scharge + " Eu";
 				xPos1 = 2;
 				yPos1 = 9 + mc.fontRenderer.FONT_HEIGHT;
 				mc.ingameGUI.drawString(mc.fontRenderer, stringCharge, xPos1, yPos1 + 1, 16777215);
 			}
 
-			if (itemarmor != null && itemarmor.getItem() == MainWI.wirelessChestPlate) {
-				double currChargeArmor = ElectricItem.manager.getCharge(itemarmor);
+			if (itemarmorchest != null && itemarmorchest.getItem() == MainWI.wirelessChestPlate) {
+				double currChargeArmor = ElectricItem.manager.getCharge(itemarmorchest);
 				float chargestatus = ((float) currChargeArmor
-						/ (float) ((IElectricItem) itemarmor.getItem()).getMaxCharge(itemarmor)) * 100.0F;
+						/ (float) ((IElectricItem) itemarmorchest.getItem()).getMaxCharge(itemarmorchest)) * 100.0F;
 				String schargearmor = UtilFormatGUI.formatNumber(currChargeArmor);
-				String echargenamearmor = I18n.format("info.text.wirelesschestplate.energyLevel", new Object[0]) + ": ";
+				String echargenamearmor = I18n.format("info.text.wirelesschestplate.energyLevel") + ": ";
 				String stringChargeArmor = echargenamearmor + schargearmor + " Eu";
 				String elevelarmor = ClientTickHandlerWI.getTextEnergyStatus(chargestatus);
 				xPos2 = 2;
@@ -48,9 +48,9 @@ public class ClientTickHandlerWI {
 
 			if (itemarmorhelmet != null && itemarmorhelmet.getItem() == MainWI.wirelessEuRfHelmet) {
 				NBTTagCompound nbt = StackUtil.getOrCreateNbtData(itemarmorhelmet);
-				String nvmodestringoff = I18n.format("info.text.wirelesshelmet.ingame.nightmode.off", new Object[0]);
-				String nvmodestringauto = I18n.format("info.text.wirelesshelmet.ingame.nightmode.auto", new Object[0]);
-				String nvmodestringon = I18n.format("info.text.wirelesshelmet.ingame.nightmode.on", new Object[0]);
+				String nvmodestringoff = I18n.format("info.text.wirelesshelmet.ingame.nightmode.off");
+				String nvmodestringauto = I18n.format("info.text.wirelesshelmet.ingame.nightmode.auto");
+				String nvmodestringon = I18n.format("info.text.wirelesshelmet.ingame.nightmode.on");
 
 				// 0: off, 1: auto, 2: on
 				int nvmode = nbt.getInteger("NightVisMode");

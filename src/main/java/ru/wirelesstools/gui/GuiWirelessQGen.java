@@ -1,21 +1,18 @@
 package ru.wirelesstools.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.authlib.GameProfile;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerQGenWireless;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public class GuiWirelessQGen extends GuiContainer {
 
-	private static ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GUIQuantumGenerator.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GUIQuantumGenerator.png");
 
 	private WirelessQuantumGeneratorBase tile;
 	private GameProfile owner;
@@ -40,14 +37,14 @@ public class GuiWirelessQGen extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		this.owner = this.tile.getOwner();
 
-		String tileentityname = I18n.format(this.tile.wirelessQGenName, new Object[0]);
-		String tileisCharging = I18n.format("gui.wirind.wirelessqgen.ischarging", new Object[0]);
-		String tileisNotCharging = I18n.format("gui.wirind.wirelessqgen.isnotcharging", new Object[0]);
-		String tileowner = I18n.format("gui.wirind.wirelessqgen.owner", new Object[0]) + ": " + this.owner.getName();
+		String tileentityname = I18n.format(this.tile.wirelessQGenName);
+		String tileisCharging = I18n.format("gui.wirind.wirelessqgen.ischarging");
+		String tileisNotCharging = I18n.format("gui.wirind.wirelessqgen.isnotcharging");
+		String tileowner = I18n.format("gui.wirind.wirelessqgen.owner") + ": " + this.owner.getName();
 		String noownerwhy = "No owner! Why?";
 		
-		String tileoutput = I18n.format("gui.wirind.wirelessqgen.output", new Object[0]) + ": " + String.valueOf(this.tile.getOutput()) + " Eu/t";
-		String tiletransmit = I18n.format("gui.wirind.wirelessqgen.transmit", new Object[0]) + ": " + String.valueOf(this.tile.getWirelessTransferLimitQGen()) + " Eu/t";
+		String tileoutput = I18n.format("gui.wirind.wirelessqgen.output") + ": " + String.valueOf(this.tile.getOutput()) + " Eu/t";
+		String tiletransmit = I18n.format("gui.wirind.wirelessqgen.transmit") + ": " + String.valueOf(this.tile.getWirelessTransferLimitQGen()) + " Eu/t";
 
 		int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
 		int nmPos2 = (this.xSize - this.fontRendererObj.getStringWidth(tileisCharging)) / 2;

@@ -2,9 +2,9 @@ package ru.wirelesstools.tiles;
 
 public interface IWirelessMachineCharger {
 	
-	public double getChargerEnergy();
+	double getChargerEnergy();
 
-	public void decreaseEnergy(double energy);
+	void decreaseEnergy(double energy);
 	
 	
 

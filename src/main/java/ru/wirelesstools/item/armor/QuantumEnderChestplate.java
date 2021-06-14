@@ -80,24 +80,24 @@ public class QuantumEnderChestplate extends ItemArmor
 			if (player.isSneaking()) {
 				if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
 					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner"),
-							new Object[0]));
+							EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner")
+					));
 				} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
 						.equals(player.getGameProfile())) {
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.you.cannot.clear.owner"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.you.cannot.clear.owner")
+					));
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.owner.can.clear.owner"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.owner.can.clear.owner")
+					));
 				} else {
 					nbt.removeTag("ownerGameProfile");
 					player.addChatMessage(new ChatComponentTranslation(
 							EnumChatFormatting.DARK_GREEN
-									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared"),
-							new Object[0]));
+									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared")
+					));
 				}
 
 			}
@@ -116,11 +116,8 @@ public class QuantumEnderChestplate extends ItemArmor
 			}
 
 			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-
-				if (world.provider.dimensionId == 1) {
-
+				if (world.provider.dimensionId == 1)
 					ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
-				}
 
 				boolean jetpack = nbt.getBoolean("jetpack");
 				boolean hoverMode = nbt.getBoolean("hoverMode");
@@ -131,9 +128,9 @@ public class QuantumEnderChestplate extends ItemArmor
 					hoverMode = !hoverMode;
 					nbt.setBoolean("hoverMode", hoverMode);
 					if (hoverMode) {
-						IC2.platform.messagePlayer(player, "Quantum Hover Mode enabled.", new Object[0]);
+						IC2.platform.messagePlayer(player, "Quantum Hover Mode enabled.");
 					} else {
-						IC2.platform.messagePlayer(player, "Quantum Hover Mode disabled.", new Object[0]);
+						IC2.platform.messagePlayer(player, "Quantum Hover Mode disabled.");
 					}
 				}
 
@@ -143,9 +140,9 @@ public class QuantumEnderChestplate extends ItemArmor
 					jetpack = !jetpack;
 					nbt.setBoolean("jetpack", jetpack);
 					if (jetpack) {
-						IC2.platform.messagePlayer(player, "Quantum Jetpack enabled.", new Object[0]);
+						IC2.platform.messagePlayer(player, "Quantum Jetpack enabled.");
 					} else {
-						IC2.platform.messagePlayer(player, "Quantum Jetpack disabled.", new Object[0]);
+						IC2.platform.messagePlayer(player, "Quantum Jetpack disabled.");
 					}
 				}
 
@@ -158,10 +155,8 @@ public class QuantumEnderChestplate extends ItemArmor
 					nbt.setByte("toggleTimer", toggleTimer);
 				}
 
-				if (jetpackUsed) {
-
+				if (jetpackUsed)
 					player.inventoryContainer.detectAndSendChanges();
-				}
 
 				if (player.isBurning()) {
 					player.extinguish();
@@ -179,7 +174,7 @@ public class QuantumEnderChestplate extends ItemArmor
 		} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
 			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner1"));
 			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner2"));
-			list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
+			list.add(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
 					+ NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).getName());
 		} else {
 			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));

@@ -31,6 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import ru.wirelesstools.blocks.*;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.entityarrow.ArrowVampEUNew;
+import ru.wirelesstools.entityarrow.ArrowVampXPNew;
 import ru.wirelesstools.fluidmachines.BlockExpGen;
 import ru.wirelesstools.fluidmachines.ItemBlockEG;
 import ru.wirelesstools.fluidmachines.TextureHooks;
@@ -54,7 +55,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.2", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -105,6 +106,8 @@ public class MainWI {
     public static Block wirelessabssppersonal;
     public static Block wirelessphotonicsppersonal;
     public static Block wirelessneutronsppersonal;
+    public static Block wirelessadronsppersonal;
+    public static Block wirelessbarionsppersonal;
 
     public static Block blockwirelesschargerpublic;
     public static Block blockwirelesschargerprivate;
@@ -141,79 +144,94 @@ public class MainWI {
             ConfigWI.EuRfSolarHelmetGenNight = config.get("Energy balance", "Helmet Night Generation", 1024)
                     .getInt(1024);
 
-            ConfigWI.waspgenday = config.get("Advanced Solar", "Day Generation", 16).getInt(16);
-            ConfigWI.waspgennight = config.get("Advanced Solar", "Night Generation", 8).getInt(8);
-            ConfigWI.waspoutput = config.get("Advanced Solar", "Output", 16).getInt(16);
+            ConfigWI.waspgenday = config.get("Advanced Solar", "Day Generation", 10).getInt(10);
+            ConfigWI.waspgennight = config.get("Advanced Solar", "Night Generation", 5).getInt(5);
+            ConfigWI.waspoutput = config.get("Advanced Solar", "Output", 20).getInt(20);
             ConfigWI.wasptier = config.get("Advanced Solar", "Tier", 1).getInt(1);
-            ConfigWI.waspstorage = config.get("Advanced Solar", "Storage", 4096).getInt(4096);
-            ConfigWI.wasptransfer = config.get("Advanced Solar", "Wireless Transfer", 16).getInt(16);
+            ConfigWI.waspstorage = config.get("Advanced Solar", "Storage", 3200).getInt(3200);
+            ConfigWI.wasptransfer = config.get("Advanced Solar", "Wireless Transfer", 10).getInt(10);
 
-            ConfigWI.whspgenday = config.get("Hybrid Solar", "Day Generation", 64).getInt(64);
-            ConfigWI.whspgennight = config.get("Hybrid Solar", "Night Generation", 32).getInt(32);
-            ConfigWI.whspoutput = config.get("Hybrid Solar", "Output", 64).getInt(64);
+            ConfigWI.whspgenday = config.get("Hybrid Solar", "Day Generation", 50).getInt(50);
+            ConfigWI.whspgennight = config.get("Hybrid Solar", "Night Generation", 25).getInt(25);
+            ConfigWI.whspoutput = config.get("Hybrid Solar", "Output", 100).getInt(100);
             ConfigWI.whsptier = config.get("Hybrid Solar", "Tier", 2).getInt(2);
-            ConfigWI.whspstorage = config.get("Hybrid Solar", "Storage", 10000).getInt(10000);
-            ConfigWI.whsptransfer = config.get("Hybrid Solar", "Wireless Transfer", 64).getInt(64);
+            ConfigWI.whspstorage = config.get("Hybrid Solar", "Storage", 20000).getInt(20000);
+            ConfigWI.whsptransfer = config.get("Hybrid Solar", "Wireless Transfer", 50).getInt(50);
 
-            ConfigWI.wuhspgenday = config.get("Ultimate Solar", "Day Generation", 256).getInt(256);
-            ConfigWI.wuhspgennight = config.get("Ultimate Solar", "Night Generation", 128).getInt(128);
-            ConfigWI.wuhspoutput = config.get("Ultimate Solar", "Output", 256).getInt(256);
+            ConfigWI.wuhspgenday = config.get("Ultimate Solar", "Day Generation", 250).getInt(250);
+            ConfigWI.wuhspgennight = config.get("Ultimate Solar", "Night Generation", 125).getInt(125);
+            ConfigWI.wuhspoutput = config.get("Ultimate Solar", "Output", 500).getInt(500);
             ConfigWI.wuhsptier = config.get("Ultimate Solar", "Tier", 3).getInt(3);
-            ConfigWI.wuhspstorage = config.get("Ultimate Solar", "Storage", 100000).getInt(100000);
-            ConfigWI.wuhsptransfer = config.get("Ultimate Solar", "Wireless Transfer", 256).getInt(256);
+            ConfigWI.wuhspstorage = config.get("Ultimate Solar", "Storage", 200000).getInt(200000);
+            ConfigWI.wuhsptransfer = config.get("Ultimate Solar", "Wireless Transfer", 250).getInt(250);
 
-            ConfigWI.wqspgenday = config.get("Quantum Solar", "Day Generation", 1024).getInt(1024);
-            ConfigWI.wqspgennight = config.get("Quantum Solar", "Night Generation", 512).getInt(512);
-            ConfigWI.wqspoutput = config.get("Quantum Solar", "Output", 1024).getInt(1024);
+            ConfigWI.wqspgenday = config.get("Quantum Solar", "Day Generation", 1250).getInt(1250);
+            ConfigWI.wqspgennight = config.get("Quantum Solar", "Night Generation", 625).getInt(625);
+            ConfigWI.wqspoutput = config.get("Quantum Solar", "Output", 2500).getInt(2500);
             ConfigWI.wqsptier = config.get("Quantum Solar", "Tier", 4).getInt(4);
-            ConfigWI.wqspstorage = config.get("Quantum Solar", "Storage", 200000).getInt(200000);
-            ConfigWI.wqsptransfer = config.get("Quantum Solar", "Wireless Transfer", 1024).getInt(1024);
+            ConfigWI.wqspstorage = config.get("Quantum Solar", "Storage", 1000000).getInt(1000000);
+            ConfigWI.wqsptransfer = config.get("Quantum Solar", "Wireless Transfer", 1250).getInt(1250);
 
-            ConfigWI.wspspgenday = config.get("Spectral Solar", "Day Generation", 3584).getInt(3584);
-            ConfigWI.wspspgennight = config.get("Spectral Solar", "Night Generation", 2048).getInt(2048);
-            ConfigWI.wspspoutput = config.get("Spectral Solar", "Output", 3584).getInt(3584);
+            ConfigWI.wspspgenday = config.get("Spectral Solar", "Day Generation", 6250).getInt(6250);
+            ConfigWI.wspspgennight = config.get("Spectral Solar", "Night Generation", 3125).getInt(3125);
+            ConfigWI.wspspoutput = config.get("Spectral Solar", "Output", 12500).getInt(12500);
             ConfigWI.wspsptier = config.get("Spectral Solar", "Tier", 5).getInt(5);
-            ConfigWI.wspspstorage = config.get("Spectral Solar", "Storage", 500000).getInt(500000);
-            ConfigWI.wspsptransfer = config.get("Spectral Solar", "Wireless Transfer", 3584).getInt(3584);
+            ConfigWI.wspspstorage = config.get("Spectral Solar", "Storage", 5000000).getInt(5000000);
+            ConfigWI.wspsptransfer = config.get("Spectral Solar", "Wireless Transfer", 6250).getInt(6250);
 
-            ConfigWI.wpspgenday = config.get("Proton Solar", "Day Generation", 12288).getInt(12288);
-            ConfigWI.wpspgennight = config.get("Proton Solar", "Night Generation", 6144).getInt(6144);
-            ConfigWI.wpspoutput = config.get("Proton Solar", "Output", 12288).getInt(12288);
+            ConfigWI.wpspgenday = config.get("Proton Solar", "Day Generation", 31250).getInt(31250);
+            ConfigWI.wpspgennight = config.get("Proton Solar", "Night Generation", 15625).getInt(15625);
+            ConfigWI.wpspoutput = config.get("Proton Solar", "Output", 62500).getInt(62500);
             ConfigWI.wpsptier = config.get("Proton Solar", "Tier", 6).getInt(6);
-            ConfigWI.wpspstorage = config.get("Proton Solar", "Storage", 5000000).getInt(5000000);
-            ConfigWI.wpsptransfer = config.get("Proton Solar", "Wireless Transfer", 12288).getInt(12288);
+            ConfigWI.wpspstorage = config.get("Proton Solar", "Storage", 50000000).getInt(50000000);
+            ConfigWI.wpsptransfer = config.get("Proton Solar", "Wireless Transfer", 31250).getInt(31250);
 
-            ConfigWI.wsingspgenday = config.get("Singular Solar", "Day Generation", 57344).getInt(57344);
-            ConfigWI.wsingspgennight = config.get("Singular Solar", "Night Generation", 57344).getInt(57344);
-            ConfigWI.wsingspoutput = config.get("Singular Solar", "Output", 57344).getInt(57344);
+            ConfigWI.wsingspgenday = config.get("Singular Solar", "Day Generation", 156250).getInt(156250);
+            ConfigWI.wsingspgennight = config.get("Singular Solar", "Night Generation", 78125).getInt(78125);
+            ConfigWI.wsingspoutput = config.get("Singular Solar", "Output", 312500).getInt(312500);
             ConfigWI.wsingsptier = config.get("Singular Solar", "Tier", 7).getInt(7);
-            ConfigWI.wsingspstorage = config.get("Singular Solar", "Storage", 10000000).getInt(10000000);
-            ConfigWI.wsingsptransfer = config.get("Singular Solar", "Wireless Transfer", 57344).getInt(57344);
+            ConfigWI.wsingspstorage = config.get("Singular Solar", "Storage", 100000000).getInt(100000000);
+            ConfigWI.wsingsptransfer = config.get("Singular Solar", "Wireless Transfer", 156250).getInt(156250);
 
-            ConfigWI.wdifrspgenday = config.get("Diffraction Solar", "Day Generation", 196608).getInt(196608);
-            ConfigWI.wdifrspgennight = config.get("Diffraction Solar", "Night Generation", 196608).getInt(196608);
-            ConfigWI.wdifrspoutput = config.get("Diffraction Solar", "Output", 196608).getInt(196608);
+            ConfigWI.wdifrspgenday = config.get("Diffraction Solar", "Day Generation", 781250).getInt(781250);
+            ConfigWI.wdifrspgennight = config.get("Diffraction Solar", "Night Generation", 781250).getInt(781250);
+            ConfigWI.wdifrspoutput = config.get("Diffraction Solar", "Output", 1562500).getInt(1562500);
             ConfigWI.wdifrsptier = config.get("Diffraction Solar", "Tier", 8).getInt(8);
-            ConfigWI.wdifrspstorage = config.get("Diffraction Solar", "Storage", 20000000).getInt(20000000);
-            ConfigWI.wdifrsptransfer = config.get("Diffraction Solar", "Wireless Transfer", 196608).getInt(196608);
+            ConfigWI.wdifrspstorage = config.get("Diffraction Solar", "Storage", 400000000).getInt(400000000);
+            ConfigWI.wdifrsptransfer = config.get("Diffraction Solar", "Wireless Transfer", 781250).getInt(781250);
 
-            ConfigWI.wphspgenday = config.get("Photon Solar", "Day Generation", 786432).getInt(786432);
-            ConfigWI.wphspgennight = config.get("Photon Solar", "Night Generation", 786432).getInt(786432);
-            ConfigWI.wphspoutput = config.get("Photon Solar", "Output", 786432).getInt(786432);
+            ConfigWI.wphspgenday = config.get("Photon Solar", "Day Generation", 3906250).getInt(3906250);
+            ConfigWI.wphspgennight = config.get("Photon Solar", "Night Generation", 3906250).getInt(3906250);
+            ConfigWI.wphspoutput = config.get("Photon Solar", "Output", 7812500).getInt(7812500);
             ConfigWI.wphsptier = config.get("Photon Solar", "Tier", 9).getInt(9);
-            ConfigWI.wphspstorage = config.get("Photon Solar", "Storage", 80000000).getInt(80000000);
-            ConfigWI.wphsptransfer = config.get("Photon Solar", "Wireless Transfer", 786432).getInt(786432);
+            ConfigWI.wphspstorage = config.get("Photon Solar", "Storage", 800000000).getInt(800000000);
+            ConfigWI.wphsptransfer = config.get("Photon Solar", "Wireless Transfer", 3906250).getInt(3906250);
 
-            ConfigWI.wneuspgenday = config.get("Neutron Solar", "Day Generation", 3145728).getInt(3145728);
-            ConfigWI.wneuspgennight = config.get("Neutron Solar", "Night Generation", 3145728).getInt(3145728);
-            ConfigWI.wneuspoutput = config.get("Neutron Solar", "Output", 3145728).getInt(3145728);
+            ConfigWI.wneuspgenday = config.get("Neutron Solar", "Day Generation", 19631250).getInt(19631250);
+            ConfigWI.wneuspgennight = config.get("Neutron Solar", "Night Generation", 19631250).getInt(19631250);
+            ConfigWI.wneuspoutput = config.get("Neutron Solar", "Output", 39262500).getInt(39262500);
             ConfigWI.wneusptier = config.get("Neutron Solar", "Tier", 10).getInt(10);
-            ConfigWI.wneuspstorage = config.get("Neutron Solar", "Storage", 200000000).getInt(200000000);
-            ConfigWI.wneusptransfer = config.get("Neutron Solar", "Wireless Transfer", 3145728).getInt(3145728);
+            ConfigWI.wneuspstorage = config.get("Neutron Solar", "Storage", 1200000000).getInt(1200000000);
+            ConfigWI.wneusptransfer = config.get("Neutron Solar", "Wireless Transfer", 19631250).getInt(19631250);
+
+            ConfigWI.wbarionspgenday = config.get("Barion Solar", "Day Generation", 98000000).getInt(98000000);
+            ConfigWI.wbarionspgennight = config.get("Barion Solar", "Night Generation", 98000000).getInt(98000000);
+            ConfigWI.wbarionspoutput = config.get("Barion Solar", "Output", 196000000).getInt(196000000);
+            ConfigWI.wbarionsptier = config.get("Barion Solar", "Tier", 11).getInt(11);
+            ConfigWI.wbarionspstorage = config.get("Barion Solar", "Storage", 1800000000).getInt(1800000000);
+            ConfigWI.wbarionsptransfer = config.get("Barion Solar", "Wireless Transfer", 98000000).getInt(98000000);
+
+            ConfigWI.wadronspgenday = config.get("Adron Solar", "Day Generation", 490000000).getInt(490000000);
+            ConfigWI.wadronspgennight = config.get("Adron Solar", "Night Generation", 490000000).getInt(490000000);
+            ConfigWI.wadronspoutput = config.get("Adron Solar", "Output", 1000000000).getInt(1000000000);
+            ConfigWI.wadronsptier = config.get("Adron Solar", "Tier", 12).getInt(12);
+            ConfigWI.wadronspstorage = config.get("Adron Solar", "Storage", 2145000000).getInt(2145000000);
+            ConfigWI.wadronsptransfer = config.get("Adron Solar", "Wireless Transfer", 490000000).getInt(490000000);
+
 
             ConfigWI.wstorageoutput = config.get("Wireless Receiver Storage", "Output", 16384).getInt(16384);
-            ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver Storage", "Storage", 100000000)
-                    .getInt(100000000);
+            ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver Storage", "Storage", 200000000)
+                    .getInt(200000000);
             ConfigWI.wstoragetier = config.get("Wireless Receiver Storage", "Tier", 4).getInt(4);
 
             ConfigWI.wirelessqgenoutput = config.get("Wireless Quantum Generator", "Output", 32768).getInt(32768);
@@ -267,6 +285,15 @@ public class MainWI {
             else
                 ConfigWI.enderChargeArmorValue = chargevaluelocal;
 
+            int vajramaxchargelocal = config
+                    .get(categoryOTHER, "Maximum charge of Lucky Vajra, not less than 3M Eu", 6000000).getInt(6000000);
+            ConfigWI.maxVajraCharge = vajramaxchargelocal < 3000000 ? 3000000 : vajramaxchargelocal;
+            int energyperoperationlocal = config
+                    .get(categoryOTHER, "Vajra energy using per break, not more than half of maxcharge", 3000).getInt(3000);
+            int peroperationlimitlocal = ConfigWI.maxVajraCharge / 2;
+            ConfigWI.vajraEnergyPerOperation = energyperoperationlocal > peroperationlimitlocal
+                    ? peroperationlimitlocal : energyperoperationlocal;
+
         } catch (Exception e) {
             System.out.println("{Wireless Solar Panels Mod} error occurred while reading config file");
             throw new RuntimeException(e);
@@ -312,6 +339,8 @@ public class MainWI {
         wirelessabssppersonal = new BlockWirelessAbsSPPersonal("wirelessAbsorbtionPanelPersonal", Material.rock);
         wirelessphotonicsppersonal = new BlockWirelessPhSPPersonal("wirelessPhotonicPanelPersonal", Material.rock);
         wirelessneutronsppersonal = new BlockWirelessNeuSPPersonal("wirelessNeutronSPPersonal", Material.rock);
+        wirelessadronsppersonal = new BlockWirelessAdronSP("wirelessAdronPanelPersonal");
+        wirelessbarionsppersonal = new BlockWirelessBarionSP("wirelessBarionPanelPersonal");
         blockwirelessreceiverpersonal = new BlockWStoragePersonal("wirelessStoragePersonal1Tier", Material.rock);
 
         blockwirelesschargerpublic = new BlockWirelessChargerPublic("wirelesschargerpublic");
@@ -343,6 +372,8 @@ public class MainWI {
         GameRegistry.registerBlock(wirelessabssppersonal, ItemBlockWAbsSPPersonal.class, "WAbsSPPersonal");
         GameRegistry.registerBlock(wirelessphotonicsppersonal, ItemBlockWPhSPPersonal.class, "WPhSPPersonal");
         GameRegistry.registerBlock(wirelessneutronsppersonal, ItemBlockNeuSPPersonal.class, "WNeuSPPersonal");
+        GameRegistry.registerBlock(wirelessbarionsppersonal, ItemBlockWBarSP.class, "WBarionSPPersonal");
+        GameRegistry.registerBlock(wirelessadronsppersonal, ItemBlockWAdronSP.class, "WAdronSPPersonal");
         GameRegistry.registerBlock(blockwirelessreceiverpersonal, ItemBlockWirelessStoragePersonal.class,
                 "WRes1Personal");
 
@@ -403,6 +434,8 @@ public class MainWI {
         GameRegistry.registerTileEntity(TileWirelessDifractSPPersonal.class, "TileWirelessAbsSPPersonal");
         GameRegistry.registerTileEntity(TileWirelessPhSPPersonal.class, "TileWirelessPhotonicSPPersonal");
         GameRegistry.registerTileEntity(TileWirelessNeutronSPPersonal.class, "TileWirelessNeutronSPPersonal");
+        GameRegistry.registerTileEntity(TileWirelessBarionSP.class, "TileWirelessBarionSPPersonal");
+        GameRegistry.registerTileEntity(TileWirelessAdronSP.class, "TileWirelessAdronSPPersonal");
 
         GameRegistry.registerTileEntity(TileEntityWirelessChargerPrivate.class, "TileWChargerPrivate");
         GameRegistry.registerTileEntity(TileEntityWirelessChargerPublic.class, "TileWChargerPublic");
@@ -425,6 +458,8 @@ public class MainWI {
         ClientProxy.Init();
 
         EntityRegistry.registerGlobalEntityID(ArrowVampEUNew.class, "ArrowVampEUNew",
+                EntityRegistry.findGlobalUniqueEntityId());
+        EntityRegistry.registerGlobalEntityID(ArrowVampXPNew.class, "ArrowVampXPNew",
                 EntityRegistry.findGlobalUniqueEntityId());
     }
 
@@ -473,31 +508,37 @@ public class MainWI {
                         new ItemStack(iridMach)});
 
         GameRegistry.addRecipe(new ItemStack(wirelesshsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessasppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessasppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessuhsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelesshsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesshsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessqsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessuhsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessuhsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessspsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessqsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessqsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessprotonsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessspsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessspsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelesssingsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessprotonsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessprotonsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessabssppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelesssingsppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesssingsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessphotonicsppersonal, 1),
-                new Object[]{"AAA", "A A", "AAA", Character.valueOf('A'), new ItemStack(wirelessabssppersonal)});
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessabssppersonal)});
 
-        GameRegistry.addRecipe(new ItemStack(wirelessneutronsppersonal, 1), new Object[]{"AAA", "A A", "AAA",
-                Character.valueOf('A'), new ItemStack(wirelessphotonicsppersonal)});
+        GameRegistry.addRecipe(new ItemStack(wirelessneutronsppersonal, 1),
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessphotonicsppersonal)});
+
+        GameRegistry.addRecipe(new ItemStack(wirelessbarionsppersonal, 1),
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessneutronsppersonal)});
+
+        GameRegistry.addRecipe(new ItemStack(wirelessadronsppersonal, 1),
+                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessbarionsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(luckyVajra, 1),
                 new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
