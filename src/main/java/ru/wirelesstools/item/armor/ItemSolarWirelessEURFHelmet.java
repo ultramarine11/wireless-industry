@@ -55,6 +55,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		potionRemovalCost.put(Potion.poison.id, 100);
 		potionRemovalCost.put(Potion.wither.id, 100);
 		potionRemovalCost.put(Potion.weakness.id, 100);
+		potionRemovalCost.put(Potion.moveSlowdown.id, 100);
 		potionRemovalCost.put(Potion.hunger.id, 200);
 		potionRemovalCost.put(Potion.confusion.id, 200);
 		potionRemovalCost.put(Potion.blindness.id, 200);
@@ -75,6 +76,8 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 	@SideOnly(value = Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+		list.add(StatCollector.translateToLocal("info.wirelesshelmet.about"));
+		if (org.lwjgl.input.Keyboard.isKeyDown(org.lwjgl.input.Keyboard.KEY_LSHIFT)) {
 		String isonoff = nbt.getBoolean("active") ? EnumChatFormatting.GREEN
 				+ StatCollector.translateToLocal("info.helmet.yes") : EnumChatFormatting.RED
 				+ StatCollector.translateToLocal("info.helmet.no");
@@ -91,15 +94,15 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 			strmode = EnumChatFormatting.GREEN + StatCollector.translateToLocal("info.helmet.nightmode.on");
 			break;
 		}
-		list.add(StatCollector.translateToLocal("info.wirelesshelmet.about"));
 		list.add(StatCollector.translateToLocal("info.wirelesshelmet.removespotions"));
 		list.add(StatCollector.translateToLocal("info.wirelesshelmet.selfcharge"));
-		if (org.lwjgl.input.Keyboard.isKeyDown(org.lwjgl.input.Keyboard.KEY_LSHIFT)) {
+			list.add(StatCollector.translateToLocal("info.wirelesshelmet.autofeedplayer"));
 			list.add(StatCollector.translateToLocal("info.wirelesshelmet.mode") + ": "
 					+ isonoff);
 			list.add(StatCollector.translateToLocal("info.wirelesshelmet.nightmode") + ": "
 					+ strmode);
-			list.add(StatCollector.translateToLocal("info.wirelesshelmet.radius") + ": " + EnumChatFormatting.DARK_GREEN + String.valueOf(15) + " "
+			list.add(StatCollector.translateToLocal("info.wirelesshelmet.radius") + ": "
+					+ EnumChatFormatting.DARK_GREEN + String.valueOf(ConfigWI.helmetChargingRadius) + " "
 					+ StatCollector.translateToLocal("info.wirelesscharge.blocks"));
 			list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.helmet.sneak.press.mode.key") + " " + "IC2 Mode Switch Key"
 					+ " " + StatCollector.translateToLocal("info.helmet.to.switch"));
@@ -138,22 +141,33 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		if (!world.isRemote) {
 			this.gainFuel(player, world, stack);
 
-			for (Object effect : new LinkedList(player.getActivePotionEffects())) {
-				int id = ((PotionEffect) effect).getPotionID();
-				Integer cost = potionRemovalCost.get(id);
-				if (cost == null || !ElectricItem.manager.canUse(stack,
-						cost = cost * (((PotionEffect) effect).getAmplifier() + 1)))
-					continue;
-				ElectricItem.manager.use(stack, cost.intValue(), player);
-				IC2.platform.removePotion(player, id);
+			for(PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
+				int potionid = effect.getPotionID();
+				if(potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
+					int cost = potionRemovalCost.get(Integer.valueOf(potionid));
+					if(ElectricItem.manager.canUse(stack, cost
+							* (effect.getAmplifier() + 1))) {
+						ElectricItem.manager.use(stack, cost, player);
+						player.removePotionEffect(potionid);
+					}
+				}
 			}
 
-			if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().needFood()) {
+			if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().getFoodLevel() < 16) {
+				player.getFoodStats().addStats(4, 4.0F);
+				ElectricItem.manager.use(stack, 1000.0, player);
+				player.inventoryContainer.detectAndSendChanges();
+			}
+			else if (player.getFoodStats().getFoodLevel() <= 0) {
+				IC2.achievements.issueAchievement(player, "starveWithQHelmet");
+			}
+
+			/*if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().needFood()) {
 				for (int i = 0; i < player.inventory.mainInventory.length; i++) {
 					if(player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].getItem() instanceof ItemFood) {
 						ItemStack stack1 = player.inventory.mainInventory[i];
-						ItemFood can = (ItemFood) stack1.getItem();
-						stack1 = can.onEaten(stack1, world, player);
+						ItemFood food = (ItemFood) stack1.getItem();
+						stack1 = food.onEaten(stack1, world, player);
 						if (stack1.stackSize <= 0) {
 							player.inventory.mainInventory[i] = null;
 						}
@@ -163,7 +177,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				}
 			} else if (player.getFoodStats().getFoodLevel() <= 0) {
 				IC2.achievements.issueAchievement(player, "starveWithQHelmet");
-			}
+			}*/
 
 			int airLevel = player.getAir();
 			if (ElectricItem.manager.canUse(stack, 1000.0) && airLevel < 100) {
@@ -244,8 +258,8 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 	}
 
 	protected void checkPlayers(EntityPlayer player, World world, ItemStack thisarmor) {
-		AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(player.posX - 15.0, player.posY - 15.0,
-				player.posZ - 15.0, player.posX + 15.0, player.posY + 15.0, player.posZ + 15.0);
+		AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(player.posX - ConfigWI.helmetChargingRadius, player.posY - ConfigWI.helmetChargingRadius,
+				player.posZ - ConfigWI.helmetChargingRadius, player.posX + ConfigWI.helmetChargingRadius, player.posY + ConfigWI.helmetChargingRadius, player.posZ + ConfigWI.helmetChargingRadius);
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, axisalignedbb);
 		for (Entity entityinlist : list) {
 			if (entityinlist instanceof EntityPlayer) {

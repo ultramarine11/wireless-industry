@@ -55,7 +55,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.2", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -65,6 +65,7 @@ public class MainWI {
     public static final String categoryXPSENDER = "XPSender";
     public static final String categoryVAMPIREWEAPONS = "Vampire Weapons";
     public static final String categoryWIRELESSCHARGER = "Wireless Chargers";
+    public static final String categoryWIRELESSARMOR = "Wireless Charging Armor";
 
     public static Item saber5;
     public static Item saber3;
@@ -85,6 +86,8 @@ public class MainWI {
             "Wireless RF Transmission");
     public static final EnumRarity RARITY_EU = EnumHelper.addRarity("Vampire_EU", EnumChatFormatting.DARK_AQUA,
             "EU Vampire");
+    public static final EnumRarity RARITY_CHESTPLATE_WIRELESS = EnumHelper.addRarity("EU Wireless", EnumChatFormatting.RED,
+            "Wireless EU Transmission");
 
     public static Block blockxpsender;
 
@@ -140,9 +143,14 @@ public class MainWI {
             int eutorf = config.get("Energy balance", "The EU to RF multiplier, not less than 1", 4).getInt(4);
             ConfigWI.EuToRfmultiplier = eutorf < 1 ? 1 : eutorf;
 
-            ConfigWI.EuRfSolarHelmetGenDay = config.get("Energy balance", "Helmet Day Generation", 4096).getInt(4096);
-            ConfigWI.EuRfSolarHelmetGenNight = config.get("Energy balance", "Helmet Night Generation", 1024)
+            ConfigWI.EuRfSolarHelmetGenDay = config.get(categoryWIRELESSARMOR, "Wireless Helmet day generation (EU/t)", 4096).getInt(4096);
+            ConfigWI.EuRfSolarHelmetGenNight = config.get(categoryWIRELESSARMOR, "Wireless Helmet night generation (EU/t)", 1024)
                     .getInt(1024);
+
+            int helmetChargingRadiuslocal = config.get(categoryWIRELESSARMOR, "Wireless Helmet charging radius (blocks)", 15).getInt(15);
+            ConfigWI.helmetChargingRadius = helmetChargingRadiuslocal < 1 ? 1 : helmetChargingRadiuslocal;
+            int chestplateChargingRadiuslocal = config.get(categoryWIRELESSARMOR, "Wireless Chestplate charging radius (blocks)", 15).getInt(15);
+            ConfigWI.chestplateChargingRadius = chestplateChargingRadiuslocal < 1 ? 1 : chestplateChargingRadiuslocal;
 
             ConfigWI.waspgenday = config.get("Advanced Solar", "Day Generation", 10).getInt(10);
             ConfigWI.waspgennight = config.get("Advanced Solar", "Night Generation", 5).getInt(5);
@@ -259,12 +267,12 @@ public class MainWI {
                     .getInt(7);
 
             int stolenEUlocal = config
-                    .get(categoryVAMPIREWEAPONS, "Stolen amount of EU energy from player armor part", 100000)
-                    .getInt(100000);
+                    .get(categoryVAMPIREWEAPONS, "Stolen amount of EU energy from player armor part", 120000)
+                    .getInt(120000);
             ConfigWI.stolenEnergyEUFromArmor = stolenEUlocal > 0 ? stolenEUlocal : 0;
 
             int vbowenergycost = config.get(categoryVAMPIREWEAPONS, "EU cost per shot", 1000).getInt(1000);
-            ConfigWI.vampBowShotEnergyCost = vbowenergycost < 0 ? 0 : vbowenergycost;
+            ConfigWI.vampBowShotEnergyCost = vbowenergycost > 0 ? vbowenergycost : 0;
 
             ConfigWI.vampBowMaxCharge = config.get(categoryVAMPIREWEAPONS, "Maximum charge of vampire bow", 300000).getInt(300000);
 
@@ -298,7 +306,9 @@ public class MainWI {
             System.out.println("{Wireless Solar Panels Mod} error occurred while reading config file");
             throw new RuntimeException(e);
         } finally {
-            config.save();
+            if (config.hasChanged()) {
+                config.save();
+            }
         }
 
         WirelessTransfer.transmithandler = new WirelessTransmitHandler();

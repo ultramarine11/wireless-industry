@@ -7,21 +7,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import ru.wirelesstools.command.CommandClearOwner;
 import ru.wirelesstools.fluidmachines.TileExpGen;
-import ru.wirelesstools.fluidmachines.TileXPGenPublic;
-import ru.wirelesstools.tiles.TileEntityWirelessCharger;
-import ru.wirelesstools.tiles.TileVajraChargerElectric;
-import ru.wirelesstools.tiles.TileWPBasePersonal;
-import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
-import ru.wirelesstools.tiles.TileWirelessStorageBasePersonal;
-import ru.wirelesstools.tiles.TileXPSenderElectric;
-import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
+import ru.wirelesstools.tiles.*;
 
 public class ServerProxy implements IGuiHandler {
 
 	public static void Init() {
 
 	}
-	
+
 	public void serverStart(FMLServerStartingEvent event) {
 		
 		event.registerServerCommand(new CommandClearOwner());

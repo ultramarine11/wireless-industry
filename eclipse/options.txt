@@ -96,6 +96,7 @@ key_Streak Key:45
 key_Change Mode Key:36
 key_Gravi Fly Key:34
 key_Gravi Display Hud:35
+key_key.ic2ca_upgrades_key:41
 key_key.placeItem:25
 key_key.toolConfig:46
 key_key.toolProfileChange:43

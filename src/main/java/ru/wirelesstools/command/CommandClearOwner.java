@@ -54,7 +54,7 @@ public class CommandClearOwner extends CommandBase {
 						}
 					}
 				} else {
-					playersender.addChatMessage(new ChatComponentTranslation("Please use" + " /" + Alias1));
+					playersender.addChatMessage(new ChatComponentTranslation("Please use " + "/" + Alias1));
 				}
 			} else if (args.length == 0) {
 				EntityPlayerMP senderplayer = this.getCommandSenderAsPlayer(commandSender);
@@ -65,17 +65,14 @@ public class CommandClearOwner extends CommandBase {
 						IPrivateArmor armor = (IPrivateArmor) stack.getItem();
 						if (armor.getArmorOwner(stack) != null && !armor.getArmorOwner(stack)
 								.equals(((EntityPlayerMP) commandSender).getGameProfile())) {
-
 							armor.clearOwner(stack);
 							senderplayer.addChatMessage(new ChatComponentTranslation(
 									"Cleared owner successfully from your main inventory!"));
 						} else if (armor.getArmorOwner(stack) == null) {
-
-							senderplayer.addChatMessage(new ChatComponentTranslation("It is already no owner"));
+							senderplayer.addChatMessage(new ChatComponentTranslation("It is already no owner of armor"));
 						} else {
-
 							senderplayer.addChatMessage(new ChatComponentTranslation(
-									"You cannot use this command to clear yourself from owner!"));
+									"You cannot clear yourself from owner using this command!"));
 						}
 					}
 				}

@@ -119,4 +119,7 @@ public class ConfigWI {
 	public static int maxVajraCharge;
 	public static int vajraEnergyPerOperation;
 
+	public static int helmetChargingRadius;
+	public static int chestplateChargingRadius;
+
 }

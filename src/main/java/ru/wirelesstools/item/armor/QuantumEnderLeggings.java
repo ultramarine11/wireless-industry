@@ -1,6 +1,5 @@
 package ru.wirelesstools.item.armor;
 
-import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
@@ -294,19 +293,6 @@ public class QuantumEnderLeggings extends ItemArmor
 	public double getTransferLimit(ItemStack arg0) {
 
 		return this.transferLimit;
-	}
-
-	@Override
-	public void clearOwner(ItemStack stack) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		nbt.removeTag("ownerGameProfile");
-	}
-
-	@Override
-	public GameProfile getArmorOwner(ItemStack stack) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-
-		return NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"));
 	}
 
 }

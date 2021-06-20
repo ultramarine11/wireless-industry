@@ -52,6 +52,8 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
      */
     private int knockbackStrength;
 
+    private int shooterarmorcount;
+
     public ArrowVampEUNew(World p_i1753_1_) {
         super(p_i1753_1_);
         this.renderDistanceWeight = 10.0D;
@@ -64,6 +66,11 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
         this.setSize(0.5F, 0.5F);
         this.setPosition(p_i1754_2_, p_i1754_4_, p_i1754_6_);
         this.yOffset = 0.0F;
+    }
+
+    public ArrowVampEUNew(int armorcount, World world, EntityLivingBase entityliving, float p_i1756_3_) {
+        this(world, entityliving, p_i1756_3_);
+        this.shooterarmorcount = armorcount;
     }
 
     public ArrowVampEUNew(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_) {
@@ -268,14 +275,17 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
                                         entitylivingbase);
                             }
 
-                            if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
-                                    && this.shootingEntity instanceof EntityPlayer
-                                    && movingobjectposition.entityHit instanceof EntityPlayer) {
+                            if (this.shootingEntity instanceof EntityPlayer
+                                    && movingobjectposition.entityHit instanceof EntityPlayer
+                                    && movingobjectposition.entityHit != this.shootingEntity) {
 
                                 EntityPlayer victim = (EntityPlayer) movingobjectposition.entityHit;
                                 EntityPlayer shooter = (EntityPlayer) this.shootingEntity;
+                                if (!this.worldObj.isRemote) {
+                                    this.stealEUAndChargeShooter2(shooter, victim);
+                                }
 
-                                for (int ist = 0; ist < victim.inventory.armorInventory.length; ist++) {
+                                /*for (int ist = 0; ist < victim.inventory.armorInventory.length; ist++) {
                                     if (victim.inventory.armorInventory[ist] == null)
                                         continue;
                                     if (victim.inventory.armorInventory[ist].getItem() instanceof IElectricItem) {
@@ -283,12 +293,12 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
                                                 ConfigWI.stolenEnergyEUFromArmor, ist);
                                         // System.out.println("Invoke from update my");
                                     }
-                                }
+                                }*/
                             }
 
-                            if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
+                            if (this.shootingEntity instanceof EntityPlayerMP
                                     && movingobjectposition.entityHit instanceof EntityPlayer
-                                    && this.shootingEntity instanceof EntityPlayerMP) {
+                                    && movingobjectposition.entityHit != this.shootingEntity) {
                                 ((EntityPlayerMP) this.shootingEntity).playerNetServerHandler
                                         .sendPacket(new S2BPacketChangeGameState(6, 0.0F));
                             }
@@ -399,17 +409,15 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
     }
 
     @SideOnly(Side.CLIENT)
-    public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_)
-    {
+    public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_) {
         this.motionX = p_70016_1_;
         this.motionY = p_70016_3_;
         this.motionZ = p_70016_5_;
 
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
-        {
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt_double(p_70016_1_ * p_70016_1_ + p_70016_5_ * p_70016_5_);
-            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(p_70016_1_, p_70016_5_) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(p_70016_3_, (double)f) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(p_70016_1_, p_70016_5_) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(p_70016_3_, (double) f) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -428,6 +436,7 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
         p_70014_1_.setByte("inGround", (byte) (this.inGround ? 1 : 0));
         p_70014_1_.setByte("pickup", (byte) this.canBePickedUp);
         p_70014_1_.setDouble("damage", this.damage);
+        p_70014_1_.setInteger("armorcount", this.shooterarmorcount);
     }
 
     public void readEntityFromNBT(NBTTagCompound p_70037_1_) {
@@ -449,21 +458,19 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
         } else if (p_70037_1_.hasKey("player", 99)) {
             this.canBePickedUp = p_70037_1_.getBoolean("player") ? 1 : 0;
         }
+
+        this.shooterarmorcount = p_70037_1_.getInteger("armorcount");
     }
 
-    public void onCollideWithPlayer(EntityPlayer p_70100_1_)
-    {
-        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
-        {
+    public void onCollideWithPlayer(EntityPlayer p_70100_1_) {
+        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0) {
             boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && p_70100_1_.capabilities.isCreativeMode;
 
-            if (this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1)))
-            {
+            if (this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1))) {
                 flag = false;
             }
 
-            if (flag)
-            {
+            if (flag) {
                 this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 p_70100_1_.onItemPickup(this, 1);
                 this.setDead();
@@ -471,36 +478,73 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
         }
     }
 
-    public double getDamage()
-    {
+    public double getDamage() {
         return this.damage;
     }
 
-    public boolean getIsCritical()
-    {
+    public boolean getIsCritical() {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
         return (b0 & 1) != 0;
     }
 
-    public void setIsCritical(boolean p_70243_1_)
-    {
+    public void setIsCritical(boolean p_70243_1_) {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 
-        if (p_70243_1_)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
+        if (p_70243_1_) {
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
-    public void setDamage(double p_70239_1_)
-    {
+    public void setDamage(double p_70239_1_) {
         this.damage = p_70239_1_;
     }
 
+    private void stealEUAndChargeShooter2(EntityPlayer shooter, EntityPlayer victim) {
+        double totaldischargedamount = 0;
+        int shooterarmorcount = 0;
+
+        for (ItemStack victimarmorstack : victim.inventory.armorInventory) {
+            if (victimarmorstack != null && victimarmorstack.getItem() instanceof IElectricItem) {
+                totaldischargedamount += ElectricItem.manager.discharge(victimarmorstack,
+                        ConfigWI.stolenEnergyEUFromArmor, Integer.MAX_VALUE, true, false, false);
+            }
+        }
+
+        for (ItemStack shooterarmorstack : shooter.inventory.armorInventory) {
+            if (shooterarmorstack != null && shooterarmorstack.getItem() instanceof IElectricItem) shooterarmorcount++;
+        }
+
+        if (shooterarmorcount > 0) {
+            if (totaldischargedamount > 0) {
+                double energyperarmor = totaldischargedamount / shooterarmorcount;
+                for (ItemStack shooterarmor : shooter.inventory.armorInventory) {
+                    if (shooterarmor != null && shooterarmor.getItem() instanceof IElectricItem) {
+                        ElectricItem.manager.charge(shooterarmor,
+                                energyperarmor, Integer.MAX_VALUE, true, false);
+                    }
+                }
+                shooter.addChatMessage(new ChatComponentTranslation(
+                        EnumChatFormatting.BLUE
+                                + StatCollector.translateToLocal("chat.message.stolen.from.enemy.total")
+                                + ": " + String.valueOf((int) totaldischargedamount) + " EU"));
+                victim.addChatMessage(new ChatComponentTranslation(
+                        EnumChatFormatting.DARK_PURPLE
+                                + StatCollector.translateToLocal("chat.message.somebody.has.stolen.energy")));
+            } else {
+                shooter.addChatMessage(new ChatComponentTranslation(
+                        EnumChatFormatting.YELLOW
+                                + StatCollector.translateToLocal("chat.message.stolen.zero.amount.eu")));
+            }
+        } else {
+            shooter.addChatMessage(new ChatComponentTranslation(
+                    EnumChatFormatting.DARK_RED
+                            + StatCollector.translateToLocal("chat.message.no.electric.armor.on.you")));
+        }
+    }
+
+    @Deprecated
     private void stealEUAndChargeShooter(ItemStack armorStackToDischarge, EntityPlayer shooter, int stolenEUPerArmor,
                                          int armorslotvictim) {
         double amount = ElectricItem.manager.discharge(armorStackToDischarge, stolenEUPerArmor, Integer.MAX_VALUE, true,
@@ -518,38 +562,32 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
                 if (shooterarmorcurrent == null)
                     continue;
                 if (shooterarmorcurrent.getItem() instanceof IElectricItem) {
-
                     ElectricItem.manager.charge(shooterarmorcurrent, amount / (double) shooterarmorcount,
                             Integer.MAX_VALUE, true, false);
                     // System.out.println("Invoke from method stealEUAndChargeShooter");
                 }
             }
         }
-
         switch (armorslotvictim) {
             case 0:
                 shooter.addChatMessage(new ChatComponentTranslation(
                         EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.stolen.from.boots") + ": "
-                                + String.valueOf((int) amount) + " EU"
-                ));
+                                + String.valueOf((int) amount) + " EU"));
                 break;
             case 1:
                 shooter.addChatMessage(new ChatComponentTranslation(
                         EnumChatFormatting.GREEN + StatCollector.translateToLocal("chat.message.stolen.from.pants") + ": "
-                                + String.valueOf((int) amount) + " EU"
-                ));
+                                + String.valueOf((int) amount) + " EU"));
                 break;
             case 2:
                 shooter.addChatMessage(new ChatComponentTranslation(
                         EnumChatFormatting.RED + StatCollector.translateToLocal("chat.message.stolen.from.chestplate")
-                                + ": " + String.valueOf((int) amount) + " EU"
-                ));
+                                + ": " + String.valueOf((int) amount) + " EU"));
                 break;
             case 3:
                 shooter.addChatMessage(new ChatComponentTranslation(
                         EnumChatFormatting.YELLOW + StatCollector.translateToLocal("chat.message.stolen.from.helmet") + ": "
-                                + String.valueOf((int) amount) + " EU"
-                ));
+                                + String.valueOf((int) amount) + " EU"));
                 break;
         }
     }

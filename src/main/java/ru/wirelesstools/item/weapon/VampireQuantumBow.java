@@ -8,6 +8,7 @@ import ic2.core.IC2;
 import ic2.core.util.StackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import org.lwjgl.input.Keyboard;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
@@ -59,13 +61,24 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
     @SideOnly(value = Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List info, boolean par4) {
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-        if (nbt.getBoolean("vampiremode")) {
-            info.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("info.qbowxp.mode"));
-            info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.qbow.change.mode"));
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            if (nbt.getBoolean("vampiremode")) {
+                info.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("info.qbowxp.mode"));
+                info.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("info.qbowxp.vamped.per.shot")
+                + ": " + EnumChatFormatting.DARK_GREEN + String.valueOf(ConfigWI.vampBowXPVampiredAmount)
+                + " " + StatCollector.translateToLocal("info.qbowxp.xppoints"));
+                info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.qbow.change.mode"));
+            } else {
+                info.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.qboweu.mode"));
+                info.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.qboweu.about"));
+                info.add(EnumChatFormatting.DARK_AQUA
+                        + StatCollector.translateToLocal("info.qboweu.steal.energy") + ": "
+                        + EnumChatFormatting.GREEN
+                        + String.valueOf(ConfigWI.stolenEnergyEUFromArmor) + " EU");
+                info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.qbow.change.mode"));
+            }
         } else {
-            info.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.qboweu.mode"));
-            info.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.qboweu.about"));
-            info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.qbow.change.mode"));
+            info.add(EnumChatFormatting.ITALIC + I18n.format("press.lshift"));
         }
     }
 

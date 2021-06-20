@@ -1,6 +1,5 @@
 package ru.wirelesstools.item.armor;
 
-import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.ElectricItem;
@@ -195,7 +194,8 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
 
                 if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().needFood()) {
                     for (int i = 0; i < player.inventory.mainInventory.length; i++) {
-                        if (player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].getItem() instanceof ItemFood) {
+                        if (player.inventory.mainInventory[i] != null
+                                && player.inventory.mainInventory[i].getItem() instanceof ItemFood) {
                             ItemStack stack1 = player.inventory.mainInventory[i];
                             ItemFood can = (ItemFood) stack1.getItem();
                             stack1 = can.onEaten(stack1, world, player);
@@ -207,7 +207,6 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
                         }
                     }
                 } else if (player.getFoodStats().getFoodLevel() <= 0) {
-
                     IC2.achievements.issueAchievement(player, "starveWithQHelmet");
                 }
 
@@ -312,10 +311,8 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(armor);
         if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
                 || !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-
             return 0;
         } else {
-
             return (int) Math.round(20.0 * this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio());
         }
     }
@@ -367,19 +364,6 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
     public double getTransferLimit(ItemStack arg0) {
 
         return this.transferLimit;
-    }
-
-    @Override
-    public void clearOwner(ItemStack stack) {
-        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-        nbt.removeTag("ownerGameProfile");
-    }
-
-    @Override
-    public GameProfile getArmorOwner(ItemStack stack) {
-        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-
-        return NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"));
     }
 
 }
