@@ -55,7 +55,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3-pre", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -122,6 +122,8 @@ public class MainWI {
     public static Block expgen;
 
     public static Block blockwirelessqgen;
+
+    public static Block blockmattercollector;
 
     public static Item endermodule;
     public static Item wirelessmodule;
@@ -362,6 +364,8 @@ public class MainWI {
 
         blockwirelessqgen = new BlockWirelessQuantumGenerator("wirelessqgen");
 
+        blockmattercollector = new BlockMatterCollector("mattercollector");
+
         expgen = new BlockExpGen("expGen", Material.rock);
         iridMach = new BlockIridiumMachine();
 
@@ -415,6 +419,7 @@ public class MainWI {
         GameRegistry.registerBlock(wirelessmachinescharger, ItemBlockMachCharger.class, "MachinesCharger");
 
         GameRegistry.registerBlock(blockwirelessqgen, ItemBlockWQGen.class, "WirelessQGen");
+        GameRegistry.registerBlock(blockmattercollector, ItemBlockLiquidMatterCollector.class, "LiquidMatterCollector");
 
         GameRegistry.registerBlock(blockxpsender, ItemBlockXPSender.class, "ExpSender1");
 
@@ -433,6 +438,8 @@ public class MainWI {
         GameRegistry.registerTileEntity(WirelessQGen.class, "TileEntityWirelessQGen");
 
         GameRegistry.registerTileEntity(TileXPSender.class, "TileEntityXPSender");
+
+        GameRegistry.registerTileEntity(TileLiquidMatterCollector.class, "TileEntityLiquidMatterCollector");
 
         GameRegistry.registerTileEntity(TileWirelessASP.class, "TileWirelessASPPersonal");
         GameRegistry.registerTileEntity(TileWirelessHSP.class, "TileWirelessHSPPersonal");
@@ -621,6 +628,11 @@ public class MainWI {
                 new Object[]{" A ", "ABA", " A ",
                         Character.valueOf('A'), IC2Items.getItem("wrench"),
                         Character.valueOf('B'), IC2Items.getItem("iridiumPlate")});
+
+        GameRegistry.addRecipe(new ItemStack(blockmattercollector, 1),/////////////////
+                new Object[]{" A ", "ABA", " A ",
+                        Character.valueOf('A'), IC2Items.getItem("cell"),
+                        Character.valueOf('B'), IC2Items.getItem("massFabricator")});
 
         GameRegistry.addRecipe(new ItemStack(playermodule, 1),
                 new Object[]{" A ", "BCB", " A ", Character.valueOf('A'), Items.paper, Character.valueOf('B'),

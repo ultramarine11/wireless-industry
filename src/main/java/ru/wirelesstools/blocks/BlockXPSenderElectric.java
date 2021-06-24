@@ -27,7 +27,6 @@ public class BlockXPSenderElectric extends BlockContainer {
 	public IIcon getIcon(int side, int metadata) {
 		// 0=bottom, 1=top, 2,3,4,5 = sides
 		switch (side) {
-
 		case 0:
 			return this.icons[0];
 		case 1:
@@ -40,7 +39,6 @@ public class BlockXPSenderElectric extends BlockContainer {
 			return this.icons[2];
 		case 5:
 			return this.icons[2];
-
 		}
 
 		return this.icons[1];

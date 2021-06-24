@@ -1,31 +1,15 @@
 package ru.wirelesstools.proxy;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import ru.wirelesstools.MainWI;
 import ru.wirelesstools.fluidmachines.TextureHooks;
 import ru.wirelesstools.fluidmachines.TileExpGen;
-import ru.wirelesstools.fluidmachines.TileXPGenPublic;
-import ru.wirelesstools.gui.GuiExpGen;
-import ru.wirelesstools.gui.GuiVajraCharger;
-import ru.wirelesstools.gui.GuiWPPersonal;
-import ru.wirelesstools.gui.GuiWSBPersonal;
-import ru.wirelesstools.gui.GuiWirelessMachinesCharger;
-import ru.wirelesstools.gui.GuiWirelessQGen;
-import ru.wirelesstools.tiles.TileEntityWirelessCharger;
-import ru.wirelesstools.tiles.TileVajraChargerElectric;
-import ru.wirelesstools.tiles.TileWPBasePersonal;
-import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
-import ru.wirelesstools.tiles.TileWirelessStorageBasePersonal;
-import ru.wirelesstools.tiles.TileXPSenderElectric;
-import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
+import ru.wirelesstools.gui.*;
+import ru.wirelesstools.tiles.*;
 
 public class ClientProxy extends ServerProxy {
 
@@ -84,6 +68,11 @@ public class ClientProxy extends ServerProxy {
 			if (te instanceof TileXPSenderElectric) {
 				
 				return ((TileXPSenderElectric) te).getGui(player, false);
+			}
+
+			if (te instanceof TileLiquidMatterCollector) {
+
+				return ((TileLiquidMatterCollector) te).getGui(player, false);
 			}
 
 		}

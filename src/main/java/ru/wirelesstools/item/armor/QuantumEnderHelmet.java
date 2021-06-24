@@ -179,16 +179,16 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
                 }
 
                 if (!player.getActivePotionEffects().isEmpty()) {
-                    for (Object effect : new LinkedList(player.getActivePotionEffects())) {
-                        int id = ((PotionEffect) effect).getPotionID();
-                        Integer cost = potionRemovalCost.get(id);
-                        if (cost == null || !ElectricItem.manager.canUse(stack,
-                                (double) (cost = Integer.valueOf(cost * (((PotionEffect) effect).getAmplifier() + 1)))
-                                        .intValue()))
-                            continue;
-
-                        ElectricItem.manager.use(stack, (double) cost.intValue(), player);
-                        player.removePotionEffect(id);
+                    for(PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
+                        int potionid = effect.getPotionID();
+                        if(potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
+                            int cost = potionRemovalCost.get(Integer.valueOf(potionid));
+                            if(ElectricItem.manager.canUse(stack, cost
+                                    * (effect.getAmplifier() + 1))) {
+                                ElectricItem.manager.use(stack, cost, player);
+                                player.removePotionEffect(potionid);
+                            }
+                        }
                     }
                 }
 

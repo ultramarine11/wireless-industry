@@ -117,9 +117,9 @@ public class GuiWChargerNew extends GuiIC2 {
 		// 5 аргумент - высота,
 		// 6 аргумент - текст.
 		this.buttonList.add(new GuiButton(0, realcenter + centerOffsetButton - 11, yGuiPos + 60, xButtonSize, 12,
-				I18n.format("button.wcharger.increment", new Object[0])));
+				I18n.format("button.wcharger.increment")));
 		this.buttonList.add(new GuiButton(1, realcenter - centerOffsetButton - 11, yGuiPos + 60, xButtonSize, 12,
-				I18n.format("button.wcharger.decrement", new Object[0])));
+				I18n.format("button.wcharger.decrement")));
 	}
 
 	protected void actionPerformed(GuiButton guibutton) {

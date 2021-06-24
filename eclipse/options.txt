@@ -4,7 +4,7 @@ fov:0.5
 gamma:1.0
 saturation:0.0
 renderDistance:12
-guiScale:3
+guiScale:0
 particles:1
 bobView:false
 anaglyph3d:false
@@ -90,10 +90,6 @@ key_Boost Key:42
 key_Mode Switch Key:50
 key_Side Inventory Key:46
 key_Hub Expand Key:45
-key_Vertical Mode Key:35
-key_Fly Key:33
-key_Streak Key:45
-key_Change Mode Key:36
 key_Gravi Fly Key:34
 key_Gravi Display Hud:35
 key_key.ic2ca_upgrades_key:41
@@ -104,7 +100,7 @@ key_key.toggleFlight:0
 key_key.GuiWC.gui1:21
 key_key.cofh.empower:47
 key_key.cofh.multimode:46
-soundCategory_master:0.75827813
+soundCategory_master:0.60596025
 soundCategory_music:0.0
 soundCategory_record:1.0
 soundCategory_weather:1.0

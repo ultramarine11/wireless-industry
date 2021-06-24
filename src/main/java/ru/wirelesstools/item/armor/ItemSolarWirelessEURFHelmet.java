@@ -141,14 +141,16 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 		if (!world.isRemote) {
 			this.gainFuel(player, world, stack);
 
-			for(PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
-				int potionid = effect.getPotionID();
-				if(potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
-					int cost = potionRemovalCost.get(Integer.valueOf(potionid));
-					if(ElectricItem.manager.canUse(stack, cost
-							* (effect.getAmplifier() + 1))) {
-						ElectricItem.manager.use(stack, cost, player);
-						player.removePotionEffect(potionid);
+			if (!player.getActivePotionEffects().isEmpty()) {
+				for (PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
+					int potionid = effect.getPotionID();
+					if (potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
+						int cost = potionRemovalCost.get(Integer.valueOf(potionid));
+						if (ElectricItem.manager.canUse(stack, cost
+								* (effect.getAmplifier() + 1))) {
+							ElectricItem.manager.use(stack, cost, player);
+							player.removePotionEffect(potionid);
+						}
 					}
 				}
 			}

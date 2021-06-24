@@ -65,6 +65,11 @@ public class ServerProxy implements IGuiHandler {
 				return ((TileXPSenderElectric) te).getGuiContainer(player);
 			}
 
+			if(te instanceof TileLiquidMatterCollector) {
+
+				return ((TileLiquidMatterCollector) te).getGuiContainer(player);
+			}
+
 		}
 
 		return null;
