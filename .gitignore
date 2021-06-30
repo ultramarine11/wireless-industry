@@ -1,3 +1,31 @@
+# User-specific stuff
+.idea/
+
+*.iml
+*.ipr
+*.iws
+
+### Eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# IntelliJ
+out/
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
 # Compiled class file
 *.class
 
@@ -7,11 +35,7 @@
 # BlueJ files
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -22,7 +46,148 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+
+**/build/
+
+# Common working directory
+run/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+/.gradle/
+/bin/
+eclipse/asm/ccl_modular/net#minecraft#block#BlockFire.txt
+*.txt
+*.cfg
+*.properties
+*.prefs
+.project
+.classpath
+*.recipe
+*.csv
+*.json
+*.html
+*.dat
+*.gz
+*.ini
+*.mcmeta
+*.dat_old
+*.dat_mcr
+*.baubback
+*.thaumback
+*.mca
+*.lock
+*.baub
+*.thaum
+eclipse/saves/New World/playerdata/7d461d5d-f429-32b0-a043-0156fa837406.dat.tmp
+eclipse/saves/New World/playerdata/5b0c46c0-894b-30a6-bd31-bf02da63882f.dat.tmp
+eclipse/saves/New World/playerdata/6b0be7c5-d502-342b-9566-f3750127a843.dat.tmp
+*.tmp
+eclipse/config/draconicevolution/resources/assets/
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/ECore7.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/ECore4.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/ECore3.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/chaosIsland.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/comet.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/dislocatorReceptical.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/ECore1.png
+eclipse/config/draconicevolution/resources/assets/draconicevolution/textures/gui/manualimages/ECore11.png
+*.zs
+eclipse/screenshots/2021-03-11_16.16.37.png
+*.zs
+eclipse/screenshots/2021-03-22_20.57.02.png
+*.zs
+eclipse/screenshots/2021-04-18_13.43.16.png
+*.zs
+eclipse/scripts/New Script.zs
+libs/GalaxyAdditions-1.7.10-1.0.1-deobf.jar
+
 .idea
 .gradle
-.settings
-*.iml
+.setting
+eclipse/saves/Новый мир/galacticraft/overworldMap/Overworld192.bin
+.gradle/4.4.1/fileContent/fileContent.lock
+.gradle/4.4.1/fileHashes/fileHashes.bin
+.gradle/4.4.1/fileHashes/fileHashes.lock
+.gradle/4.4.1/taskHistory/taskHistory.bin
+.gradle/4.4.1/taskHistory/taskHistory.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+eclipse/config/IC2.ini
+eclipse/config/splash.properties
+eclipse/logs/2021-06-24-1.log.gz
+eclipse/logs/2021-06-24-2.log.gz
+eclipse/logs/2021-06-24-3.log.gz
+eclipse/logs/2021-06-24-4.log.gz

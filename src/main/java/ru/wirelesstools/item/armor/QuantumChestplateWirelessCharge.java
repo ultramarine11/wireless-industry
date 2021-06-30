@@ -46,7 +46,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     public QuantumChestplateWirelessCharge(String name) {
         super(ArmorMaterial.DIAMOND, 0, 1);
         this.setUnlocalizedName(name);
-        this.setMaxStackSize(1);
+    //  this.setMaxStackSize(1);
         this.maxCharge = 500000000.0D;
         this.transferLimit = 500000.0D;
         this.tier = 4;

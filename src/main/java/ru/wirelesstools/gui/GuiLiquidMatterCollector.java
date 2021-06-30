@@ -38,7 +38,7 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
 
         String percent = this.container.base.getIntegerPercentage() + "%";
         int nmPos2 = (this.xSize - this.fontRendererObj.getStringWidth(percent)) / 2;
-        this.fontRendererObj.drawString(percent, nmPos2 - 35, 46, 4210752); // TODO calibrate string (x,y)
+        this.fontRendererObj.drawString(percent, nmPos2 - 35, 46, 4210752);
         String isActive = this.container.base.getIsActive() ?
                 StatCollector.translateToLocal("info.button.iscollectoron") : StatCollector.translateToLocal("info.button.iscollectoroff");
         int nmPos3 = (this.xSize - this.fontRendererObj.getStringWidth(isActive)) / 2;
@@ -80,7 +80,6 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
     protected void actionPerformed(GuiButton guibutton) {
         super.actionPerformed(guibutton);
         if (guibutton.id == 1) {
-
             IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
         }
     }

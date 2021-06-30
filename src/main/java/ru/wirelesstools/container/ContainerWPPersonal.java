@@ -1,33 +1,28 @@
 package ru.wirelesstools.container;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import ru.wirelesstools.tiles.TileWPBasePersonal;
 
 public class ContainerWPPersonal extends Container {
 	protected TileWPBasePersonal tileentity;
-	private GameProfile owner = null;
 
 	public ContainerWPPersonal(InventoryPlayer inventoryplayer, TileWPBasePersonal tileEntity1) {
 		this.tileentity = tileEntity1;
-		this.owner = tileEntity1.getOwner();
 		tileEntity1.openInventory();
 
 		for (int i = 0; i < 3; i++) {
 			for (int m = 0; m < 9; m++) {
-				addSlotToContainer(new Slot((IInventory) inventoryplayer, m + i * 9 + 9, 17 + m * 18, 86 + i * 18));
+				addSlotToContainer(new Slot(inventoryplayer, m + i * 9 + 9, 17 + m * 18, 86 + i * 18));
 			}
 		}
 
 		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot((IInventory) inventoryplayer, j, 17 + j * 18, 144));
+			addSlotToContainer(new Slot(inventoryplayer, j, 17 + j * 18, 144));
 		}
 
 	}
@@ -65,7 +60,6 @@ public class ContainerWPPersonal extends Container {
 	}
 
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
-		int slot = par2;
 		ItemStack stack = null;
 
 		Slot slotObject = (Slot) this.inventorySlots.get(par2);

@@ -372,7 +372,7 @@ public class TileEntityWirelessCharger extends TileEntity
 
 	@Override
 	public List<String> getNetworkedFields() {
-		List<String> ret = new Vector<String>(1);
+		List<String> ret = new Vector<>(1);
 		ret.add("owner");
 		return ret;
 	}

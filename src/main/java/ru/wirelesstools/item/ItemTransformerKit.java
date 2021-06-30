@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ItemTransformerKit extends Item {
 
-    private int kit_type;
+    private final int kit_type;
 
     public ItemTransformerKit(int type) {
         this.setCreativeTab(MainWI.tabwi);

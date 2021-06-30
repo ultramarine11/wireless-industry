@@ -44,7 +44,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 	public ItemSolarWirelessEURFHelmet(String name) {
 		super(ArmorMaterial.DIAMOND, 0, 0);
 		this.setUnlocalizedName(name);
-		this.setMaxStackSize(1);
+	//	this.setMaxStackSize(1);
 		this.maxenergyEU = 250000000.0D;
 		this.transferLimit = 250000.0D;
 		this.tier = 4;
@@ -155,7 +155,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				}
 			}
 
-			if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().getFoodLevel() < 16) {
+			if (ElectricItem.manager.canUse(stack, 1000.0) && player.getFoodStats().getFoodLevel() < 18) {
 				player.getFoodStats().addStats(4, 4.0F);
 				ElectricItem.manager.use(stack, 1000.0, player);
 				player.inventoryContainer.detectAndSendChanges();
@@ -188,7 +188,9 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
 				player.inventoryContainer.detectAndSendChanges();
 			}
 
-			ElectricItem.manager.charge(stack, nbt.getInteger("generating"), Integer.MAX_VALUE, false, false);
+			int generating = nbt.getInteger("generating");
+			if(generating > 0)
+				ElectricItem.manager.charge(stack, generating, Integer.MAX_VALUE, false, false);
 
 			for (ItemStack st2 : player.inventory.mainInventory) {
 				if (st2 == null)

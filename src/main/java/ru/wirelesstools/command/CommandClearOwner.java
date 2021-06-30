@@ -16,7 +16,7 @@ import java.util.List;
 public class CommandClearOwner extends CommandBase {
 
 	public static final String NAME_COMMAND = "cleararmorowner";
-	public static final String Alias1 = "clo";
+	public static final String ALIAS_1 = "clo";
 
 	public static final String USAGE_COMMAND = "/" + NAME_COMMAND + " " + "<player>";
 
@@ -54,7 +54,7 @@ public class CommandClearOwner extends CommandBase {
 						}
 					}
 				} else {
-					playersender.addChatMessage(new ChatComponentTranslation("Please use " + "/" + Alias1));
+					playersender.addChatMessage(new ChatComponentTranslation("Please use " + "/" + ALIAS_1));
 				}
 			} else if (args.length == 0) {
 				EntityPlayerMP senderplayer = this.getCommandSenderAsPlayer(commandSender);
@@ -107,7 +107,7 @@ public class CommandClearOwner extends CommandBase {
 	@Override
 	public List<String> getCommandAliases() {
 		List<String> aliaseslist = new ArrayList<>();
-		aliaseslist.add(Alias1);
+		aliaseslist.add(ALIAS_1);
 
 		return aliaseslist;
 	}

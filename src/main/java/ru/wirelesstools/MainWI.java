@@ -32,6 +32,7 @@ import ru.wirelesstools.blocks.*;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.entityarrow.ArrowVampEUNew;
 import ru.wirelesstools.entityarrow.ArrowVampXPNew;
+import ru.wirelesstools.eventhandler.HandlerRegistry;
 import ru.wirelesstools.fluidmachines.BlockExpGen;
 import ru.wirelesstools.fluidmachines.ItemBlockEG;
 import ru.wirelesstools.fluidmachines.TextureHooks;
@@ -39,10 +40,7 @@ import ru.wirelesstools.fluidmachines.TileXPGenPublic;
 import ru.wirelesstools.handlerwireless.WirelessChargerHandler;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
 import ru.wirelesstools.handlerwireless.WirelessTransmitHandler;
-import ru.wirelesstools.item.ItemEnderModule;
-import ru.wirelesstools.item.ItemPlayerModule;
-import ru.wirelesstools.item.ItemTransformerKit;
-import ru.wirelesstools.item.ItemWirelessModule;
+import ru.wirelesstools.item.*;
 import ru.wirelesstools.item.armor.*;
 import ru.wirelesstools.item.tool.LuckyVajra;
 import ru.wirelesstools.item.weapon.ItemSaberLoot3;
@@ -88,6 +86,8 @@ public class MainWI {
             "EU Vampire");
     public static final EnumRarity RARITY_CHESTPLATE_WIRELESS = EnumHelper.addRarity("EU Wireless", EnumChatFormatting.RED,
             "Wireless EU Transmission");
+    public static final EnumRarity RARITY_WISDOM = EnumHelper.addRarity("WisdomArmor", EnumChatFormatting.DARK_GREEN,
+            "Armor of Wisdom");
 
     public static Block blockxpsender;
 
@@ -324,6 +324,7 @@ public class MainWI {
         wirelessChestPlate = new QuantumChestplateWirelessCharge("wirelesschargingchestplate");
         wirelessEuRfHelmet = new ItemSolarWirelessEURFHelmet();
 
+
         enderQuantumHelmet = new QuantumEnderHelmet("eqHelmet");
         enderQuantumChest = new QuantumEnderChestplate("eqChestplate");
         enderQuantumLegs = new QuantumEnderLeggings("eqLeggings");
@@ -404,6 +405,7 @@ public class MainWI {
         GameRegistry.registerItem(transformkit_changeowner, "KitChangeownerModule");
 
         GameRegistry.registerItem(wirelessEuRfHelmet, "WirelessHelmet");
+
         GameRegistry.registerItem(wirelessChestPlate, "WirelessChestPlate");
 
         GameRegistry.registerItem(enderQuantumHelmet, "QuantumEnderHelmet");
@@ -457,12 +459,13 @@ public class MainWI {
         GameRegistry.registerTileEntity(TileEntityWirelessChargerPrivate.class, "TileWChargerPrivate");
         GameRegistry.registerTileEntity(TileEntityWirelessChargerPublic.class, "TileWChargerPublic");
 
+        HandlerRegistry.register();
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
     }
 
     @EventHandler
     public void serverStart(FMLServerStartingEvent event) {
-
         proxy.serverStart(event);
     }
 

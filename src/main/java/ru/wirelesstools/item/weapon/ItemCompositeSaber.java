@@ -35,7 +35,7 @@ public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 	private IIcon[] textures;
 	public double maxenergy;
 	protected int tier;
-	private boolean isLooting5;
+	private final boolean isLooting5;
 	private final double useamount;
 	private final Set<Object> whitelist = new HashSet<>(Arrays.asList(new Object[] { Blocks.web, Material.plants,
 			Material.vine, Material.coral, Material.leaves, Material.gourd }));
@@ -53,14 +53,11 @@ public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
 		info.add(StatCollector.translateToLocal("press.rmb.saber"));
-		info.add(StatCollector.translateToLocal("item.lootsaber.energy.drain") + ": "
-				+ String.valueOf((int) this.useamount) + " Eu");
 	}
 
 	public boolean canHarvestBlock(Block block, ItemStack stack) {
 		Material material = block.getMaterial();
 		if (this.whitelist.contains(block) && this.whitelist.contains(material)) {
-
 			return true;
 		}
 
@@ -170,15 +167,11 @@ public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
 		NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(stack);
-		if (!nbtData.getBoolean("active")) {
-
+		if (!nbtData.getBoolean("active"))
 			return true;
-		}
 
-		if (IC2.platform.isSimulating()) {
-
+		if (IC2.platform.isSimulating())
 			this.drainSaber(stack, this.useamount, source);
-		}
 
 		return true;
 	}
@@ -205,12 +198,10 @@ public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 				enchantmentmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(3));
 			}
 
-			EnchantmentHelper.setEnchantments(enchantmentmapsaber, stack);
-
 		} else {
 			enchantmentmapsaber.remove(Integer.valueOf(Enchantment.looting.effectId));
-			EnchantmentHelper.setEnchantments(enchantmentmapsaber, stack);
 		}
+		EnchantmentHelper.setEnchantments(enchantmentmapsaber, stack);
 		NBTTagCompound entry = new NBTTagCompound();
 		entry.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
 		entry.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
