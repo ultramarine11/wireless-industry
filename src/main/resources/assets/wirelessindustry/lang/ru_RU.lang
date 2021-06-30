@@ -300,3 +300,5 @@ gui.armorconfig.wisdompoints=ед.мудрости
 info.wisdomhelmet.wpamount=Очков мудрости
 chat.message.wi.commands=Доступны команды [Wireless Industry]
 chat.message.wi.and=и
+info.buffs.yes=Усиливающие эффекты включены
+info..buffs.no=Усиливающие эффекты отключены

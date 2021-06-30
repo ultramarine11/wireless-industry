@@ -53,7 +53,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3-pre", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")

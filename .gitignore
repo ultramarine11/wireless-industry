@@ -191,3 +191,65 @@ eclipse/logs/2021-06-24-1.log.gz
 eclipse/logs/2021-06-24-2.log.gz
 eclipse/logs/2021-06-24-3.log.gz
 eclipse/logs/2021-06-24-4.log.gz
+*.properties
+*.ini
+*.gradle
+*.bin
+*.lock
+.gradle/4.4.1/fileContent/fileContent.lock
+.gradle/4.4.1/fileHashes/fileHashes.bin
+.gradle/4.4.1/fileHashes/fileHashes.lock
+.gradle/4.4.1/taskHistory/taskHistory.bin
+.gradle/4.4.1/taskHistory/taskHistory.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+build.gradle
+eclipse/config/IC2.ini
+eclipse/config/splash.properties
+eclipse/logs/2021-06-24-1.log.gz
+eclipse/logs/2021-06-24-2.log.gz
+eclipse/logs/2021-06-24-3.log.gz
+eclipse/logs/2021-06-24-4.log.gz
+eclipse/logs/2021-06-24-5.log.gz
+eclipse/logs/2021-06-24-6.log.gz
+eclipse/logs/2021-06-24-7.log.gz
+eclipse/mods/ic2/EJML-core-0.26.jar
+eclipse/saves/Новый мир/data/Mineshaft.dat
+eclipse/saves/Новый мир/data/villages.dat
+eclipse/saves/Новый мир/DIM-1/data/villages.dat
+eclipse/saves/Новый мир/DIM1/data/villages.dat
+eclipse/saves/Новый мир/level.dat
+eclipse/saves/Новый мир/level.dat_mcr
+eclipse/saves/Новый мир/level.dat_old
+eclipse/saves/Новый мир/NEI/players/Player222.dat
+eclipse/saves/Новый мир/NEI/players/Player227.dat
+eclipse/saves/Новый мир/NEI/players/Player232.dat
+eclipse/saves/Новый мир/NEI/players/Player612.dat
+eclipse/saves/Новый мир/NEI/players/Player629.dat
+eclipse/saves/Новый мир/NEI/players/Player676.dat
+eclipse/saves/Новый мир/NEI/players/Player704.dat
+eclipse/saves/Новый мир/NEI/players/Player753.dat
+eclipse/saves/Новый мир/NEI/players/Player968.dat
+eclipse/saves/Новый мир/playerdata/03ba29a1-d6bd-32ba-90b2-375e4d65abc9.dat
+eclipse/saves/Новый мир/playerdata/19e1dbac-54cc-34fa-99b8-c2a0812b14c1.dat
+eclipse/saves/Новый мир/playerdata/6d917d12-8c99-3a68-96a3-2ce5d15924c0.dat
+eclipse/saves/Новый мир/playerdata/a349eb7d-8b74-32da-bb8d-6a1fb49c3d85.dat
+eclipse/saves/Новый мир/playerdata/c1896c31-8159-3c75-9e16-fc454b66b2cc.dat
+eclipse/saves/Новый мир/playerdata/cc8f980e-8ea7-381a-8715-01149d418cfb.dat
+eclipse/saves/Новый мир/playerdata/de192d37-7eec-3daf-a76d-c22c1a8036fd.dat
+eclipse/saves/Новый мир/playerdata/eb7081a5-32ec-3752-9cbc-963a701e6fdd.dat
+eclipse/saves/Новый мир/playerdata/f61ca7c9-c051-37fb-bee7-11203541854b.dat
+eclipse/saves/Новый мир/region/r.-1.0.mca
+eclipse/saves/Новый мир/region/r.0.0.mca
+eclipse/saves/Новый мир/session.lock
+eclipse/saves/Новый мир/stats/03ba29a1-d6bd-32ba-90b2-375e4d65abc9.json
+eclipse/saves/Новый мир/stats/19e1dbac-54cc-34fa-99b8-c2a0812b14c1.json
+eclipse/saves/Новый мир/stats/6d917d12-8c99-3a68-96a3-2ce5d15924c0.json
+eclipse/saves/Новый мир/stats/a349eb7d-8b74-32da-bb8d-6a1fb49c3d85.json
+eclipse/saves/Новый мир/stats/c1896c31-8159-3c75-9e16-fc454b66b2cc.json
+eclipse/saves/Новый мир/stats/cc8f980e-8ea7-381a-8715-01149d418cfb.json
+eclipse/saves/Новый мир/stats/de192d37-7eec-3daf-a76d-c22c1a8036fd.json
+eclipse/saves/Новый мир/stats/eb7081a5-32ec-3752-9cbc-963a701e6fdd.json
+eclipse/saves/Новый мир/stats/f61ca7c9-c051-37fb-bee7-11203541854b.json
+eclipse/screenshots/2021-06-25_00.22.52.png
+eclipse/usernamecache.json
+gradle/wrapper/gradle-wrapper.jar

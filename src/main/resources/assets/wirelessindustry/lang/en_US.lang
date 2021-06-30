@@ -298,3 +298,5 @@ gui.armorconfig.wisdompoints=wisdom point(s)
 info.wisdomhelmet.wpamount=Wisdom points
 chat.message.wi.commands=Available commands [Wireless Industry]
 chat.message.wi.and=and
+info.buffs.yes=Buff mode activated
+info..buffs.no=Buff mode not active

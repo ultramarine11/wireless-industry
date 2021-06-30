@@ -267,11 +267,15 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             String isonoff = nbt.getBoolean("active") ? EnumChatFormatting.GREEN
                     + StatCollector.translateToLocal("info.yes") : EnumChatFormatting.RED
                     + StatCollector.translateToLocal("info.no");
+            String isBuffOnOff = nbt.getBoolean("potionbuffs") ? EnumChatFormatting.DARK_AQUA
+                    + StatCollector.translateToLocal("info.buffs.yes") : EnumChatFormatting.YELLOW
+                    + StatCollector.translateToLocal("info..buffs.no");
             list.add(StatCollector.translateToLocal("info.wirelesscharge.mode") + ": "
                     + isonoff);
             list.add(StatCollector.translateToLocal("info.wirelesscharge.radius") + ": "
                     + EnumChatFormatting.DARK_GREEN + String.valueOf(ConfigWI.chestplateChargingRadius) + " "
                     + StatCollector.translateToLocal("info.wirelesscharge.blocks"));
+            list.add(isBuffOnOff);
             list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.press.modeswitch.key")
                     + " " + StatCollector.translateToLocal("info.to.switch"));
             list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.press.boost.key")
