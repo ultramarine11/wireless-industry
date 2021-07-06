@@ -13,7 +13,7 @@ import ru.wirelesstools.tiles.IWirelessMachineCharger;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 public class WirelessUtil {
 
@@ -47,8 +47,8 @@ public class WirelessUtil {
 	public static boolean iterateIEnergySinkTilesQGenBool(WirelessQuantumGeneratorBase qgen) {
 		boolean ret = false;
 		if (!qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap.isEmpty()) {
-			for (TileEntity tile : (Collection<TileEntity>) qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
-					qgen.zCoord).chunkTileEntityMap.values()) {
+			for (TileEntity tile : new ArrayList<TileEntity>(qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
+					qgen.zCoord).chunkTileEntityMap.values())) {
 				if (tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
 					IEnergySink sink = (IEnergySink) tile;
 					if (sink.getDemandedEnergy() > 0) {
@@ -65,11 +65,11 @@ public class WirelessUtil {
 	public static void iterateIEnergySinkTiles(TileWirelessMachinesChargerBase charger) {
 		if (!charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap
 				.isEmpty()) {
-			for (TileEntity tile : (Collection<TileEntity>) charger.getWorldObj()
-					.getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap.values()) {
+			for (TileEntity tile : new ArrayList<TileEntity>(charger.getWorldObj()
+					.getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap.values())) {
 				if (tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
-					IEnergySink tileenergysink = (IEnergySink) tile;
-					WirelessUtil.sendEnergyToEnergySink(charger, tileenergysink);
+					IEnergySink sink = (IEnergySink) tile;
+					WirelessUtil.sendEnergyToEnergySink(charger, sink);
 				}
 			}
 		}
