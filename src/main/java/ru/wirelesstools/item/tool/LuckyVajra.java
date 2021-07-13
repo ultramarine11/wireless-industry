@@ -94,9 +94,8 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 			TileEntity te = world.getTileEntity(i, j, k);
 			if (te instanceof TileVajraCharger) {
 				TileVajraCharger tilewch = (TileVajraCharger) te;
-				int sentEnergy;
 				if (tilewch.getStored() > 0) {
-					sentEnergy = (int) ElectricItem.manager.charge(itemstack, tilewch.getStored(),
+					int sentEnergy = (int) ElectricItem.manager.charge(itemstack, tilewch.getStored(),
 							Integer.MAX_VALUE, false, false);
 					tilewch.addEnergy(-sentEnergy);
 					entityplayer.addChatMessage(new ChatComponentTranslation(

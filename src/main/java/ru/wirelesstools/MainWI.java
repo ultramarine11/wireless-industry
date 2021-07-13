@@ -42,6 +42,7 @@ import ru.wirelesstools.handlerwireless.WirelessTransfer;
 import ru.wirelesstools.handlerwireless.WirelessTransmitHandler;
 import ru.wirelesstools.item.*;
 import ru.wirelesstools.item.armor.*;
+import ru.wirelesstools.item.tool.ElectricDescaler;
 import ru.wirelesstools.item.tool.LuckyVajra;
 import ru.wirelesstools.item.weapon.ItemSaberLoot3;
 import ru.wirelesstools.item.weapon.ItemSaberLoot5;
@@ -69,6 +70,7 @@ public class MainWI {
     public static Item saber3;
 
     public static Item quantumVampBowEu;
+    public static Item descaler;
 
     public static Item luckyVajra;
     public static Block iridMach;
@@ -316,6 +318,7 @@ public class MainWI {
         WirelessTransfer.transmithandler = new WirelessTransmitHandler();
         WirelessTransfer.chargeplayerhandler = new WirelessChargerHandler();
 
+        descaler = new ElectricDescaler();
         luckyVajra = new LuckyVajra(ToolMaterial.EMERALD);
         saber3 = new ItemSaberLoot3();
         saber5 = new ItemSaberLoot5();
@@ -403,6 +406,8 @@ public class MainWI {
 
         GameRegistry.registerItem(transformkit_upgrade, "KitUpgradeModule");
         GameRegistry.registerItem(transformkit_changeowner, "KitChangeownerModule");
+
+        GameRegistry.registerItem(descaler, "Electric Descaler");
 
         GameRegistry.registerItem(wirelessEuRfHelmet, "WirelessHelmet");
 
@@ -568,6 +573,14 @@ public class MainWI {
                         RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("iridiumDrill").getItem(), 1,
                                 OreDictionary.WILDCARD_VALUE)),
                         'E', Blocks.emerald_block, 'F', IC2Items.getItem("advancedCircuit")});
+
+        GameRegistry.addRecipe(new ItemStack(descaler, 1),
+                new Object[]{"AAA",
+                             "BCB",
+                             " D ", 'A', IC2Items.getItem("rubber"),
+                                    'B', IC2Items.getItem("advancedAlloy"),
+                                    'C', IC2Items.getItem("electricWrench"),
+                                    'D', IC2Items.getItem("reBattery")});
 
         GameRegistry.addRecipe(new ItemStack(saber3, 1),
                 new Object[]{"ACF", "ACF", "BDE", 'A', new ItemStack(Items.dye, 1, 4), 'B', Items.diamond, 'C',

@@ -60,6 +60,15 @@ public class QuantumEnderChestplate extends ItemArmor
 
 	@SideOnly(value = Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		if(entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			if(player.worldObj.provider.dimensionId == 1) {
+				return Reference.PathTex + "textures/armor/enderquantum_charge.png";
+			}
+			else {
+				return Reference.PathTex + "textures/armor/enderquantum_1.png";
+			}
+		}
 		return Reference.PathTex + "textures/armor/enderquantum_1.png";
 	}
 
