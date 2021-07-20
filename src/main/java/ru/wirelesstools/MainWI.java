@@ -54,7 +54,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.3", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.4", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -88,8 +88,6 @@ public class MainWI {
             "EU Vampire");
     public static final EnumRarity RARITY_CHESTPLATE_WIRELESS = EnumHelper.addRarity("EU Wireless", EnumChatFormatting.RED,
             "Wireless EU Transmission");
-    public static final EnumRarity RARITY_WISDOM = EnumHelper.addRarity("WisdomArmor", EnumChatFormatting.DARK_GREEN,
-            "Armor of Wisdom");
 
     public static Block blockxpsender;
 
@@ -281,7 +279,7 @@ public class MainWI {
             ConfigWI.vampBowMaxCharge = config.get(categoryVAMPIREWEAPONS, "Maximum charge of vampire bow", 300000).getInt(300000);
 
             int vbowxpvampired = config.get(categoryVAMPIREWEAPONS, "XP amount vampired per shot", 4).getInt(4);
-            if(vbowxpvampired < 0)
+            if (vbowxpvampired < 0)
                 ConfigWI.vampBowXPVampiredAmount = 0;
             else if (vbowxpvampired > 20)
                 ConfigWI.vampBowXPVampiredAmount = 20;
@@ -565,33 +563,26 @@ public class MainWI {
         GameRegistry.addRecipe(new ItemStack(wirelessadronsppersonal, 1),
                 new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessbarionsppersonal)});
 
-        GameRegistry.addRecipe(new ItemStack(luckyVajra, 1),
-                new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
-                        RecipeUtil.copyWithWildCard(new ItemStack(
-                                IC2Items.getItem("miningLaser").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
-                        'C', Blocks.lapis_block, 'D',
-                        RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("iridiumDrill").getItem(), 1,
-                                OreDictionary.WILDCARD_VALUE)),
-                        'E', Blocks.emerald_block, 'F', IC2Items.getItem("advancedCircuit")});
-
-        GameRegistry.addRecipe(new ItemStack(descaler, 1),
+        GameRegistry.addRecipe(new ItemStack(descaler, 1, OreDictionary.WILDCARD_VALUE),
                 new Object[]{"AAA",
-                             "BCB",
-                             " D ", 'A', IC2Items.getItem("rubber"),
-                                    'B', IC2Items.getItem("advancedAlloy"),
-                                    'C', IC2Items.getItem("electricWrench"),
-                                    'D', IC2Items.getItem("reBattery")});
+                        "BCB",
+                        " D ", 'A', IC2Items.getItem("rubber"),
+                        'B', IC2Items.getItem("advancedAlloy"),
+                        'C', RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("electricWrench").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
+                        'D', RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("reBattery").getItem(), 1, OreDictionary.WILDCARD_VALUE))});
 
-        GameRegistry.addRecipe(new ItemStack(saber3, 1),
+        GameRegistry.addRecipe(new ItemStack(saber3, 1, OreDictionary.WILDCARD_VALUE),
                 new Object[]{"ACF", "ACF", "BDE", 'A', new ItemStack(Items.dye, 1, 4), 'B', Items.diamond, 'C',
                         IC2Items.getItem("advancedAlloy"), 'D', IC2Items.getItem("electronicCircuit"), 'E',
-                        IC2Items.getItem("reBattery"), 'F', Items.redstone});
+                        RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("reBattery").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
+                        'F', Items.redstone});
 
-        GameRegistry.addRecipe(new ItemStack(saber5, 1), new Object[]{"ACF", "BDF", "AEG", 'A', Items.glowstone_dust,
-                'B', IC2Items.getItem("iridiumPlate"), 'C', Items.emerald, 'D',
-                RecipeUtil.copyWithWildCard(new ItemStack(saber3, 1, OreDictionary.WILDCARD_VALUE)), 'E',
-                IC2Items.getItem("advancedCircuit"), 'F', Items.diamond, 'G', RecipeUtil.copyWithWildCard(
-                new ItemStack(IC2Items.getItem("energyCrystal").getItem(), 1, OreDictionary.WILDCARD_VALUE))});
+        GameRegistry.addRecipe(new ItemStack(saber5, 1, OreDictionary.WILDCARD_VALUE),
+                new Object[]{"ACF", "BDF", "AEG", 'A', Items.glowstone_dust,
+                        'B', IC2Items.getItem("iridiumPlate"), 'C', Items.emerald, 'D',
+                        RecipeUtil.copyWithWildCard(new ItemStack(saber3, 1, OreDictionary.WILDCARD_VALUE)), 'E',
+                        IC2Items.getItem("advancedCircuit"), 'F', Items.diamond, 'G', RecipeUtil.copyWithWildCard(
+                        new ItemStack(IC2Items.getItem("energyCrystal").getItem(), 1, OreDictionary.WILDCARD_VALUE))});
 
         // }
 
@@ -620,6 +611,15 @@ public class MainWI {
                             'B', new ItemStack(wirelessmodule), 'C',
                             RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("lapotronCrystal").getItem(), 1,
                                     OreDictionary.WILDCARD_VALUE))});
+
+            GameRegistry.addRecipe(new ItemStack(luckyVajra, 1, OreDictionary.WILDCARD_VALUE),
+                    new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
+                            RecipeUtil.copyWithWildCard(new ItemStack(
+                                    IC2Items.getItem("iridiumDrill").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
+                            'C', Blocks.lapis_block, 'D',
+                            RecipeUtil.copyWithWildCard(new ItemStack(GraviSuite.vajra, 1,
+                                    OreDictionary.WILDCARD_VALUE)),
+                            'E', Blocks.emerald_block, 'F', IC2Items.getItem("advancedCircuit")});
         } else {
             GameRegistry.addRecipe(new ItemStack(wirelessChestPlate, 1, OreDictionary.WILDCARD_VALUE),
                     new Object[]{"C C", "BAB", "C C", 'A',
@@ -628,6 +628,15 @@ public class MainWI {
                             'B', new ItemStack(wirelessmodule), 'C',
                             RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("lapotronCrystal").getItem(), 1,
                                     OreDictionary.WILDCARD_VALUE))});
+
+            GameRegistry.addRecipe(new ItemStack(luckyVajra, 1, OreDictionary.WILDCARD_VALUE),
+                    new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
+                            RecipeUtil.copyWithWildCard(new ItemStack(
+                                    IC2Items.getItem("miningLaser").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
+                            'C', Blocks.lapis_block, 'D',
+                            RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("iridiumDrill").getItem(), 1,
+                                    OreDictionary.WILDCARD_VALUE)),
+                            'E', Blocks.emerald_block, 'F', IC2Items.getItem("advancedCircuit")});
         }
 
         GameRegistry.addRecipe(new ItemStack(wirelessmodule, 1),
