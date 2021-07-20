@@ -108,16 +108,13 @@ public class QuantumEnderBoots extends ItemArmor implements IElectricItem, IMeta
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
         if (!world.isRemote) {
             if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
-                NBTTagCompound ownerNbt = new NBTTagCompound();
-                NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
-                nbt.setTag("ownerGameProfile", ownerNbt);
+                this.setArmorOwner(stack, player);
             }
 
             if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-                if (world.provider.dimensionId == 1) {
-
+                if (world.provider.dimensionId == 1)
                     ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
-                }
+
 
                 boolean wasOnGround = nbt.hasKey("wasOnGround") ? nbt.getBoolean("wasOnGround") : true;
                 if (wasOnGround && !player.onGround && IC2.keyboard.isJumpKeyDown(player)

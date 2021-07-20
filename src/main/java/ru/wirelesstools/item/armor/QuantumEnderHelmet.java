@@ -119,15 +119,13 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
         if (!world.isRemote) {
             NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
             if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
-                NBTTagCompound ownerNbt = new NBTTagCompound();
-                NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
-                nbt.setTag("ownerGameProfile", ownerNbt);
+                this.setArmorOwner(stack, player);
             }
 
             if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-                if (world.provider.dimensionId == 1) {
+                if (world.provider.dimensionId == 1)
                     ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
-                }
+
                 byte toggleTimer = nbt.getByte("toggleTimer");
                 byte nightvisionmode = nbt.getByte("NightVisMode");
 
@@ -179,11 +177,11 @@ public class QuantumEnderHelmet extends ItemArmor implements IElectricItem, IMet
                 }
 
                 if (!player.getActivePotionEffects().isEmpty()) {
-                    for(PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
+                    for (PotionEffect effect : new LinkedList<PotionEffect>(player.getActivePotionEffects())) {
                         int potionid = effect.getPotionID();
-                        if(potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
+                        if (potionRemovalCost.containsKey(Integer.valueOf(potionid))) {
                             int cost = potionRemovalCost.get(Integer.valueOf(potionid));
-                            if(ElectricItem.manager.canUse(stack, cost
+                            if (ElectricItem.manager.canUse(stack, cost
                                     * (effect.getAmplifier() + 1))) {
                                 ElectricItem.manager.use(stack, cost, player);
                                 player.removePotionEffect(potionid);

@@ -48,7 +48,7 @@ public class GuiWirelessMachinesCharger extends GuiContainer {
 		String tileentityname = I18n.format(this.tile.chargername);
 		String storageString = I18n.format("gui.wirind.wirelessmachineschargerstorage") + ": ";
 		String energyformatted = UtilFormatGUI.formatNumber(this.tile.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tile.getCapacity());
+		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tile.getMaxChargerEnergy());
 
 		String stringEnergyAll = storageString + energyformatted + " / " + maxstorageformatted + " EU";
 

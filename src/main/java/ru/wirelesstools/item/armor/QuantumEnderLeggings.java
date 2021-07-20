@@ -31,268 +31,265 @@ import ru.wirelesstools.config.ConfigWI;
 import java.util.List;
 
 public class QuantumEnderLeggings extends ItemArmor
-		implements IElectricItem, IMetalArmor, ISpecialArmor, IPrivateArmor {
+        implements IElectricItem, IMetalArmor, ISpecialArmor, IPrivateArmor {
 
-	public double maxCharge;
-	protected double transferLimit;
-	protected int tier;
+    public double maxCharge;
+    protected double transferLimit;
+    protected int tier;
 
-	public QuantumEnderLeggings(String name) {
-		super(ArmorMaterial.DIAMOND, 0, 2); // 2 = leggings
-		this.setUnlocalizedName(name);
-		this.setMaxStackSize(1);
-		this.setMaxDamage(27);
-		this.setCreativeTab(MainWI.tabwi);
-		this.maxCharge = 15000000.0;
-		this.transferLimit = 100000.0;
-		this.tier = 4;
-	}
+    public QuantumEnderLeggings(String name) {
+        super(ArmorMaterial.DIAMOND, 0, 2); // 2 = leggings
+        this.setUnlocalizedName(name);
+        this.setMaxStackSize(1);
+        this.setMaxDamage(27);
+        this.setCreativeTab(MainWI.tabwi);
+        this.maxCharge = 15000000.0;
+        this.transferLimit = 100000.0;
+        this.tier = 4;
+    }
 
-	public EnumRarity getRarity(ItemStack itemstack) {
+    public EnumRarity getRarity(ItemStack itemstack) {
 
-		return EnumRarity.epic;
-	}
+        return EnumRarity.epic;
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(Reference.PathTex + "itemArmorEnderQuantumLegs");
-	}
+    @SideOnly(value = Side.CLIENT)
+    public void registerIcons(IIconRegister par1IconRegister) {
+        this.itemIcon = par1IconRegister.registerIcon(Reference.PathTex + "itemArmorEnderQuantumLegs");
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return Reference.PathTex + "textures/armor/enderquantum_2.png";
-	}
+    @SideOnly(value = Side.CLIENT)
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+        return Reference.PathTex + "textures/armor/enderquantum_2.png";
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		ItemStack stack = new ItemStack(this, 1);
-		ElectricItem.manager.charge(stack, 2.147483647E9, Integer.MAX_VALUE, true, false);
-		list.add(stack);
-		ItemStack stack1 = new ItemStack(this, 1);
-		ElectricItem.manager.charge(stack1, 0.0D, Integer.MAX_VALUE, true, false);
-		list.add(stack1);
-	}
+    @SideOnly(value = Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
+        ItemStack stack = new ItemStack(this, 1);
+        ElectricItem.manager.charge(stack, 2.147483647E9, Integer.MAX_VALUE, true, false);
+        list.add(stack);
+        ItemStack stack1 = new ItemStack(this, 1);
+        ElectricItem.manager.charge(stack1, 0.0D, Integer.MAX_VALUE, true, false);
+        list.add(stack1);
+    }
 
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-			if (player.isSneaking()) {
-				if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        if (!world.isRemote) {
+            NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+            if (player.isSneaking()) {
+                if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
 
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner")
-					));
-				} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
-						.equals(player.getGameProfile())) {
+                    player.addChatMessage(new ChatComponentTranslation(
+                            EnumChatFormatting.GOLD + StatCollector.translateToLocal("chat.message.no.owner")
+                    ));
+                } else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
+                        .equals(player.getGameProfile())) {
 
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.you.cannot.clear.owner")
-					));
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.DARK_RED
-									+ StatCollector.translateToLocal("chat.message.owner.can.clear.owner")
-					));
-				} else {
+                    player.addChatMessage(new ChatComponentTranslation(
+                            EnumChatFormatting.DARK_RED
+                                    + StatCollector.translateToLocal("chat.message.you.cannot.clear.owner")
+                    ));
+                    player.addChatMessage(new ChatComponentTranslation(
+                            EnumChatFormatting.DARK_RED
+                                    + StatCollector.translateToLocal("chat.message.owner.can.clear.owner")
+                    ));
+                } else {
 
-					nbt.removeTag("ownerGameProfile");
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.DARK_GREEN
-									+ StatCollector.translateToLocal("chat.message.owner.successfully.cleared")
-					));
-				}
+                    nbt.removeTag("ownerGameProfile");
+                    player.addChatMessage(new ChatComponentTranslation(
+                            EnumChatFormatting.DARK_GREEN
+                                    + StatCollector.translateToLocal("chat.message.owner.successfully.cleared")
+                    ));
+                }
 
-			}
-		}
-		return stack;
-	}
+            }
+        }
+        return stack;
+    }
 
-	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		if (!world.isRemote) {
-			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
-				NBTTagCompound ownerNbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
-				nbt.setTag("ownerGameProfile", ownerNbt);
-			}
-			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-				if (world.provider.dimensionId == 1) {
+    public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+        if (!world.isRemote) {
+            if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
+                this.setArmorOwner(stack, player);
+            }
+            if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
+                if (world.provider.dimensionId == 1)
+                    ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
 
-					ElectricItem.manager.charge(stack, ConfigWI.enderChargeArmorValue, Integer.MAX_VALUE, true, false);
-				}
-			}
-		} else {
-			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) != null
-					&& NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
+            }
+        } else {
+            if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) != null
+                    && NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
 
-				if (ElectricItem.manager.canUse(stack, 1000.0) && (player.onGround || player.isInWater())
-						&& IC2.keyboard.isForwardKeyDown(player)
-						&& (player.isSprinting() || IC2.keyboard.isBoostKeyDown(player))) {
-					byte speedTicker = nbt.getByte("speedTicker");
-					if ((speedTicker++) >= 10) {
-						speedTicker = 0;
-						ElectricItem.manager.use(stack, 1000.0, null);
-						player.inventoryContainer.detectAndSendChanges();
-					}
-					nbt.setByte("speedTicker", speedTicker);
-					float speed = 0.22F;
-					if (player.isInWater()) {
-						speed = 0.1F;
-						if (IC2.keyboard.isJumpKeyDown(player)) {
-							player.motionY += 0.1F;
-						}
-					}
-					player.moveFlying(0.0F, 1.0F, speed);
-				}
-			}
-		}
-	}
+                if (ElectricItem.manager.canUse(stack, 1000.0) && (player.onGround || player.isInWater())
+                        && IC2.keyboard.isForwardKeyDown(player)
+                        && (player.isSprinting() || IC2.keyboard.isBoostKeyDown(player))) {
+                    byte speedTicker = nbt.getByte("speedTicker");
+                    if ((speedTicker++) >= 10) {
+                        speedTicker = 0;
+                        ElectricItem.manager.use(stack, 1000.0, null);
+                        player.inventoryContainer.detectAndSendChanges();
+                    }
+                    nbt.setByte("speedTicker", speedTicker);
+                    float speed = 0.22F;
+                    if (player.isInWater()) {
+                        speed = 0.1F;
+                        if (IC2.keyboard.isJumpKeyDown(player)) {
+                            player.motionY += 0.1F;
+                        }
+                    }
+                    player.moveFlying(0.0F, 1.0F, speed);
+                }
+            }
+        }
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
-			list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("info.eqarmor.noowner1"));
-			list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("info.eqarmor.noowner2"));
-		} else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
-			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner1"));
-			list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner2"));
-			list.add(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
-					+ NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).getName());
-		} else {
-			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));
-			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner2"));
-			list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.you.can.clear"));
-			if (player.worldObj.provider.dimensionId == 1) {
-				list.add(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC.toString()
-						+ StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
-						+ String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
-			} else {
-				list.add(EnumChatFormatting.GOLD.toString() + EnumChatFormatting.ITALIC.toString()
-						+ StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
-			}
-		}
-	}
+    @SideOnly(value = Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+        if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
+            list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("info.eqarmor.noowner1"));
+            list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("info.eqarmor.noowner2"));
+        } else if (!NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
+            list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner1"));
+            list.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("info.eqarmor.incorrectowner2"));
+            list.add(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("info.eqarmor.owner.is") + ": "
+                    + NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).getName());
+        } else {
+            list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner1"));
+            list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.correctowner2"));
+            list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("info.eqarmor.you.can.clear"));
+            if (player.worldObj.provider.dimensionId == 1) {
+                list.add(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC.toString()
+                        + StatCollector.translateToLocal("info.eqarmor.is.charging.ender") + ": "
+                        + String.valueOf(ConfigWI.enderChargeArmorValue) + " EU/t");
+            } else {
+                list.add(EnumChatFormatting.GOLD.toString() + EnumChatFormatting.ITALIC.toString()
+                        + StatCollector.translateToLocal("info.eqarmor.go.to.ender.dim"));
+            }
+        }
+    }
 
-	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-			if (player != null) {
-				NBTTagCompound ownerNbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
-				nbt.setTag("ownerGameProfile", ownerNbt);
-			}
-		}
-	}
+    public void onCreated(ItemStack stack, World world, EntityPlayer player) {
+        if (!world.isRemote) {
+            NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+            if (player != null) {
+                NBTTagCompound ownerNbt = new NBTTagCompound();
+                NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
+                nbt.setTag("ownerGameProfile", ownerNbt);
+            }
+        }
+    }
 
-	public boolean isRepairable() {
+    public boolean isRepairable() {
 
-		return false;
-	}
+        return false;
+    }
 
-	public int getItemEnchantability() {
+    public int getItemEnchantability() {
 
-		return 0;
-	}
+        return 0;
+    }
 
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 
-		return false;
-	}
+        return false;
+    }
 
-	public double getDamageAbsorptionRatio() {
+    public double getDamageAbsorptionRatio() {
 
-		return 1.0;
-	}
+        return 1.0;
+    }
 
-	private double getBaseAbsorptionRatio() {
-		return 0.3;
-	}
+    private double getBaseAbsorptionRatio() {
+        return 0.3;
+    }
 
-	public int getEnergyPerDamage() {
+    public int getEnergyPerDamage() {
 
-		return 15000;
-	}
+        return 15000;
+    }
 
-	@Override
-	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage,
-			int slot) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(armor);
-		double absorptionRatio = this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio();
-		int energyPerDamage = this.getEnergyPerDamage();
-		int damageLimit = Integer.MAX_VALUE;
-		if (energyPerDamage > 0) {
-			damageLimit = (int) Math.min(damageLimit, 25.0 * ElectricItem.manager.getCharge(armor) / energyPerDamage);
-		}
-		if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
-				|| (player instanceof EntityPlayer && !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
-						.equals(((EntityPlayer) player).getGameProfile()))) {
-			return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
-		} else {
-			return new ISpecialArmor.ArmorProperties(0, absorptionRatio, damageLimit);
-		}
-	}
+    @Override
+    public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage,
+                                         int slot) {
+        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(armor);
+        double absorptionRatio = this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio();
+        int energyPerDamage = this.getEnergyPerDamage();
+        int damageLimit = Integer.MAX_VALUE;
+        if (energyPerDamage > 0) {
+            damageLimit = (int) Math.min(damageLimit, 25.0 * ElectricItem.manager.getCharge(armor) / energyPerDamage);
+        }
+        if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
+                || (player instanceof EntityPlayer && !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile"))
+                .equals(((EntityPlayer) player).getGameProfile()))) {
+            return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
+        } else {
+            return new ISpecialArmor.ArmorProperties(0, absorptionRatio, damageLimit);
+        }
+    }
 
-	@Override
-	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(armor);
-		if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
-				|| !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
+    @Override
+    public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+        NBTTagCompound nbt = StackUtil.getOrCreateNbtData(armor);
+        if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null
+                || !NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {
 
-			return 0;
-		} else {
+            return 0;
+        } else {
 
-			return (int) Math.round(20.0 * this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio());
-		}
-	}
+            return (int) Math.round(20.0 * this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio());
+        }
+    }
 
-	@Override
-	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+    @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
 
-		ElectricItem.manager.discharge(stack, damage * this.getEnergyPerDamage(), Integer.MAX_VALUE, true, false,
-				false);
-	}
+        ElectricItem.manager.discharge(stack, damage * this.getEnergyPerDamage(), Integer.MAX_VALUE, true, false,
+                false);
+    }
 
-	@Override
-	public boolean isMetalArmor(ItemStack arg0, EntityPlayer arg1) {
+    @Override
+    public boolean isMetalArmor(ItemStack arg0, EntityPlayer arg1) {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean canProvideEnergy(ItemStack arg0) {
+    @Override
+    public boolean canProvideEnergy(ItemStack arg0) {
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public Item getChargedItem(ItemStack arg0) {
+    @Override
+    public Item getChargedItem(ItemStack arg0) {
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public Item getEmptyItem(ItemStack arg0) {
+    @Override
+    public Item getEmptyItem(ItemStack arg0) {
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public double getMaxCharge(ItemStack arg0) {
+    @Override
+    public double getMaxCharge(ItemStack arg0) {
 
-		return this.maxCharge;
-	}
+        return this.maxCharge;
+    }
 
-	@Override
-	public int getTier(ItemStack arg0) {
+    @Override
+    public int getTier(ItemStack arg0) {
 
-		return this.tier;
-	}
+        return this.tier;
+    }
 
-	@Override
-	public double getTransferLimit(ItemStack arg0) {
+    @Override
+    public double getTransferLimit(ItemStack arg0) {
 
-		return this.transferLimit;
-	}
+        return this.transferLimit;
+    }
 
 }

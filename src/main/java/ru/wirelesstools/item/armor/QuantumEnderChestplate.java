@@ -118,9 +118,7 @@ public class QuantumEnderChestplate extends ItemArmor
 			NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
 			byte toggleTimer = nbt.getByte("toggleTimer");
 			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")) == null) {
-				NBTTagCompound ownerNbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(ownerNbt, player.getGameProfile());
-				nbt.setTag("ownerGameProfile", ownerNbt);
+				this.setArmorOwner(stack, player);
 			}
 
 			if (NBTUtil.func_152459_a(nbt.getCompoundTag("ownerGameProfile")).equals(player.getGameProfile())) {

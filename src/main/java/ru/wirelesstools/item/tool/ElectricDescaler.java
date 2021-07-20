@@ -39,7 +39,7 @@ public class ElectricDescaler extends Item implements IElectricItem {
     }
 
     @SideOnly(value = Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b) {
         list.add(StatCollector.translateToLocal("info.descaler.howto.use"));
     }
 
@@ -58,13 +58,14 @@ public class ElectricDescaler extends Item implements IElectricItem {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(i, j, k);
             if (te instanceof TileEntitySteamGenerator) {
-                TileEntitySteamGenerator stgente = (TileEntitySteamGenerator) te;
+                TileEntitySteamGenerator steamgente = (TileEntitySteamGenerator) te;
                 try {
                     if (ElectricItem.manager.canUse(stack, 1000.0)) {
-                        int calcification = ReflectionHelper.getPrivateValue(TileEntitySteamGenerator.class, stgente, "calcification");
+                        int calcification = ReflectionHelper.<Integer, TileEntitySteamGenerator>getPrivateValue(TileEntitySteamGenerator.class, steamgente, "calcification");
                         if (calcification > 0) {
-                            ReflectionHelper.setPrivateValue(TileEntitySteamGenerator.class, stgente, 0, "calcification");
-                            ElectricItem.manager.use(stack, 1000.0, player);
+                            ReflectionHelper.setPrivateValue(TileEntitySteamGenerator.class, steamgente, 0, "calcification");
+                            if (!player.capabilities.isCreativeMode)
+                                ElectricItem.manager.use(stack, 1000.0, player);
                             player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.message.scale.cleared")
                                     + " " + EnumChatFormatting.GREEN + String.format("%.2f", (double) calcification / 1000.0) + "%"
                                     + " " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("chat.message.of.calcification")));

@@ -3,59 +3,39 @@ package ru.wirelesstools.tiles;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.network.INetworkClientTileEntityEventListener;
+import ic2.core.ContainerBase;
+import ic2.core.IHasGui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import ru.wirelesstools.container.ContainerWirelessMachinesCharger;
-import ru.wirelesstools.utils.WirelessUtil;
 
-public class TileWirelessMachinesChargerBase extends TileEntity
-        implements IEnergySink, IWirelessMachineCharger, IInventory {
+public class PFPConvertorTile extends TileEntity implements IEnergySink, IInventory, IHasGui, INetworkClientTileEntityEventListener {
 
-    protected int maxStorage;
+    public int maxStorage;
     public double energy;
-    protected int tier;
+    public int tier;
     private boolean loaded = false;
     private boolean addedToEnergyNet;
-    public String chargername;
+    public String pfpconvertorname;
+    protected int energyformaxheat;
 
-//	public boolean isCharging = false;
-
-    public TileWirelessMachinesChargerBase(int maxStorage, int tier, String name) {
-        this.energy = 0.0D;
-        this.maxStorage = maxStorage;
-        this.chargername = name;
-        this.tier = tier;
+    public PFPConvertorTile(String name) {
+        this.energy = 0.0;
+        this.pfpconvertorname = name;
     }
 
-    public int gaugeEnergyScaled(int i) {
-
-        return (int) (this.energy * i / this.maxStorage);
-    }
-
-    @Override
     public void updateEntity() {
         super.updateEntity();
-        if (this.worldObj.isRemote) {
-            return;
-        }
+        if (!this.worldObj.isRemote) {
 
-        if (this.energy > this.maxStorage) {
-            this.energy = this.maxStorage;
+            // TODO some logic
 
             this.markDirty();
-        }
-
-        if (this.energy > 0.0) {
-
-            WirelessUtil.iterateIEnergySinkTiles(this);
-
         }
     }
 
@@ -77,39 +57,6 @@ public class TileWirelessMachinesChargerBase extends TileEntity
             this.loaded = false;
         }
         super.invalidate();
-    }
-
-    public Container getGuiContainer(InventoryPlayer inventory) {
-
-        return new ContainerWirelessMachinesCharger(inventory, this);
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
-        super.writeToNBT(nbttagcompound);
-        nbttagcompound.setDouble("energy", this.energy);
-        nbttagcompound.setInteger("maxenergy", this.maxStorage);
-        // nbttagcompound.setBoolean("ischarging", this.isCharging);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
-        super.readFromNBT(nbttagcompound);
-        this.energy = nbttagcompound.getDouble("energy");
-        this.maxStorage = nbttagcompound.getInteger("maxenergy");
-        // this.isCharging = nbttagcompound.getBoolean("ischarging");
-    }
-
-    public void decreaseEnergy(double amountdecrease) {
-
-        double realdecrease = Math.min(this.energy, amountdecrease);
-        this.energy -= realdecrease;
-    }
-
-    @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-
-        return true;
     }
 
     @Override
@@ -139,19 +86,29 @@ public class TileWirelessMachinesChargerBase extends TileEntity
     }
 
     @Override
-    public double getChargerEnergy() {
+    public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
 
-        return this.energy;
+        return true;
     }
 
-    public int getMaxChargerEnergy() {
-
-        return this.maxStorage;
+    @Override
+    public void onNetworkEvent(EntityPlayer entityPlayer, int i) {
     }
 
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    @Override
+    public ContainerBase<?> getGuiContainer(EntityPlayer entityPlayer) {
 
-        return player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+        return null;
+    }
+
+    @Override
+    public GuiScreen getGui(EntityPlayer entityPlayer, boolean b) {
+
+        return null;
+    }
+
+    @Override
+    public void onGuiClosed(EntityPlayer entityPlayer) {
     }
 
     @Override
@@ -162,19 +119,16 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
     @Override
     public ItemStack getStackInSlot(int p_70301_1_) {
-
         return null;
     }
 
     @Override
     public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-
         return null;
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-
         return null;
     }
 
@@ -191,14 +145,18 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
     @Override
     public boolean hasCustomInventoryName() {
-
         return false;
     }
 
     @Override
     public int getInventoryStackLimit() {
-
         return 0;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+
+        return player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -213,8 +171,6 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
     @Override
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-
-        return true;
+        return false;
     }
-
 }
