@@ -75,6 +75,11 @@ public class ClientProxy extends ServerProxy {
 				return ((TileLiquidMatterCollector) te).getGui(player, false);
 			}
 
+			if (te instanceof PFPConvertorTile) {
+
+				return ((PFPConvertorTile) te).getGui(player, false);
+			}
+
 		}
 
 		return null;

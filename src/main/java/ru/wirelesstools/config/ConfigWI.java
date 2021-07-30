@@ -98,7 +98,7 @@ public class ConfigWI {
 	public static int EuRfSolarHelmetGenDay;
 	public static int EuRfSolarHelmetGenNight;
 
-	public static int EuToRfmultiplier;
+	public static int EUToRF_Multiplier;
 
 	public static int stolenEnergyEUFromArmor;
 	

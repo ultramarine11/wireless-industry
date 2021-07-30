@@ -11,6 +11,10 @@ import ru.wirelesstools.tiles.*;
 
 public class ServerProxy implements IGuiHandler {
 
+	public void initRecipes() {
+		PFPConvertorTile.init();
+	}
+
 	public static void Init() {
 
 	}
@@ -68,6 +72,11 @@ public class ServerProxy implements IGuiHandler {
 			if(te instanceof TileLiquidMatterCollector) {
 
 				return ((TileLiquidMatterCollector) te).getGuiContainer(player);
+			}
+
+			if(te instanceof PFPConvertorTile) {
+
+				return ((PFPConvertorTile) te).getGuiContainer(player);
 			}
 
 		}

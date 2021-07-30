@@ -306,9 +306,9 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
 	}
 
 	public int gainFuel() {
-		if (this.ticker++ % tickRate() == 0) {
+		if (this.worldObj.getTotalWorldTime() % 20L == 0) {
 
-			updateVisibility();
+			this.updateVisibility();
 		}
 
 		if (this.sunIsUp && this.skyIsVisible) {

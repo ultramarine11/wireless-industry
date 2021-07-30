@@ -312,3 +312,5 @@ command.wi.msg.no.owner=У брони ещё нет владельца
 command.wi.msg.cleared.owner=Владелец брони очищен (командой)
 command.wi.msg.cleared.from.inv=Владелец брони был очищен (командой)
 command.wi.msg.cleared.owner.from=Владелец брони очищен командой у игрока
+pfpconverter.name=Совершенный преобразователь на пламени чистилища
+tile.pfpconverter.name=Совершенный преобразователь на пламени чистилища

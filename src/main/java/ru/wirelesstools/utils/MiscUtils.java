@@ -13,9 +13,9 @@ public class MiscUtils {
 		IEnergyContainerItem item = (IEnergyContainerItem) rfitemstack.getItem();
 		int amountRfCanBeReceivedIncludesLimit = item.receiveEnergy(rfitemstack, Integer.MAX_VALUE, true);
 		if (amountRfCanBeReceivedIncludesLimit > 0) {
-			double helmetChargeRF = ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EuToRfmultiplier;
+			double helmetChargeRF = ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EUToRF_Multiplier;
 			double realSentEnergyRF = Math.min(amountRfCanBeReceivedIncludesLimit, helmetChargeRF);
-			double realDischargedEUFromHelmet = realSentEnergyRF / ConfigWI.EuToRfmultiplier;
+			double realDischargedEUFromHelmet = realSentEnergyRF / ConfigWI.EUToRF_Multiplier;
 
 			item.receiveEnergy(rfitemstack, (int) realSentEnergyRF, false);
 			ElectricItem.manager.discharge(currentarmorstack, realDischargedEUFromHelmet, Integer.MAX_VALUE, true,
@@ -27,8 +27,8 @@ public class MiscUtils {
 		IEnergyContainerItem item = (IEnergyContainerItem) rfitemstack.getItem();
 		if (item.receiveEnergy(rfitemstack, Integer.MAX_VALUE, true) > 0) {
 			int chargedEUfinally = item.receiveEnergy(rfitemstack,
-					(int) (ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EuToRfmultiplier),
-					false) / ConfigWI.EuToRfmultiplier;
+					(int) (ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EUToRF_Multiplier),
+					false) / ConfigWI.EUToRF_Multiplier;
 			ElectricItem.manager.discharge(currentarmorstack, chargedEUfinally, Integer.MAX_VALUE, true,
 					false, false);
 		}

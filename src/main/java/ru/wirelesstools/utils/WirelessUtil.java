@@ -29,8 +29,8 @@ public class WirelessUtil {
 		IEnergyContainerItem item = (IEnergyContainerItem) currentItemStackRF.getItem();
 		if (item.receiveEnergy(currentItemStackRF, Integer.MAX_VALUE, true) > 0) {
 			int euFinallySent = item.receiveEnergy(currentItemStackRF,
-					(int) (tile.getCurrentEnergyInCharger() * ConfigWI.EuToRfmultiplier),
-					false) / ConfigWI.EuToRfmultiplier;
+					(int) (tile.getCurrentEnergyInCharger() * ConfigWI.EUToRF_Multiplier),
+					false) / ConfigWI.EUToRF_Multiplier;
 			tile.decreaseEnergy(euFinallySent);
 		}
 	}

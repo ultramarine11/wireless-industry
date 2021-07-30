@@ -126,16 +126,18 @@ public class TileWirelessMachinesChargerBase extends TileEntity
 
     @Override
     public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-        if (amount == 0D)
-            return 0D;
-        if (this.energy >= this.maxStorage)
+        double de = this.getDemandedEnergy();
+        if (amount == 0.0D) {
+            return 0.0D;
+        } else if (de <= 0.0D) {
             return amount;
-
-        double demanded = this.getDemandedEnergy();
-        if (demanded > 0.0)
-            this.energy += Math.min(amount, demanded);
-
-        return 0.0D;
+        } else if (amount >= de) {
+            this.energy += de;
+            return amount - de;
+        } else {
+            this.energy += amount;
+            return 0.0D;
+        }
     }
 
     @Override

@@ -60,7 +60,6 @@ public class BlockMatterCollector extends BlockContainer {
                                     float subY, float subZ) {
         if (!world.isRemote) {
             if(!player.isSneaking()) {
-
                 player.openGui(MainWI.instance, 1, world, x, y, z);
             }
         }

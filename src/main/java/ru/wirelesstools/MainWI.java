@@ -40,7 +40,10 @@ import ru.wirelesstools.fluidmachines.TileXPGenPublic;
 import ru.wirelesstools.handlerwireless.WirelessChargerHandler;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
 import ru.wirelesstools.handlerwireless.WirelessTransmitHandler;
-import ru.wirelesstools.item.*;
+import ru.wirelesstools.item.ItemEnderModule;
+import ru.wirelesstools.item.ItemPlayerModule;
+import ru.wirelesstools.item.ItemTransformerKit;
+import ru.wirelesstools.item.ItemWirelessModule;
 import ru.wirelesstools.item.armor.*;
 import ru.wirelesstools.item.tool.ElectricDescaler;
 import ru.wirelesstools.item.tool.LuckyVajra;
@@ -54,7 +57,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.4", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.5", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -76,6 +79,7 @@ public class MainWI {
     public static Block iridMach;
     public static Item wirelessChestPlate;
     public static Item wirelessEuRfHelmet;
+    public static Block pfpConverter;
 
     public static Item enderQuantumHelmet;
     public static Item enderQuantumChest;
@@ -143,7 +147,7 @@ public class MainWI {
         try {
             config.load();
             int eutorf = config.get("Energy balance", "The EU to RF multiplier, not less than 1", 4).getInt(4);
-            ConfigWI.EuToRfmultiplier = eutorf < 1 ? 1 : eutorf;
+            ConfigWI.EUToRF_Multiplier = eutorf < 1 ? 1 : eutorf;
 
             ConfigWI.EuRfSolarHelmetGenDay = config.get(categoryWIRELESSARMOR, "Wireless Helmet day generation (EU/t)", 4096).getInt(4096);
             ConfigWI.EuRfSolarHelmetGenNight = config.get(categoryWIRELESSARMOR, "Wireless Helmet night generation (EU/t)", 1024)
@@ -371,6 +375,8 @@ public class MainWI {
         expgen = new BlockExpGen("expGen", Material.rock);
         iridMach = new BlockIridiumMachine();
 
+        pfpConverter = new BlockPFPConverter("pfpconverter");
+
         if (FluidRegistry.isFluidRegistered("xpjuice")) {
             FluidXP.xpJuice = FluidRegistry.getFluid("xpjuice");
         } else {
@@ -392,6 +398,8 @@ public class MainWI {
         GameRegistry.registerBlock(wirelessadronsppersonal, ItemBlockWAdronSP.class, "WAdronSPPersonal");
         GameRegistry.registerBlock(blockwirelessreceiverpersonal, ItemBlockWirelessStoragePersonal.class,
                 "WRes1Personal");
+
+        GameRegistry.registerBlock(pfpConverter, ItemBlockPFPConverter.class, "PFPConverter");
 
         GameRegistry.registerItem(luckyVajra, "LuckyVajra");
         GameRegistry.registerItem(saber5, "LootSaber5");
@@ -446,6 +454,8 @@ public class MainWI {
 
         GameRegistry.registerTileEntity(TileLiquidMatterCollector.class, "TileEntityLiquidMatterCollector");
 
+        GameRegistry.registerTileEntity(PFPConvertorTile.class, "TileEntityPFPConverter");
+
         GameRegistry.registerTileEntity(TileWirelessASP.class, "TileWirelessASPPersonal");
         GameRegistry.registerTileEntity(TileWirelessHSP.class, "TileWirelessHSPPersonal");
         GameRegistry.registerTileEntity(TileWirelessUHSP.class, "TileWirelessUHSPPersonal");
@@ -463,6 +473,8 @@ public class MainWI {
         GameRegistry.registerTileEntity(TileEntityWirelessChargerPublic.class, "TileWChargerPublic");
 
         HandlerRegistry.register();
+
+        proxy.initRecipes();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
     }
@@ -562,6 +574,14 @@ public class MainWI {
 
         GameRegistry.addRecipe(new ItemStack(wirelessadronsppersonal, 1),
                 new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessbarionsppersonal)});
+
+        GameRegistry.addRecipe(new ItemStack(pfpConverter, 1),
+                new Object[]{"DCD",
+                             "BAB",
+                             "DCD", Character.valueOf('A'), IC2Items.getItem("replicator"),
+                                    Character.valueOf('B'), new ItemStack(iridMach),
+                                    Character.valueOf('C'), IC2Items.getItem("mfsUnit"),
+                                    Character.valueOf('D'), Items.nether_star});
 
         GameRegistry.addRecipe(new ItemStack(descaler, 1, OreDictionary.WILDCARD_VALUE),
                 new Object[]{"AAA",

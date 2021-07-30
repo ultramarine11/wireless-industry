@@ -123,11 +123,18 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 
 	@Override
 	public double injectEnergy(ForgeDirection nameForgeDirection, double amount, double voltage) {
-		if (this.energy >= this.maxStorage) {
+		double de = this.getDemandedEnergy();
+		if (amount == 0.0D) {
+			return 0.0D;
+		} else if (de <= 0.0D) {
 			return amount;
+		} else if (amount >= de) {
+			this.energy += de;
+			return amount - de;
+		} else {
+			this.energy += amount;
+			return 0.0D;
 		}
-		this.energy += (int) amount;
-		return 0.0D;
 	}
 
 	@Override
