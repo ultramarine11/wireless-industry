@@ -61,6 +61,6 @@ public class GuiPFPConvertor extends GuiIC2 {
     @Override
     public ResourceLocation getResourceLocation() {
 
-        return new ResourceLocation(Reference.NAME, "textures/gui/gui_pfp1_1.png");
+        return new ResourceLocation(Reference.IDNAME, "textures/gui/gui_pfp1_1.png");
     }
 }

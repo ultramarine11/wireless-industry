@@ -15,7 +15,7 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWSBPersonal extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiTWSBPersonal.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GuiTWSBPersonal.png");
 
 	private TileWirelessStorageBasePersonal tileentity;
 

@@ -5,88 +5,87 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import ru.wirelesstools.command.CommandChangeOwnerArmor;
 import ru.wirelesstools.command.CommandClearOwner;
 import ru.wirelesstools.fluidmachines.TileExpGen;
 import ru.wirelesstools.tiles.*;
 
 public class ServerProxy implements IGuiHandler {
 
-	public void initRecipes() {
-		PFPConvertorTile.init();
-	}
+    public void initRecipes() {
+        PFPConvertorTile.init();
+    }
 
-	public static void Init() {
+    public static void Init() {
+    }
 
-	}
+    public void serverStart(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandClearOwner());
+        event.registerServerCommand(new CommandChangeOwnerArmor());
+    }
 
-	public void serverStart(FMLServerStartingEvent event) {
-		
-		event.registerServerCommand(new CommandClearOwner());
-	}
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te != null) {
 
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te = world.getTileEntity(x, y, z);
+            if(te instanceof TileWPBasePersonal) {
 
-		if (te != null) {
+                return ((TileWPBasePersonal) te).getGuiContainer(player.inventory);
+            }
 
-			if (te instanceof TileWPBasePersonal) {
+            if(te instanceof TileWirelessStorageBasePersonal) {
 
-				return ((TileWPBasePersonal) te).getGuiContainer(player.inventory);
-			}
+                return ((TileWirelessStorageBasePersonal) te).getGuiContainer(player.inventory);
+            }
 
-			if (te instanceof TileWirelessStorageBasePersonal) {
+            if(te instanceof TileExpGen) {
 
-				return ((TileWirelessStorageBasePersonal) te).getGuiContainer(player.inventory);
-			}
+                return ((TileExpGen) te).getGuiContainer(player.inventory);
+            }
 
-			if (te instanceof TileExpGen) {
+            if(te instanceof TileVajraChargerElectric) {
 
-				return ((TileExpGen) te).getGuiContainer(player.inventory);
-			}
+                return ((TileVajraChargerElectric) te).getGuiContainer(player.inventory);
+            }
 
-			if (te instanceof TileVajraChargerElectric) {
+            if(te instanceof TileEntityWirelessCharger) {
 
-				return ((TileVajraChargerElectric) te).getGuiContainer(player.inventory);
-			}
+                return ((TileEntityWirelessCharger) te).getGuiContainer(player);
+            }
 
-			if (te instanceof TileEntityWirelessCharger) {
+            if(te instanceof TileWirelessMachinesChargerBase) {
 
-				return ((TileEntityWirelessCharger) te).getGuiContainer(player);
-			}
+                return ((TileWirelessMachinesChargerBase) te).getGuiContainer(player.inventory);
+            }
 
-			if (te instanceof TileWirelessMachinesChargerBase) {
+            if(te instanceof WirelessQuantumGeneratorBase) {
 
-				return ((TileWirelessMachinesChargerBase) te).getGuiContainer(player.inventory);
-			}
-			
-			if (te instanceof WirelessQuantumGeneratorBase) {
+                return ((WirelessQuantumGeneratorBase) te).getGuiContainer(player.inventory);
+            }
 
-				return ((WirelessQuantumGeneratorBase) te).getGuiContainer(player.inventory);
-			}
-			
-			if(te instanceof TileXPSenderElectric) {
-				
-				return ((TileXPSenderElectric) te).getGuiContainer(player);
-			}
+            if(te instanceof TileXPSenderElectric) {
 
-			if(te instanceof TileLiquidMatterCollector) {
+                return ((TileXPSenderElectric) te).getGuiContainer(player);
+            }
 
-				return ((TileLiquidMatterCollector) te).getGuiContainer(player);
-			}
+            if(te instanceof TileLiquidMatterCollector) {
 
-			if(te instanceof PFPConvertorTile) {
+                return ((TileLiquidMatterCollector) te).getGuiContainer(player);
+            }
 
-				return ((PFPConvertorTile) te).getGuiContainer(player);
-			}
+            if(te instanceof PFPConvertorTile) {
 
-		}
+                return ((PFPConvertorTile) te).getGuiContainer(player);
+            }
 
-		return null;
-	}
+        }
 
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return null;
+    }
 
-		return null;
-	}
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+
+        return null;
+    }
 
 }

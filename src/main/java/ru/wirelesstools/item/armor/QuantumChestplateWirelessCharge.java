@@ -269,7 +269,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
                     + StatCollector.translateToLocal("info.no");
             String isBuffOnOff = nbt.getBoolean("potionbuffs") ? EnumChatFormatting.DARK_AQUA
                     + StatCollector.translateToLocal("info.buffs.yes") : EnumChatFormatting.YELLOW
-                    + StatCollector.translateToLocal("info..buffs.no");
+                    + StatCollector.translateToLocal("info.buffs.no");
             list.add(StatCollector.translateToLocal("info.wirelesscharge.mode") + ": "
                     + isonoff);
             list.add(StatCollector.translateToLocal("info.wirelesscharge.radius") + ": "

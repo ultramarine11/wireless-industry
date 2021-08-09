@@ -16,7 +16,7 @@ import ru.wirelesstools.fluidmachines.TileExpGen;
 
 public class GuiExpGen extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GUIExpGen.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GUIExpGen.png");
 
 	public TileExpGen tileentity;
 

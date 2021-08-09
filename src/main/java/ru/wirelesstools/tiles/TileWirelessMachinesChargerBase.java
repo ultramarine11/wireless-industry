@@ -1,5 +1,6 @@
 package ru.wirelesstools.tiles;
 
+import cofh.api.energy.IEnergyReceiver;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -12,11 +13,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerWirelessMachinesCharger;
 import ru.wirelesstools.utils.WirelessUtil;
 
 public class TileWirelessMachinesChargerBase extends TileEntity
-        implements IEnergySink, IWirelessMachineCharger, IInventory {
+        implements IEnergySink, IWirelessMachineCharger, IInventory, IEnergyReceiver {
 
     protected int maxStorage;
     public double energy;
@@ -24,8 +26,6 @@ public class TileWirelessMachinesChargerBase extends TileEntity
     private boolean loaded = false;
     private boolean addedToEnergyNet;
     public String chargername;
-
-//	public boolean isCharging = false;
 
     public TileWirelessMachinesChargerBase(int maxStorage, int tier, String name) {
         this.energy = 0.0D;
@@ -219,4 +219,30 @@ public class TileWirelessMachinesChargerBase extends TileEntity
         return true;
     }
 
+    @Override
+    public boolean canConnectEnergy(ForgeDirection var1) {
+        return true;
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+        int energyReceivedRF = Math.min(this.getMaxEnergyStored(from) - this.getEnergyStored(from), maxReceive);
+        if(!simulate) {
+            this.addRfEnergy(energyReceivedRF);
+        }
+        return energyReceivedRF;
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection var1) {
+        return (int)this.energy * ConfigWI.EUToRF_Multiplier;
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection var1) {
+        return this.maxStorage * ConfigWI.EUToRF_Multiplier;
+    }
+    protected void addRfEnergy(int RFamount) {
+        this.energy += (double) RFamount / ConfigWI.EUToRF_Multiplier;
+    }
 }

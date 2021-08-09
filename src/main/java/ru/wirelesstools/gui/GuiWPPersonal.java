@@ -15,7 +15,7 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWPPersonal extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/wirelesssolarpanel.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/wirelesssolarpanel.png");
 
 	private TileWPBasePersonal tileentity;
 

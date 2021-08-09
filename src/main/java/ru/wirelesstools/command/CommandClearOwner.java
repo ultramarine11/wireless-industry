@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
+import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.item.armor.IPrivateArmor;
 
 import java.util.ArrayList;
@@ -23,31 +24,30 @@ public class CommandClearOwner extends CommandBase {
 
     @Override
     public String getCommandName() {
-
         return NAME_COMMAND;
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-
         return USAGE_COMMAND;
     }
 
     @Override
     public void processCommand(ICommandSender commandSender, String[] args) {
-        if (commandSender instanceof EntityPlayer) {
-            if (args.length > 1) {
+        if(commandSender instanceof EntityPlayer) {
+            if(args.length > 1) {
                 throw new WrongUsageException(this.getCommandUsage(commandSender));
             }
-            switch (args.length) {
+
+            switch(args.length) {
                 case 0: {
                     EntityPlayerMP senderplayer = CommandBase.getCommandSenderAsPlayer(commandSender);
-                    for (ItemStack stack : senderplayer.inventory.mainInventory) {
-                        if (stack == null)
+                    for(ItemStack stack : senderplayer.inventory.mainInventory) {
+                        if(stack == null)
                             continue;
-                        if (stack.getItem() instanceof IPrivateArmor) {
+                        if(stack.getItem() instanceof IPrivateArmor) {
                             IPrivateArmor armor = (IPrivateArmor) stack.getItem();
-                            if (armor.getArmorOwner(stack) == null) {
+                            if(armor.getArmorOwner(stack) == null) {
                                 senderplayer.addChatMessage(new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.no.owner")));
                             } else {
                                 armor.clearOwner(stack);
@@ -61,11 +61,11 @@ public class CommandClearOwner extends CommandBase {
                 case 1: {
                     EntityPlayerMP playermp = CommandBase.getPlayer(commandSender, args[0]);
                     EntityPlayerMP playersender = CommandBase.getCommandSenderAsPlayer(commandSender);
-                    if (playersender.getGameProfile().equals(playermp.getGameProfile())) {
-                        for (ItemStack stack : playersender.inventory.mainInventory) {
-                            if (stack == null)
+                    if(playersender.getGameProfile().equals(playermp.getGameProfile())) {
+                        for(ItemStack stack : playersender.inventory.mainInventory) {
+                            if(stack == null)
                                 continue;
-                            if (stack.getItem() instanceof IPrivateArmor) {
+                            if(stack.getItem() instanceof IPrivateArmor) {
                                 IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                                 armor.clearOwner(stack);
                                 playersender.addChatMessage(
@@ -74,19 +74,19 @@ public class CommandClearOwner extends CommandBase {
                         }
                     } else {
                         boolean success = false;
-                        for (ItemStack stack : playermp.inventory.mainInventory) {
-                            if (stack == null)
+                        for(ItemStack stack : playermp.inventory.mainInventory) {
+                            if(stack == null)
                                 continue;
-                            if (stack.getItem() instanceof IPrivateArmor) {
+                            if(stack.getItem() instanceof IPrivateArmor) {
                                 IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                                 armor.clearOwner(stack);
-                                if (!success)
+                                if(!success)
                                     success = true;
                                 playermp.addChatMessage(
                                         new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.cleared.from.inv")));
                             }
                         }
-                        if (success)
+                        if(success)
                             playersender.addChatMessage(
                                     new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.cleared.owner.from")
                                             + ": " + playermp.getGameProfile().getName()));
@@ -99,20 +99,17 @@ public class CommandClearOwner extends CommandBase {
 
     @Override
     public int getRequiredPermissionLevel() {
-
-        return 2;
+        return ConfigWI.permissionLevelCommandClearOwner;
     }
 
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-
         return args.length == 1 ? CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames())
                 : null;
     }
 
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender commandSender) {
-
         // ServerConfigurationManager.func_152596_g(GameProfile p_152596_1_) отвечает за
         // то, может ли этот игрок использовать команды
         return commandSender instanceof EntityPlayerMP && MinecraftServer.getServer().getConfigurationManager()

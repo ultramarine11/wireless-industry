@@ -122,4 +122,11 @@ public class ConfigWI {
 	public static int helmetChargingRadius;
 	public static int chestplateChargingRadius;
 
+	public static boolean isServerJoinedChatMsgEnabled;
+	public static boolean isModLogEnabled;
+	public static boolean isIU_EuRf_priority;
+	public static boolean enableWeaponsChatMsgs;
+
+	public static int permissionLevelCommandChangeOwner;
+	public static int permissionLevelCommandClearOwner;
 }

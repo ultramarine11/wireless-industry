@@ -61,12 +61,12 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
     @SideOnly(value = Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List info, boolean par4) {
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            if (nbt.getBoolean("vampiremode")) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            if(nbt.getBoolean("vampiremode")) {
                 info.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("info.qbowxp.mode"));
                 info.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("info.qbowxp.vamped.per.shot")
-                + ": " + EnumChatFormatting.DARK_GREEN + String.valueOf(ConfigWI.vampBowXPVampiredAmount)
-                + " " + StatCollector.translateToLocal("info.qbowxp.xppoints"));
+                        + ": " + EnumChatFormatting.DARK_GREEN + String.valueOf(ConfigWI.vampBowXPVampiredAmount)
+                        + " " + StatCollector.translateToLocal("info.qbowxp.xppoints"));
                 info.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.qbow.change.mode"));
             } else {
                 info.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal("info.qboweu.mode"));
@@ -120,16 +120,16 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
     @SideOnly(value = Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-        if (usingItem != null
+        if(usingItem != null
                 && Item.getIdFromItem(usingItem.getItem()) == Item.getIdFromItem(MainWI.quantumVampBowEu)) {
             int usingticks = this.getMaxItemUseDuration(stack) - useRemaining;
-            if (usingticks > 17)
+            if(usingticks > 17)
                 return nbt.getBoolean("vampiremode") ? this.qbowXP[3] : this.qbowEU[3];
 
-            if (usingticks > 13)
+            if(usingticks > 13)
                 return nbt.getBoolean("vampiremode") ? this.qbowXP[2] : this.qbowEU[2];
 
-            if (usingticks > 0)
+            if(usingticks > 0)
                 return nbt.getBoolean("vampiremode") ? this.qbowXP[1] : this.qbowEU[1];
         }
         return nbt.getBoolean("vampiremode") ? this.qbowXP[0] : this.qbowEU[0];
@@ -162,25 +162,27 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if (!(ElectricItem.manager.canUse(itemStack, ConfigWI.vampBowShotEnergyCost) &&
+        if(!(ElectricItem.manager.canUse(itemStack, ConfigWI.vampBowShotEnergyCost) &&
                 !player.capabilities.isCreativeMode) ^ player.capabilities.isCreativeMode) {
             return itemStack;
         }
         ArrowNockEvent event = new ArrowNockEvent(player, itemStack);
         MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
+        if(event.isCanceled())
             return event.result;
 
-        if (!world.isRemote && IC2.keyboard.isModeSwitchKeyDown(player)) {
+        if(!world.isRemote && IC2.keyboard.isModeSwitchKeyDown(player)) {
             NBTTagCompound nbt = StackUtil.getOrCreateNbtData(itemStack);
             boolean vampmodenew = !nbt.getBoolean("vampiremode");
             nbt.setBoolean("vampiremode", vampmodenew);
-            if (vampmodenew) {
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
-                        + StatCollector.translateToLocal("info.chatmessage.vampmode.xp")));
-            } else {
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
-                        + StatCollector.translateToLocal("info.chatmessage.vampmode.eu")));
+            if(ConfigWI.enableWeaponsChatMsgs) {
+                if(vampmodenew) {
+                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
+                            + StatCollector.translateToLocal("info.chatmessage.vampmode.xp")));
+                } else {
+                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
+                            + StatCollector.translateToLocal("info.chatmessage.vampmode.eu")));
+                }
             }
             return itemStack;
         }
@@ -194,7 +196,7 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
         int inUseDuration = this.getMaxItemUseDuration(itemStack) - itemInUseCount;
         ArrowLooseEvent event = new ArrowLooseEvent(player, itemStack, inUseDuration);
         MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
+        if(event.isCanceled())
             return;
 
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(itemStack);
@@ -204,37 +206,37 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
         float inUseSeconds = (float) inUseDuration / 20.0F;
         inUseSeconds = (inUseSeconds * inUseSeconds + inUseSeconds * 2.0F) / 3.0F;
 
-        if (inUseSeconds < 0.1F)
+        if(inUseSeconds < 0.1F)
             return;
 
-        if (inUseSeconds > 1.0F)
+        if(inUseSeconds > 1.0F)
             inUseSeconds = 1.0F;
 
-        if (vampXPmodelocal) {
+        if(vampXPmodelocal) {
             ArrowVampXPNew arrowvampxpNew = new ArrowVampXPNew(world, player, inUseSeconds * 2.0F);
 
-            if (inUseSeconds == 1.0F)
+            if(inUseSeconds == 1.0F)
                 arrowvampxpNew.setIsCritical(true);
 
             int enchpow = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemStack);
-            if (arrowvampxpNew.getIsCritical()) {
+            if(arrowvampxpNew.getIsCritical()) {
                 enchpow += 3;
             }
 
-            if (enchpow > 0) {
+            if(enchpow > 0) {
                 arrowvampxpNew.setDamage(arrowvampxpNew.getDamage() + (double) enchpow * 0.5 + 0.5);
             }
 
             int enchpunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemStack);
-            if (arrowvampxpNew.getIsCritical()) {
+            if(arrowvampxpNew.getIsCritical()) {
                 ++enchpunch;
             }
 
-            if (enchpunch > 0) {
+            if(enchpunch > 0) {
                 arrowvampxpNew.setKnockbackStrength(enchpunch);
             }
 
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemStack) > 0) {
+            if(EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemStack) > 0) {
                 arrowvampxpNew.setFire(100);
             }
 
@@ -242,8 +244,8 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
                     1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + inUseSeconds * 0.5f);
             arrowvampxpNew.canBePickedUp = 2;
 
-            if (!world.isRemote) {
-                if (!player.capabilities.isCreativeMode)
+            if(!world.isRemote) {
+                if(!player.capabilities.isCreativeMode)
                     ElectricItem.manager.use(itemStack, ConfigWI.vampBowShotEnergyCost, player);
 
                 world.spawnEntityInWorld(arrowvampxpNew);
@@ -251,28 +253,28 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
         } else {
             ArrowVampEUNew arrowvampeuNew = new ArrowVampEUNew(world, player, inUseSeconds * 2.0F);
 
-            if (inUseSeconds == 1.0F)
+            if(inUseSeconds == 1.0F)
                 arrowvampeuNew.setIsCritical(true);
 
             int enchpow = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemStack);
-            if (arrowvampeuNew.getIsCritical()) {
+            if(arrowvampeuNew.getIsCritical()) {
                 enchpow += 3;
             }
 
-            if (enchpow > 0) {
+            if(enchpow > 0) {
                 arrowvampeuNew.setDamage(arrowvampeuNew.getDamage() + (double) enchpow * 0.5 + 0.5);
             }
 
             int enchpunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemStack);
-            if (arrowvampeuNew.getIsCritical()) {
+            if(arrowvampeuNew.getIsCritical()) {
                 ++enchpunch;
             }
 
-            if (enchpunch > 0) {
+            if(enchpunch > 0) {
                 arrowvampeuNew.setKnockbackStrength(enchpunch);
             }
 
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemStack) > 0) {
+            if(EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemStack) > 0) {
                 arrowvampeuNew.setFire(100);
             }
 
@@ -280,8 +282,8 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
                     1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + inUseSeconds * 0.5f);
             arrowvampeuNew.canBePickedUp = 2;
 
-            if (!world.isRemote) {
-                if (!player.capabilities.isCreativeMode)
+            if(!world.isRemote) {
+                if(!player.capabilities.isCreativeMode)
                     ElectricItem.manager.use(itemStack, ConfigWI.vampBowShotEnergyCost, player);
 
                 world.spawnEntityInWorld(arrowvampeuNew);

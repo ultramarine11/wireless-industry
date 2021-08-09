@@ -32,206 +32,218 @@ import java.util.*;
 
 public class ItemCompositeSaber extends ItemTool implements IElectricItem {
 
-	private IIcon[] textures;
-	public double maxenergy;
-	protected int tier;
-	private final boolean isLooting5;
-	private final double useamount;
-	private final Set<Object> whitelist = new HashSet<>(Arrays.asList(new Object[] { Blocks.web, Material.plants,
-			Material.vine, Material.coral, Material.leaves, Material.gourd }));
+    private IIcon[] textures;
+    public double maxenergy;
+    protected double transferlimit;
+    protected int tier;
+    private final boolean isLooting5;
+    private final double useamount;
+    private final Set<Object> whitelist = new HashSet<>(Arrays.asList(Blocks.web, Material.plants,
+            Material.vine, Material.coral, Material.leaves, Material.gourd));
 
-	public ItemCompositeSaber(String name, boolean isLootingV, double energymax, int tier, double useAmount) {
-		super(0.0F, ToolMaterial.EMERALD, new HashSet());
-		this.setUnlocalizedName(name);
-		this.maxenergy = energymax;
-		this.tier = tier;
-		this.isLooting5 = isLootingV;
-		this.useamount = useAmount;
-		this.setMaxDamage(27);
-		this.setCreativeTab(MainWI.tabwi);
-	}
+    public ItemCompositeSaber(String name, boolean isLootingV, double energymax, int tier, double useAmount) {
+        super(0.0F, ToolMaterial.EMERALD, new HashSet());
+        this.setUnlocalizedName(name);
+        this.maxenergy = energymax;
+        this.tier = tier;
+        this.transferlimit = 256.0;
+        this.isLooting5 = isLootingV;
+        this.useamount = useAmount;
+        this.setMaxDamage(27);
+        this.setCreativeTab(MainWI.tabwi);
+    }
 
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
-		info.add(StatCollector.translateToLocal("press.rmb.saber"));
-	}
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
+        info.add(StatCollector.translateToLocal("press.rmb.saber"));
+    }
 
-	public boolean canHarvestBlock(Block block, ItemStack stack) {
-		Material material = block.getMaterial();
-		if (this.whitelist.contains(block) && this.whitelist.contains(material)) {
-			return true;
-		}
+    public boolean canHarvestBlock(Block block, ItemStack stack) {
+        Material material = block.getMaterial();
+        if(this.whitelist.contains(block) && this.whitelist.contains(material)) {
+            return true;
+        }
 
-		return super.canHarvestBlock(block, stack);
-	}
+        return super.canHarvestBlock(block, stack);
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public EnumRarity getRarity(ItemStack stack) {
+    @SideOnly(value = Side.CLIENT)
+    public EnumRarity getRarity(ItemStack stack) {
+        return this.isLooting5 ? EnumRarity.rare : EnumRarity.uncommon;
+    }
 
-		return this.isLooting5 ? EnumRarity.rare : EnumRarity.uncommon;
-	}
+    @SideOnly(value = Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tabs, List itemList) {
+        ItemStack discharged = new ItemStack(this);
+        ItemStack charged = new ItemStack(this);
+        ElectricItem.manager.charge(discharged, 0.0, Integer.MAX_VALUE, true, false);
+        ElectricItem.manager.charge(charged, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true, false);
+        itemList.add(discharged);
+        itemList.add(charged);
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tabs, List itemList) {
-		ItemStack stack1 = new ItemStack(this);
-		ItemStack stack2 = new ItemStack(this);
-		ElectricItem.manager.charge(stack1, 0.0, Integer.MAX_VALUE, true, false);
-		ElectricItem.manager.charge(stack2, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true, false);
-		itemList.add(stack1);
-		itemList.add(stack2);
-	}
+    public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+        return false;
+    }
 
-	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+    public int getItemEnchantability() {
+        return 0;
+    }
 
-		return false;
-	}
+    public boolean isRepairable() {
+        return false;
+    }
 
-	public int getItemEnchantability() {
+    public boolean isBookEnchantable(ItemStack itemstack1, ItemStack itemstack2) {
+        return false;
+    }
 
-		return 0;
-	}
+    @Override
+    public boolean canProvideEnergy(ItemStack var1) {
+        return false;
+    }
 
-	public boolean isRepairable() {
+    @Override
+    public Item getChargedItem(ItemStack var1) {
+        return this;
+    }
 
-		return false;
-	}
+    @Override
+    public Item getEmptyItem(ItemStack var1) {
+        return this;
+    }
 
-	public boolean isBookEnchantable(ItemStack itemstack1, ItemStack itemstack2) {
+    @Override
+    public double getMaxCharge(ItemStack var1) {
+        return this.maxenergy;
+    }
 
-		return false;
-	}
+    @Override
+    public int getTier(ItemStack var1) {
+        return this.tier;
+    }
 
-	@Override
-	public boolean canProvideEnergy(ItemStack var1) {
+    @Override
+    public double getTransferLimit(ItemStack var1) {
+        return this.transferlimit;
+    }
 
-		return false;
-	}
+    @SideOnly(value = Side.CLIENT)
+    public boolean requiresMultipleRenderPasses() {
+        return true;
+    }
 
-	@Override
-	public Item getChargedItem(ItemStack var1) {
+    public boolean isFull3D() {
+        return true;
+    }
 
-		return this;
-	}
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityplayer) {
+        if(!IC2.platform.isSimulating()) {
+            return itemStack;
+        }
+        NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
+        if(nbtData.getBoolean("active")) {
+            nbtData.setBoolean("active", false);
+            this.changeEnchantments(itemStack, false);
+            this.updateAttributes(nbtData);
+        } else if(ElectricItem.manager.canUse(itemStack, 4.0)) {
+            nbtData.setBoolean("active", true);
+            this.changeEnchantments(itemStack, true);
+            this.updateAttributes(nbtData);
+        }
 
-	@Override
-	public Item getEmptyItem(ItemStack var1) {
+        return super.onItemRightClick(itemStack, world, entityplayer);
+    }
 
-		return this;
-	}
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
+        NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(stack);
+        if(!nbtData.getBoolean("active"))
+            return true;
 
-	@Override
-	public double getMaxCharge(ItemStack var1) {
+        if(IC2.platform.isSimulating())
+            this.drainSaber(stack, this.useamount, source);
 
-		return this.maxenergy;
-	}
+        return true;
+    }
 
-	@Override
-	public int getTier(ItemStack var1) {
+    protected void drainSaber(ItemStack itemStack, double amount, EntityLivingBase entity) {
+        if(!ElectricItem.manager.use(itemStack, amount, entity)) {
+            NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
+            nbtData.setBoolean("active", false);
+            this.changeEnchantments(itemStack, false);
+            this.updateAttributes(nbtData);
+        }
 
-		return this.tier;
-	}
+    }
 
-	@Override
-	public double getTransferLimit(ItemStack var1) {
+    private void changeEnchantments(ItemStack stack, boolean isActiveEnchantment) {
+        Map<Integer, Integer> enchmapsaber = EnchantmentHelper.getEnchantments(stack);
+        if(isActiveEnchantment) {
+            if(this.isLooting5) {
+                enchmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(5));
+            } else {
+                enchmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(3));
+            }
+        } else {
+            enchmapsaber.remove(Integer.valueOf(Enchantment.looting.effectId));
+        }
+        EnchantmentHelper.setEnchantments(enchmapsaber, stack);
+    }
 
-		return 256.0;
-	}
+    private void updateAttributes(NBTTagCompound nbtData) {
+        boolean active = nbtData.getBoolean("active");
+        double damage = active ? 10.0 : (double) ToolMaterial.EMERALD.getDamageVsEntity();
+        /*Map<Integer, Integer> enchmapsaber = EnchantmentHelper.getEnchantments(stack);
+        if(active) {
+            if(this.isLooting5) {
+                enchmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(5));
+            } else {
+                enchmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(3));
+            }
+        } else {
+            enchmapsaber.remove(Integer.valueOf(Enchantment.looting.effectId));
+        }
+        EnchantmentHelper.setEnchantments(enchmapsaber, stack);*/
+        NBTTagCompound entry = new NBTTagCompound();
+        entry.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
+        entry.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
+        entry.setLong("UUIDLeast", field_111210_e.getLeastSignificantBits());
+        entry.setString("Name", "Tool modifier");
+        entry.setDouble("Amount", damage);
+        entry.setInteger("Operation", 0);
+        NBTTagList list = new NBTTagList();
+        list.appendTag(entry);
+        nbtData.setTag("AttributeModifiers", list);
+    }
 
-	@SideOnly(value = Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
+    @Override
+    @SideOnly(value = Side.CLIENT)
+    public void registerIcons(IIconRegister iconRegister) {
+        this.textures = new IIcon[4];
 
-		return true;
-	}
+        this.textures[0] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeLootingSaber_off");
+        this.textures[1] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeLootingSaber_active");
+        this.textures[2] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeHunterSaber_off");
+        this.textures[3] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeHunterSaber_active");
+    }
 
-	public boolean isFull3D() {
-
-		return true;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityplayer) {
-		if (!IC2.platform.isSimulating()) {
-			return itemStack;
-		}
-		NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
-		if (nbtData.getBoolean("active")) {
-			nbtData.setBoolean("active", false);
-			this.updateAttributes(nbtData, itemStack);
-		} else if (ElectricItem.manager.canUse(itemStack, 4.0)) {
-			nbtData.setBoolean("active", true);
-			this.updateAttributes(nbtData, itemStack);
-		}
-
-		return super.onItemRightClick(itemStack, world, entityplayer);
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
-		NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(stack);
-		if (!nbtData.getBoolean("active"))
-			return true;
-
-		if (IC2.platform.isSimulating())
-			this.drainSaber(stack, this.useamount, source);
-
-		return true;
-	}
-
-	protected void drainSaber(ItemStack itemStack, double amount, EntityLivingBase entity) {
-		if (!ElectricItem.manager.use(itemStack, amount, entity)) {
-			NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
-			nbtData.setBoolean("active", false);
-			this.updateAttributes(nbtData, itemStack);
-		}
-
-	}
-
-	private void updateAttributes(NBTTagCompound nbtData, ItemStack stack) {
-		boolean active = nbtData.getBoolean("active");
-		double damage = active ? 10.0 : (double) ToolMaterial.EMERALD.getDamageVsEntity();
-		Map<Integer, Integer> enchantmentmapsaber = EnchantmentHelper.getEnchantments(stack);
-		if (active) {
-			if (this.isLooting5) {
-
-				enchantmentmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(5));
-			} else {
-
-				enchantmentmapsaber.put(Integer.valueOf(Enchantment.looting.effectId), Integer.valueOf(3));
-			}
-
-		} else {
-			enchantmentmapsaber.remove(Integer.valueOf(Enchantment.looting.effectId));
-		}
-		EnchantmentHelper.setEnchantments(enchantmentmapsaber, stack);
-		NBTTagCompound entry = new NBTTagCompound();
-		entry.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-		entry.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
-		entry.setLong("UUIDLeast", field_111210_e.getLeastSignificantBits());
-		entry.setString("Name", "Tool modifier");
-		entry.setDouble("Amount", damage);
-		entry.setInteger("Operation", 0);
-		NBTTagList list = new NBTTagList();
-		list.appendTag(entry);
-		nbtData.setTag("AttributeModifiers", list);
-	}
-
-	@Override
-	@SideOnly(value = Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.textures = new IIcon[2];
-
-		this.textures[0] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeLootingSaber_off");
-		this.textures[1] = iconRegister.registerIcon(Reference.PathTex + "itemCompositeLootingSaber_active");
-	}
-
-	@SideOnly(value = Side.CLIENT)
-	public IIcon getIcon(ItemStack itemStack, int pass) {
-		NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
-		if (nbtData.getBoolean("active")) {
-
-			return this.textures[1];
-		}
-
-		return this.textures[0];
-	}
+    @SideOnly(value = Side.CLIENT)
+    public IIcon getIcon(ItemStack itemStack, int pass) {
+        NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(itemStack);
+        if(nbtData.getBoolean("active")) {
+            if(this.isLooting5) {
+                return this.textures[3];
+            } else {
+                return this.textures[1];
+            }
+        } else {
+            if(this.isLooting5) {
+                return this.textures[2];
+            } else {
+                return this.textures[0];
+            }
+        }
+    }
 
 }

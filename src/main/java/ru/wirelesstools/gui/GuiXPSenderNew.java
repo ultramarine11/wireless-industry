@@ -30,7 +30,7 @@ public class GuiXPSenderNew extends GuiIC2 {
 	@Override
 	public ResourceLocation getResourceLocation() {
 
-		return new ResourceLocation(Reference.NAME, "textures/gui/GuiXPSender.png");
+		return new ResourceLocation(Reference.IDNAME, "textures/gui/GuiXPSender.png");
 	}
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {

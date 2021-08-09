@@ -31,11 +31,17 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
     private Block field_145790_g;
     private int inData;
     private boolean inGround;
-    /** 1 if the player can pick up the arrow */
+    /**
+     * 1 if the player can pick up the arrow
+     */
     public int canBePickedUp;
-    /** Seems to be some sort of timer for animating an arrow. */
+    /**
+     * Seems to be some sort of timer for animating an arrow.
+     */
     public int arrowShake;
-    /** The owner of this arrow. */
+    /**
+     * The owner of this arrow.
+     */
     public Entity shootingEntity;
     private int ticksInGround;
     private int ticksInAir;
@@ -65,7 +71,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         this.renderDistanceWeight = 10.0D;
         this.shootingEntity = p_i1755_2_;
 
-        if (p_i1755_2_ instanceof EntityPlayer) {
+        if(p_i1755_2_ instanceof EntityPlayer) {
             this.canBePickedUp = 1;
         }
 
@@ -75,7 +81,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         double d2 = p_i1755_3_.posZ - p_i1755_2_.posZ;
         double d3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
 
-        if (d3 >= 1.0E-7D) {
+        if(d3 >= 1.0E-7D) {
             float f2 = (float) (Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
             float f3 = (float) (-(Math.atan2(d1, d3) * 180.0D / Math.PI));
             double d4 = d0 / d3;
@@ -92,7 +98,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         this.renderDistanceWeight = 10.0D;
         this.shootingEntity = p_i1756_2_;
 
-        if (p_i1756_2_ instanceof EntityPlayer) {
+        if(p_i1756_2_ instanceof EntityPlayer) {
             this.canBePickedUp = 2;
         }
 
@@ -114,7 +120,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
 
     public void onUpdate() {
         super.onUpdate();
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
+        if(this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D
                     / Math.PI);
@@ -124,29 +130,29 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
 
         Block block = this.worldObj.getBlock(this.field_145791_d, this.field_145792_e, this.field_145789_f);
 
-        if (block.getMaterial() != Material.air) {
+        if(block.getMaterial() != Material.air) {
             block.setBlockBoundsBasedOnState(this.worldObj, this.field_145791_d, this.field_145792_e,
                     this.field_145789_f);
             AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, this.field_145791_d,
                     this.field_145792_e, this.field_145789_f);
 
-            if (axisalignedbb != null
+            if(axisalignedbb != null
                     && axisalignedbb.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ))) {
                 this.inGround = true;
             }
         }
 
-        if (this.arrowShake > 0) {
+        if(this.arrowShake > 0) {
             --this.arrowShake;
         }
 
-        if (this.inGround) {
+        if(this.inGround) {
             int j = this.worldObj.getBlockMetadata(this.field_145791_d, this.field_145792_e, this.field_145789_f);
 
-            if (block == this.field_145790_g && j == this.inData) {
+            if(block == this.field_145790_g && j == this.inData) {
                 ++this.ticksInGround;
 
-                if (this.ticksInGround == 1200) {
+                if(this.ticksInGround == 1200) {
                     this.setDead();
                 }
             } else {
@@ -167,7 +173,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
             vec3 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY,
                     this.posZ + this.motionZ);
 
-            if (movingobjectposition != null) {
+            if(movingobjectposition != null) {
                 vec3 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord,
                         movingobjectposition.hitVec.zCoord);
             }
@@ -179,18 +185,18 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
             int i;
             float f1;
 
-            for (i = 0; i < list.size(); ++i) {
+            for(i = 0; i < list.size(); ++i) {
                 Entity entity1 = (Entity) list.get(i);
 
-                if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
+                if(entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
                     f1 = 0.3F;
                     AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand(f1, f1, f1);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
 
-                    if (movingobjectposition1 != null) {
+                    if(movingobjectposition1 != null) {
                         double d1 = vec31.distanceTo(movingobjectposition1.hitVec);
 
-                        if (d1 < d0 || d0 == 0.0D) {
+                        if(d1 < d0 || d0 == 0.0D) {
                             entity = entity1;
                             d0 = d1;
                         }
@@ -198,14 +204,14 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
                 }
             }
 
-            if (entity != null) {
+            if(entity != null) {
                 movingobjectposition = new MovingObjectPosition(entity);
             }
 
-            if (movingobjectposition != null && movingobjectposition.entityHit instanceof EntityPlayer) {
+            if(movingobjectposition != null && movingobjectposition.entityHit instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
 
-                if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer
+                if(entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer
                         && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
                     movingobjectposition = null;
                 }
@@ -213,40 +219,40 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
 
             float f2;
             float f4;
-            if (movingobjectposition != null) {
-                if (movingobjectposition.entityHit != null) {
+            if(movingobjectposition != null) {
+                if(movingobjectposition.entityHit != null) {
                     f2 = MathHelper.sqrt_double(
                             this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
                     int k = MathHelper.ceiling_double_int((double) f2 * this.damage);
 
-                    if (this.getIsCritical()) {
+                    if(this.getIsCritical()) {
                         k += this.rand.nextInt(k / 2 + 2);
                     }
 
                     DamageSource damagesource;
 
-                    if (this.shootingEntity == null) {
+                    if(this.shootingEntity == null) {
                         damagesource = DamageSource.causeArrowDamage(this, this);
                     } else {
                         damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
                     }
 
-                    if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman)) {
+                    if(this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman)) {
                         movingobjectposition.entityHit.setFire(5);
                     }
 
-                    if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float) k)) {
-                        if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    if(movingobjectposition.entityHit.attackEntityFrom(damagesource, (float) k)) {
+                        if(movingobjectposition.entityHit instanceof EntityLivingBase) {
                             EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.entityHit;
 
-                            if (!this.worldObj.isRemote) {
+                            if(!this.worldObj.isRemote) {
                                 entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
                             }
 
-                            if (this.knockbackStrength > 0) {
+                            if(this.knockbackStrength > 0) {
                                 f4 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
-                                if (f4 > 0.0F) {
+                                if(f4 > 0.0F) {
                                     movingobjectposition.entityHit.addVelocity(
                                             this.motionX * (double) this.knockbackStrength * 0.6000000238418579D
                                                     / (double) f4,
@@ -255,23 +261,24 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
                                 }
                             }
 
-                            if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) {
+                            if(this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) {
                                 EnchantmentHelper.func_151384_a(entitylivingbase, this.shootingEntity);
                                 EnchantmentHelper.func_151385_b((EntityLivingBase) this.shootingEntity,
                                         entitylivingbase);
                             }
 
-                            if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
+                            if(this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
                                     && this.shootingEntity instanceof EntityPlayer
                                     && movingobjectposition.entityHit instanceof EntityPlayer) {
 
                                 EntityPlayer victim = (EntityPlayer) movingobjectposition.entityHit;
                                 EntityPlayer shooter = (EntityPlayer) this.shootingEntity;
 
-                                this.tryTransferXPToVamp(victim, shooter);
+                                if(!this.worldObj.isRemote)
+                                    this.tryTransferXPToVamp(victim, shooter);
                             }
 
-                            if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
+                            if(this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity
                                     && movingobjectposition.entityHit instanceof EntityPlayer
                                     && this.shootingEntity instanceof EntityPlayerMP) {
                                 ((EntityPlayerMP) this.shootingEntity).playerNetServerHandler
@@ -281,7 +288,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
 
                         this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-                        if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
+                        if(!(movingobjectposition.entityHit instanceof EntityEnderman)) {
                             this.setDead();
                         }
                     } else {
@@ -313,15 +320,15 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
                     this.arrowShake = 7;
                     this.setIsCritical(false);
 
-                    if (this.field_145790_g.getMaterial() != Material.air) {
+                    if(this.field_145790_g.getMaterial() != Material.air) {
                         this.field_145790_g.onEntityCollidedWithBlock(this.worldObj, this.field_145791_d,
                                 this.field_145792_e, this.field_145789_f, this);
                     }
                 }
             }
 
-            if (this.getIsCritical()) {
-                for (i = 0; i < 4; ++i) {
+            if(this.getIsCritical()) {
+                for(i = 0; i < 4; ++i) {
                     this.worldObj.spawnParticle("crit", this.posX + this.motionX * (double) i / 4.0D,
                             this.posY + this.motionY * (double) i / 4.0D, this.posZ + this.motionZ * (double) i / 4.0D,
                             -this.motionX, -this.motionY + 0.2D, -this.motionZ);
@@ -333,21 +340,21 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
             this.posZ += this.motionZ;
             f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f2) * 180.0D
+            for(this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f2) * 180.0D
                     / Math.PI); this.rotationPitch
-                         - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+                        - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
                 ;
             }
 
-            while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
+            while(this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
             }
 
-            while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
+            while(this.rotationYaw - this.prevRotationYaw < -180.0F) {
                 this.prevRotationYaw -= 360.0F;
             }
 
-            while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
+            while(this.rotationYaw - this.prevRotationYaw >= 180.0F) {
                 this.prevRotationYaw += 360.0F;
             }
 
@@ -355,8 +362,8 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
             float f3 = 0.99F;
             f1 = 0.05F;
-            if (this.isInWater()) {
-                for (int l = 0; l < 4; ++l) {
+            if(this.isInWater()) {
+                for(int l = 0; l < 4; ++l) {
                     f4 = 0.25F;
                     this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) f4,
                             this.posY - this.motionY * (double) f4, this.posZ - this.motionZ * (double) f4,
@@ -366,7 +373,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
                 f3 = 0.8F;
             }
 
-            if (this.isWet()) {
+            if(this.isWet()) {
                 this.extinguish();
             }
 
@@ -402,30 +409,26 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         this.arrowShake = p_70037_1_.getByte("shake") & 255;
         this.inGround = p_70037_1_.getByte("inGround") == 1;
 
-        if (p_70037_1_.hasKey("damage", 99)) {
+        if(p_70037_1_.hasKey("damage", 99)) {
             this.damage = p_70037_1_.getDouble("damage");
         }
 
-        if (p_70037_1_.hasKey("pickup", 99)) {
+        if(p_70037_1_.hasKey("pickup", 99)) {
             this.canBePickedUp = p_70037_1_.getByte("pickup");
-        } else if (p_70037_1_.hasKey("player", 99)) {
+        } else if(p_70037_1_.hasKey("player", 99)) {
             this.canBePickedUp = p_70037_1_.getBoolean("player") ? 1 : 0;
         }
     }
 
-    public void onCollideWithPlayer(EntityPlayer p_70100_1_)
-    {
-        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
-        {
+    public void onCollideWithPlayer(EntityPlayer p_70100_1_) {
+        if(!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0) {
             boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && p_70100_1_.capabilities.isCreativeMode;
 
-            if (this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1)))
-            {
+            if(this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1))) {
                 flag = false;
             }
 
-            if (flag)
-            {
+            if(flag) {
                 this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 p_70100_1_.onItemPickup(this, 1);
                 this.setDead();
@@ -433,52 +436,43 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         }
     }
 
-    public double getDamage()
-    {
+    public double getDamage() {
         return this.damage;
     }
 
-    public boolean getIsCritical()
-    {
+    public boolean getIsCritical() {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
         return (b0 & 1) != 0;
     }
 
-    public void setIsCritical(boolean p_70243_1_)
-    {
+    public void setIsCritical(boolean p_70243_1_) {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 
-        if (p_70243_1_)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
+        if(p_70243_1_) {
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
-    public void setDamage(double p_70239_1_)
-    {
+    public void setDamage(double p_70239_1_) {
         this.damage = p_70239_1_;
     }
 
-    public void setKnockbackStrength(int p_70240_1_)
-    {
+    public void setKnockbackStrength(int p_70240_1_) {
         this.knockbackStrength = p_70240_1_;
     }
+
     @SideOnly(Side.CLIENT)
-    public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_)
-    {
+    public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_) {
         this.motionX = p_70016_1_;
         this.motionY = p_70016_3_;
         this.motionZ = p_70016_5_;
 
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
-        {
+        if(this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt_double(p_70016_1_ * p_70016_1_ + p_70016_5_ * p_70016_5_);
-            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(p_70016_1_, p_70016_5_) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(p_70016_3_, (double)f) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(p_70016_1_, p_70016_5_) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(p_70016_3_, f) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -491,7 +485,7 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
 
         int victimplayerXP = ExperienceUtils.getPlayerXP(victim);
 
-        if (victimplayerXP <= 0)
+        if(victimplayerXP <= 0)
             return;
 
         int stolenXP = Math.min(ConfigWI.vampBowXPVampiredAmount, victimplayerXP);
@@ -499,10 +493,13 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         ExperienceUtils.addPlayerXP(victim, -stolenXP);
         ExperienceUtils.addPlayerXP(shooter, stolenXP);
 
-        victim.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
-                + StatCollector.translateToLocal("chat.message.xp.lost") + " " + String.valueOf(stolenXP) + " " + StatCollector.translateToLocal("chat.message.xp.points")));
-        shooter.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN
-                + StatCollector.translateToLocal("chat.message.xp.gained.vamp") + " " + String.valueOf(stolenXP) + " " + StatCollector.translateToLocal("chat.message.xp.points")));
-
+        if(ConfigWI.enableWeaponsChatMsgs) {
+            victim.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
+                    + StatCollector.translateToLocal("chat.message.xp.lost") + " " + String.valueOf(stolenXP)
+                    + " " + StatCollector.translateToLocal("chat.message.xp.points")));
+            shooter.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN
+                    + StatCollector.translateToLocal("chat.message.xp.gained.vamp") + " " + String.valueOf(stolenXP)
+                    + " " + StatCollector.translateToLocal("chat.message.xp.points")));
+        }
     }
 }

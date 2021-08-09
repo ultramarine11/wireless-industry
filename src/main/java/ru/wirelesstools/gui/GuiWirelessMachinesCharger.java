@@ -12,7 +12,7 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiWirelessMachinesCharger extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME,
+	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME,
 			"textures/gui/GuiWirelessMachinesCharger.png");
 
 	private TileWirelessMachinesChargerBase tile;

@@ -57,17 +57,23 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-@Mod(modid = Reference.NAME, name = "Wireless Industry", version = "0.7.9.5", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+import java.io.File;
+
+@Mod(modid = Reference.IDNAME, name = Reference.NAME_MOD, version = "0.7.9.5", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
     public static ServerProxy proxy;
 
     public static final String categoryOTHER = "Other";
-    public static final String categoryXPSENDER = "XPSender";
+    public static final String categoryXPSENDER = "XP Sender";
     public static final String categoryVAMPIREWEAPONS = "Vampire Weapons";
     public static final String categoryWIRELESSCHARGER = "Wireless Chargers";
-    public static final String categoryWIRELESSARMOR = "Wireless Charging Armor";
+    public static final String categoryENERGYBALANCE = "Energy balance";
+    public static final String categoryTOOLS_ARMOR = "Tools and Armor";
+    public static final String categoryCOMMANDS = "Commands";
+
+    static final String IU_config = "industrialupgrade.cfg";
 
     public static Item saber5;
     public static Item saber3;
@@ -138,24 +144,24 @@ public class MainWI {
         public static Fluid xpJuice = new Fluid("xpjuicewv");
     }
 
-    @Instance(Reference.NAME)
+    @Instance(Reference.IDNAME)
     public static MainWI instance = new MainWI();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+        int EuRfCrossConfig = 0;
+        int EuRf_WI_Config;
         try {
             config.load();
-            int eutorf = config.get("Energy balance", "The EU to RF multiplier, not less than 1", 4).getInt(4);
-            ConfigWI.EUToRF_Multiplier = eutorf < 1 ? 1 : eutorf;
-
-            ConfigWI.EuRfSolarHelmetGenDay = config.get(categoryWIRELESSARMOR, "Wireless Helmet day generation (EU/t)", 4096).getInt(4096);
-            ConfigWI.EuRfSolarHelmetGenNight = config.get(categoryWIRELESSARMOR, "Wireless Helmet night generation (EU/t)", 1024)
+            EuRf_WI_Config = config.get(categoryENERGYBALANCE, "Eu-Rf Multiplier", 4, "EU to RF multiplier related to WI mod, not less than 1", 1, Integer.MAX_VALUE).getInt(4);
+            ConfigWI.EuRfSolarHelmetGenDay = config.get(categoryTOOLS_ARMOR, "Day Generation", 4096, "Wireless Helmet day generation (EU/t)").getInt(4096);
+            ConfigWI.EuRfSolarHelmetGenNight = config.get(categoryTOOLS_ARMOR, "Night Generation", 1024, "Wireless Helmet night generation (EU/t)")
                     .getInt(1024);
 
-            int helmetChargingRadiuslocal = config.get(categoryWIRELESSARMOR, "Wireless Helmet charging radius (blocks)", 15).getInt(15);
+            int helmetChargingRadiuslocal = config.get(categoryTOOLS_ARMOR, "Helmet radius", 15, "Wireless Helmet charging radius (blocks)").getInt(15);
             ConfigWI.helmetChargingRadius = helmetChargingRadiuslocal < 1 ? 1 : helmetChargingRadiuslocal;
-            int chestplateChargingRadiuslocal = config.get(categoryWIRELESSARMOR, "Wireless Chestplate charging radius (blocks)", 15).getInt(15);
+            int chestplateChargingRadiuslocal = config.get(categoryTOOLS_ARMOR, "Chestplate radius", 15, "Wireless Chestplate charging radius (blocks)").getInt(15);
             ConfigWI.chestplateChargingRadius = chestplateChargingRadiuslocal < 1 ? 1 : chestplateChargingRadiuslocal;
 
             ConfigWI.waspgenday = config.get("Advanced Solar", "Day Generation", 10).getInt(10);
@@ -243,10 +249,10 @@ public class MainWI {
             ConfigWI.wadronsptransfer = config.get("Adron Solar", "Wireless Transfer", 490000000).getInt(490000000);
 
 
-            ConfigWI.wstorageoutput = config.get("Wireless Receiver Storage", "Output", 16384).getInt(16384);
-            ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver Storage", "Storage", 200000000)
+            ConfigWI.wstorageoutput = config.get("Wireless Receiver", "Output", 16384).getInt(16384);
+            ConfigWI.wstoragemaxstorage = config.get("Wireless Receiver", "Storage", 200000000)
                     .getInt(200000000);
-            ConfigWI.wstoragetier = config.get("Wireless Receiver Storage", "Tier", 4).getInt(4);
+            ConfigWI.wstoragetier = config.get("Wireless Receiver", "Tier", 4).getInt(4);
 
             ConfigWI.wirelessqgenoutput = config.get("Wireless Quantum Generator", "Output", 32768).getInt(32768);
             ConfigWI.wirelessqgentier = config.get("Wireless Quantum Generator", "Tier", 4).getInt(4);
@@ -254,67 +260,101 @@ public class MainWI {
                     .getInt(32768);
 
             ConfigWI.maxstorageofchargers = config
-                    .get(categoryWIRELESSCHARGER, "Maximum storage of wireless chargers (EU)", 100000000)
+                    .get(categoryWIRELESSCHARGER, "MaxStorage", 100000000, "Maximum storage of wireless chargers (EU)")
                     .getInt(100000000);
-            ConfigWI.tierofchargers = config.get(categoryWIRELESSCHARGER, "Tier of wireless chargers", 10).getInt(10);
+            ConfigWI.tierofchargers = config.get(categoryWIRELESSCHARGER, "Tier", 10, "Tier of wireless chargers").getInt(10);
 
-            int secondslocal = config.get(categoryXPSENDER, "Interval in seconds to send xp to players", 1).getInt(1);
+            int secondslocal = config.get(categoryXPSENDER, "Interval", 1, "Delay (in seconds) to send XP to players, not less than 1").getInt(1);
             ConfigWI.secondsXPSender = secondslocal < 1 ? 1 : secondslocal;
 
-            int xpgivenlocal = config.get(categoryXPSENDER, "XP amount given to player per 1 operation", 2).getInt(2);
+            int xpgivenlocal = config.get(categoryXPSENDER, "XP amount", 2, "XP amount given to player per 1 operation").getInt(2);
             ConfigWI.amountXPsent = xpgivenlocal < 1 ? 1 : xpgivenlocal;
 
-            ConfigWI.maxstorageXPSender = config.get(categoryXPSENDER, "Maximum storage of energy", 40000000)
+            ConfigWI.maxstorageXPSender = config.get(categoryXPSENDER, "MaxStorage", 40000000, "Maximum storage of energy")
                     .getInt(40000000);
-            ConfigWI.energyperxppointXPSender = config.get(categoryXPSENDER, "EU energy consumed per 1 xp point", 25000)
+            ConfigWI.energyperxppointXPSender = config.get(categoryXPSENDER, "EU per point", 25000, "EU energy consumed per 1 XP point")
                     .getInt(25000);
 
-            ConfigWI.tierXPSender = config.get(categoryXPSENDER, "Tier of XP Sender", 7)
-                    .getInt(7);
+            ConfigWI.tierXPSender = config.get(categoryXPSENDER, "Tier", 7).getInt(7);
 
             int stolenEUlocal = config
-                    .get(categoryVAMPIREWEAPONS, "Stolen amount of EU energy from player armor part", 120000)
+                    .get(categoryVAMPIREWEAPONS, "EU Stolen", 120000, "Stolen amount of EU energy from one armor part")
                     .getInt(120000);
             ConfigWI.stolenEnergyEUFromArmor = stolenEUlocal > 0 ? stolenEUlocal : 0;
 
-            int vbowenergycost = config.get(categoryVAMPIREWEAPONS, "EU cost per shot", 1000).getInt(1000);
+            int vbowenergycost = config.get(categoryVAMPIREWEAPONS, "Cost", 1000, "EU cost per vamp bow shot").getInt(1000);
             ConfigWI.vampBowShotEnergyCost = vbowenergycost > 0 ? vbowenergycost : 0;
 
-            ConfigWI.vampBowMaxCharge = config.get(categoryVAMPIREWEAPONS, "Maximum charge of vampire bow", 300000).getInt(300000);
+            ConfigWI.vampBowMaxCharge = config.get(categoryVAMPIREWEAPONS, "MaxCharge", 300000, "Maximum charge (EU) of vampire bow").getInt(300000);
 
-            int vbowxpvampired = config.get(categoryVAMPIREWEAPONS, "XP amount vampired per shot", 4).getInt(4);
-            if (vbowxpvampired < 0)
+            int vbowxpvampired = config.get(categoryVAMPIREWEAPONS, "XP Vampired", 4, "XP points vampired per hit").getInt(4);
+            if(vbowxpvampired < 0)
                 ConfigWI.vampBowXPVampiredAmount = 0;
-            else if (vbowxpvampired > 20)
+            else if(vbowxpvampired > 20)
                 ConfigWI.vampBowXPVampiredAmount = 20;
             else
                 ConfigWI.vampBowXPVampiredAmount = vbowxpvampired;
 
             int chargevaluelocal = config
-                    .get(categoryOTHER, "Ender Quamtum Armor self-charging EU/t amount, not more than 16", 8).getInt(8);
-            if (chargevaluelocal > 16)
+                    .get(categoryTOOLS_ARMOR, "Self-Recharge", 8, "Ender Quamtum Armor self-charging EU/t amount, not more than 16").getInt(8);
+            if(chargevaluelocal > 16)
                 ConfigWI.enderChargeArmorValue = 16;
-            else if (chargevaluelocal < 0)
+            else if(chargevaluelocal < 0)
                 ConfigWI.enderChargeArmorValue = 0;
             else
                 ConfigWI.enderChargeArmorValue = chargevaluelocal;
 
             int vajramaxchargelocal = config
-                    .get(categoryOTHER, "Maximum charge of Lucky Vajra, not less than 3M Eu", 6000000).getInt(6000000);
+                    .get(categoryTOOLS_ARMOR, "MaxCharge", 6000000, "Maximum charge of Lucky Vajra, not less than 3M EU").getInt(6000000);
             ConfigWI.maxVajraCharge = vajramaxchargelocal < 3000000 ? 3000000 : vajramaxchargelocal;
             int energyperoperationlocal = config
-                    .get(categoryOTHER, "Vajra energy using per break, not more than half of maxcharge", 3000).getInt(3000);
+                    .get(categoryTOOLS_ARMOR, "Break cost", 3000, "Vajra energy using per block break, not more than half of maxcharge").getInt(3000);
             int peroperationlimitlocal = ConfigWI.maxVajraCharge / 2;
             ConfigWI.vajraEnergyPerOperation = energyperoperationlocal > peroperationlimitlocal
                     ? peroperationlimitlocal : energyperoperationlocal;
 
-        } catch (Exception e) {
-            System.out.println("{Wireless Solar Panels Mod} error occurred while reading config file");
+            ConfigWI.isServerJoinedChatMsgEnabled = config.get(categoryOTHER, "Enable message", false, "Determines if the message of available WI commands is shown when player joined server").getBoolean(false);
+            ConfigWI.isModLogEnabled = config.get(categoryOTHER, "Logging", true, "Enables console logging of Wireless Industry mod. Strongly recommended not to change this value").getBoolean(true);
+            ConfigWI.isIU_EuRf_priority = config.get(categoryENERGYBALANCE, "IU priority", true, "If true, the RF/EU multiplier will be loaded from Industrial Upgrade mod instead of WI mod").getBoolean(true);
+
+            ConfigWI.enableWeaponsChatMsgs = config.get(categoryVAMPIREWEAPONS, "Enable chat msgs", true, "Enables player receiving info chat messages (e.g. when shooter absorbes XP from enemy who is hit by vampiric arrow)").getBoolean(true);
+            ConfigWI.permissionLevelCommandClearOwner = config.get(categoryCOMMANDS, "permissionLevelCLO", 2, "Required permission level for /clo command")
+                    .getInt(2);
+            ConfigWI.permissionLevelCommandChangeOwner = config.get(categoryCOMMANDS, "permissionLevelSTOW", 2, "Required permission level for /stow command")
+                    .getInt(2);
+
+
+            if(ConfigWI.isModLogEnabled)
+                LogHelperWI.info("Finished reading " + Reference.NAME_MOD + " config");
+        } catch(Exception e) {
+            System.out.println("{" + Reference.NAME_MOD + "} " + "error occurred while reading config file");
             throw new RuntimeException(e);
         } finally {
-            if (config.hasChanged()) {
+            if(config.hasChanged()) {
                 config.save();
             }
+        }
+
+        try {
+            Configuration iu_config = new Configuration(new File(event.getModConfigurationDirectory(), IU_config));
+            iu_config.load();
+            EuRfCrossConfig = iu_config.get("general", "coefficient rf", 4).getInt(4);
+        } catch(Exception e) {
+            if(ConfigWI.isModLogEnabled) {
+                LogHelperWI.error("CANNOT read \\\"coefficient rf\\\" value from " + IU_config);
+                LogHelperWI.warning("Setting the value of RF/EU multiplier from WI mod...");
+            }
+        } finally {
+            if(EuRf_WI_Config < 1) EuRf_WI_Config = 1;
+
+            if(ConfigWI.isIU_EuRf_priority)
+                ConfigWI.EUToRF_Multiplier = EuRfCrossConfig == 0 ? EuRf_WI_Config : EuRfCrossConfig;
+            else
+                ConfigWI.EUToRF_Multiplier = EuRf_WI_Config;
+
+            if(ConfigWI.isModLogEnabled)
+                LogHelperWI.info("RF/EU multiplier was loaded from Industrial Upgrade mod, " + String.valueOf(ConfigWI.EUToRF_Multiplier)
+                        + " RF = 1 EU");
         }
 
         WirelessTransfer.transmithandler = new WirelessTransmitHandler();
@@ -377,7 +417,7 @@ public class MainWI {
 
         pfpConverter = new BlockPFPConverter("pfpconverter");
 
-        if (FluidRegistry.isFluidRegistered("xpjuice")) {
+        if(FluidRegistry.isFluidRegistered("xpjuice")) {
             FluidXP.xpJuice = FluidRegistry.getFluid("xpjuice");
         } else {
             FluidRegistry.registerFluid(FluidXP.xpJuice);
@@ -528,7 +568,7 @@ public class MainWI {
         // if(!Loader.isModLoaded("industrialupgrade")) {
 
         GameRegistry.addRecipe(new ItemStack(wirelessEuRfHelmet, 1, OreDictionary.WILDCARD_VALUE), // OreDictionary.WILDCARD_VALUE
-                new Object[]{"C C", "BAB", "C C", 'A',
+                new Object[] {"C C", "BAB", "C C", 'A',
                         RecipeUtil.copyWithWildCard(!OreDictionary.getOres("helmetSpectral").isEmpty()
                                 ? OreDictionary.getOres("helmetSpectral").get(0)
                                 : new ItemStack(IC2Items.getItem("quantumHelmet").getItem(), 1,
@@ -538,53 +578,53 @@ public class MainWI {
                                 OreDictionary.WILDCARD_VALUE))});
 
         GameRegistry.addRecipe(new ItemStack(wirelessasppersonal, 1),
-                new Object[]{" A ", " B ", " C ", Character.valueOf('A'), new ItemStack(wirelessmodule),
+                new Object[] {" A ", " B ", " C ", Character.valueOf('A'), new ItemStack(wirelessmodule),
                         Character.valueOf('B'), IC2Items.getItem("solarPanel"), Character.valueOf('C'),
                         new ItemStack(iridMach)});
 
         GameRegistry.addRecipe(new ItemStack(wirelesshsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessasppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessasppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessuhsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesshsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesshsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessqsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessuhsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessuhsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessspsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessqsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessqsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessprotonsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessspsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessspsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelesssingsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessprotonsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessprotonsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessabssppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesssingsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelesssingsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessphotonicsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessabssppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessabssppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessneutronsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessphotonicsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessphotonicsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessbarionsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessneutronsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessneutronsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(wirelessadronsppersonal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessbarionsppersonal)});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), new ItemStack(wirelessbarionsppersonal)});
 
         GameRegistry.addRecipe(new ItemStack(pfpConverter, 1),
-                new Object[]{"DCD",
-                             "BAB",
-                             "DCD", Character.valueOf('A'), IC2Items.getItem("replicator"),
-                                    Character.valueOf('B'), new ItemStack(iridMach),
-                                    Character.valueOf('C'), IC2Items.getItem("mfsUnit"),
-                                    Character.valueOf('D'), Items.nether_star});
+                new Object[] {"DCD",
+                        "BAB",
+                        "DCD", Character.valueOf('A'), IC2Items.getItem("replicator"),
+                        Character.valueOf('B'), new ItemStack(iridMach),
+                        Character.valueOf('C'), IC2Items.getItem("mfsUnit"),
+                        Character.valueOf('D'), Items.nether_star});
 
         GameRegistry.addRecipe(new ItemStack(descaler, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"AAA",
+                new Object[] {"AAA",
                         "BCB",
                         " D ", 'A', IC2Items.getItem("rubber"),
                         'B', IC2Items.getItem("advancedAlloy"),
@@ -592,13 +632,13 @@ public class MainWI {
                         'D', RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("reBattery").getItem(), 1, OreDictionary.WILDCARD_VALUE))});
 
         GameRegistry.addRecipe(new ItemStack(saber3, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"ACF", "ACF", "BDE", 'A', new ItemStack(Items.dye, 1, 4), 'B', Items.diamond, 'C',
+                new Object[] {"ACF", "ACF", "BDE", 'A', new ItemStack(Items.dye, 1, 4), 'B', Items.diamond, 'C',
                         IC2Items.getItem("advancedAlloy"), 'D', IC2Items.getItem("electronicCircuit"), 'E',
                         RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("reBattery").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                         'F', Items.redstone});
 
         GameRegistry.addRecipe(new ItemStack(saber5, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"ACF", "BDF", "AEG", 'A', Items.glowstone_dust,
+                new Object[] {"ACF", "BDF", "AEG", 'A', Items.glowstone_dust,
                         'B', IC2Items.getItem("iridiumPlate"), 'C', Items.emerald, 'D',
                         RecipeUtil.copyWithWildCard(new ItemStack(saber3, 1, OreDictionary.WILDCARD_VALUE)), 'E',
                         IC2Items.getItem("advancedCircuit"), 'F', Items.diamond, 'G', RecipeUtil.copyWithWildCard(
@@ -606,26 +646,26 @@ public class MainWI {
 
         // }
 
-        GameRegistry.addRecipe(new ItemStack(iridMach, 1), new Object[]{" A ", "ABA", " A ", Character.valueOf('A'),
+        GameRegistry.addRecipe(new ItemStack(iridMach, 1), new Object[] {" A ", "ABA", " A ", Character.valueOf('A'),
                 IC2Items.getItem("iridiumPlate"), Character.valueOf('B'), IC2Items.getItem("advancedMachine")});
 
         GameRegistry.addRecipe(new ItemStack(blockvajracharger, 1),
-                new Object[]{" A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedMachine"),
+                new Object[] {" A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedMachine"),
                         Character.valueOf('B'), Blocks.redstone_block, Character.valueOf('C'),
                         !OreDictionary.getOres("storageMFSU").isEmpty() ? OreDictionary.getOres("storageMFSU").get(0)
                                 : IC2Items.getItem("mfsUnit")});
 
         GameRegistry.addRecipe(new ItemStack(blockwirelesschargerpublic, 1),
-                new Object[]{" A ", "BCB", " A ", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
+                new Object[] {" A ", "BCB", " A ", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
                         new ItemStack(wirelessmodule), Character.valueOf('C'), new ItemStack(iridMach)});
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockwirelesschargerprivate, 1),
                 new ItemStack(blockwirelesschargerpublic), Items.book, Blocks.emerald_block);
 
         // TODO подумать над интеграцией с industrial upgrade
-        if (Loader.isModLoaded("GraviSuite")) {
+        if(Loader.isModLoaded("GraviSuite")) {
             GameRegistry.addRecipe(new ItemStack(wirelessChestPlate, 1, OreDictionary.WILDCARD_VALUE),
-                    new Object[]{"C C", "BAB", "C C", 'A',
+                    new Object[] {"C C", "BAB", "C C", 'A',
                             RecipeUtil.copyWithWildCard(
                                     new ItemStack(GraviSuite.graviChestPlate, 1, OreDictionary.WILDCARD_VALUE)),
                             'B', new ItemStack(wirelessmodule), 'C',
@@ -633,7 +673,7 @@ public class MainWI {
                                     OreDictionary.WILDCARD_VALUE))});
 
             GameRegistry.addRecipe(new ItemStack(luckyVajra, 1, OreDictionary.WILDCARD_VALUE),
-                    new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
+                    new Object[] {"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
                             RecipeUtil.copyWithWildCard(new ItemStack(
                                     IC2Items.getItem("iridiumDrill").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                             'C', Blocks.lapis_block, 'D',
@@ -642,7 +682,7 @@ public class MainWI {
                             'E', Blocks.emerald_block, 'F', IC2Items.getItem("advancedCircuit")});
         } else {
             GameRegistry.addRecipe(new ItemStack(wirelessChestPlate, 1, OreDictionary.WILDCARD_VALUE),
-                    new Object[]{"C C", "BAB", "C C", 'A',
+                    new Object[] {"C C", "BAB", "C C", 'A',
                             RecipeUtil.copyWithWildCard(new ItemStack(IC2Items.getItem("quantumBodyarmor").getItem(), 1,
                                     OreDictionary.WILDCARD_VALUE)),
                             'B', new ItemStack(wirelessmodule), 'C',
@@ -650,7 +690,7 @@ public class MainWI {
                                     OreDictionary.WILDCARD_VALUE))});
 
             GameRegistry.addRecipe(new ItemStack(luckyVajra, 1, OreDictionary.WILDCARD_VALUE),
-                    new Object[]{"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
+                    new Object[] {"ABA", "CDE", "FBF", 'A', IC2Items.getItem("iridiumPlate"), 'B',
                             RecipeUtil.copyWithWildCard(new ItemStack(
                                     IC2Items.getItem("miningLaser").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                             'C', Blocks.lapis_block, 'D',
@@ -660,81 +700,81 @@ public class MainWI {
         }
 
         GameRegistry.addRecipe(new ItemStack(wirelessmodule, 1),
-                new Object[]{"ABA", "CDC", "ABA", Character.valueOf('A'), IC2Items.getItem("iridiumOre"),
+                new Object[] {"ABA", "CDC", "ABA", Character.valueOf('A'), IC2Items.getItem("iridiumOre"),
                         Character.valueOf('B'), Blocks.redstone_block, Character.valueOf('C'),
                         IC2Items.getItem("advancedCircuit"), Character.valueOf('D'), Items.ender_pearl});
 
         GameRegistry.addRecipe(new ItemStack(endermodule, 1),
-                new Object[]{"DAD", "BCB", "DAD", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
+                new Object[] {"DAD", "BCB", "DAD", Character.valueOf('A'), Items.ender_pearl, Character.valueOf('B'),
                         IC2Items.getItem("advancedCircuit"), Character.valueOf('C'),
                         IC2Items.getItem("iridiumPlate"), Character.valueOf('D'), Items.redstone});
 
         GameRegistry.addRecipe(new ItemStack(transformkit_upgrade, 1),
-                new Object[]{" A ", "ABA", " A ",
+                new Object[] {" A ", "ABA", " A ",
                         Character.valueOf('A'), IC2Items.getItem("wrench"),
                         Character.valueOf('B'), IC2Items.getItem("iridiumPlate")});
 
         GameRegistry.addRecipe(new ItemStack(blockmattercollector, 1),/////////////////
-                new Object[]{" A ", "ABA", " A ",
+                new Object[] {" A ", "ABA", " A ",
                         Character.valueOf('A'), IC2Items.getItem("cell"),
                         Character.valueOf('B'), IC2Items.getItem("massFabricator")});
 
         GameRegistry.addRecipe(new ItemStack(playermodule, 1),
-                new Object[]{" A ", "BCB", " A ", Character.valueOf('A'), Items.paper, Character.valueOf('B'),
+                new Object[] {" A ", "BCB", " A ", Character.valueOf('A'), Items.paper, Character.valueOf('B'),
                         IC2Items.getItem("advancedCircuit"), Character.valueOf('C'),
                         IC2Items.getItem("advancedAlloy")});
 
         GameRegistry.addRecipe(new ItemStack(quantumVampBowEu, 1),
-                new Object[]{" A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedCircuit"),
+                new Object[] {" A ", "BCB", " A ", Character.valueOf('A'), IC2Items.getItem("advancedCircuit"),
                         Character.valueOf('B'), new ItemStack(endermodule), Character.valueOf('C'), Items.bow});
 
         GameRegistry.addRecipe(new ItemStack(enderQuantumHelmet, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
+                new Object[] {"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
                         new ItemStack(IC2Items.getItem("quantumHelmet").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                         Character.valueOf('B'), new ItemStack(endermodule)});
 
         GameRegistry.addRecipe(new ItemStack(enderQuantumChest, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
+                new Object[] {"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
                         new ItemStack(IC2Items.getItem("quantumBodyarmor").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                         Character.valueOf('B'), new ItemStack(endermodule)});
 
         GameRegistry.addRecipe(new ItemStack(enderQuantumLegs, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
+                new Object[] {"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
                         new ItemStack(IC2Items.getItem("quantumLeggings").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                         Character.valueOf('B'), new ItemStack(endermodule)});
 
         GameRegistry.addRecipe(new ItemStack(enderQuantumBoots, 1, OreDictionary.WILDCARD_VALUE),
-                new Object[]{"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
+                new Object[] {"   ", "BAB", "   ", Character.valueOf('A'), RecipeUtil.copyWithWildCard(
                         new ItemStack(IC2Items.getItem("quantumBoots").getItem(), 1, OreDictionary.WILDCARD_VALUE)),
                         Character.valueOf('B'), new ItemStack(endermodule)});
 
         GameRegistry.addRecipe(new ItemStack(blockwirelessreceiverpersonal, 1),
-                new Object[]{"A A", "CDC", "A A", Character.valueOf('A'), new ItemStack(wirelessmodule),
+                new Object[] {"A A", "CDC", "A A", Character.valueOf('A'), new ItemStack(wirelessmodule),
                         Character.valueOf('C'), IC2Items.getItem("glassFiberCableItem"), Character.valueOf('D'),
                         !OreDictionary.getOres("storageMFSU").isEmpty() ? OreDictionary.getOres("storageMFSU").get(0)
                                 : IC2Items.getItem("mfsUnit")});
 
         GameRegistry.addRecipe(new ItemStack(wirelessmachinescharger, 1),
-                new Object[]{"AAA", "ABA", "AAA", Character.valueOf('A'), new ItemStack(wirelessmodule),
+                new Object[] {"AAA", "ABA", "AAA", Character.valueOf('A'), new ItemStack(wirelessmodule),
                         Character.valueOf('B'),
                         !OreDictionary.getOres("storageMFSU").isEmpty() ? OreDictionary.getOres("storageMFSU").get(0)
                                 : IC2Items.getItem("mfsUnit")});
 
         GameRegistry.addRecipe(new ItemStack(expgen, 1),
-                new Object[]{"BAB", "BCB", "BAB", Character.valueOf('A'), new ItemStack(iridMach),
+                new Object[] {"BAB", "BCB", "BAB", Character.valueOf('A'), new ItemStack(iridMach),
                         Character.valueOf('B'), IC2Items.getItem("cell"), Character.valueOf('C'),
                         !OreDictionary.getOres("mechanismAdvMatter").isEmpty()
                                 ? OreDictionary.getOres("mechanismAdvMatter").get(0)
                                 : IC2Items.getItem("massFabricator")});
         GameRegistry.addRecipe(new ItemStack(blockxpsender, 1),////////
-                new Object[]{"BAB", "BCB", "BAB", Character.valueOf('A'), new ItemStack(expgen),
+                new Object[] {"BAB", "BCB", "BAB", Character.valueOf('A'), new ItemStack(expgen),
                         Character.valueOf('B'), Blocks.redstone_block, Character.valueOf('C'),
                         !OreDictionary.getOres("mechanismAdvMatter").isEmpty()
                                 ? OreDictionary.getOres("mechanismAdvMatter").get(0)
                                 : IC2Items.getItem("teleporter")});
 
         GameRegistry.addRecipe(new ItemStack(blockcreativepedestal, 1),
-                new Object[]{" A ", "AAA", " A ", Character.valueOf('A'), Blocks.bedrock});
+                new Object[] {" A ", "AAA", " A ", Character.valueOf('A'), Blocks.bedrock});
 
     }
 

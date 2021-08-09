@@ -12,7 +12,7 @@ import ru.wirelesstools.utils.UtilFormatGUI;
 
 public class GuiVajraCharger extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.NAME, "textures/gui/GuiVajraCharger.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GuiVajraCharger.png");
 	private final TileVajraChargerElectric tileentity;
 
 	public GuiVajraCharger(InventoryPlayer inventoryplayer, TileVajraChargerElectric tile) {
