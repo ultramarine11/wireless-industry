@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
@@ -46,7 +45,7 @@ public class BlockWirelessQuantumGenerator extends BlockContainer {
 				player.openGui(MainWI.instance, 1, world, x, y, z);
 			} else {
 
-				player.addChatMessage(new ChatComponentTranslation("access.qgen.notallowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.qgen.notallowed"));
 			}
 
 		}

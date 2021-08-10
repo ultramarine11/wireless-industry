@@ -77,7 +77,7 @@ public class BlockWirelessChargerPrivate extends BlockContainer {
 			}
 			else {
 
-				player.addChatMessage(new ChatComponentTranslation("access.wirelesscharger.notallowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.wirelesscharger.notallowed"));
 			}
 		}
 		

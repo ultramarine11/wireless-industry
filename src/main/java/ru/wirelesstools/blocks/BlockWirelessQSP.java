@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.tiles.TileWirelessQSP;
-import ru.wirelesstools.tiles.TileWirelessUHSP;
 
 public class BlockWirelessQSP extends BlockContainer {
 
@@ -84,7 +83,7 @@ public class BlockWirelessQSP extends BlockContainer {
 			}
 			else {
 
-				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed"));
 			}
 
 		}

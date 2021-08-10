@@ -312,3 +312,5 @@ command.wi.msg.cleared.from.inv=The owner was removed from armor (by command)
 command.wi.msg.cleared.owner.from=Removed owner from armor in inventory of player
 pfpconverter.name=Purgatory-Flaming Perfect Converter
 tile.pfpconverter.name=Purgatory-Flaming Perfect Converter
+command.wi.msg.changed.armor.owner=Successfully changed armor owner
+command.wi.msg.no.private.armor=No private armor was found in inventory

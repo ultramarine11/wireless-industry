@@ -7,10 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ChatComponentText;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.item.armor.IPrivateArmor;
+import ru.wirelesstools.utils.MiscUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +48,10 @@ public class CommandClearOwner extends CommandBase {
                         if(stack.getItem() instanceof IPrivateArmor) {
                             IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                             if(armor.getArmorOwner(stack) == null) {
-                                senderplayer.addChatMessage(new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.no.owner")));
+                                MiscUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.no.owner");
                             } else {
                                 armor.clearOwner(stack);
-                                senderplayer.addChatMessage(new ChatComponentTranslation(
-                                        StatCollector.translateToLocal("command.wi.msg.cleared.owner")));
+                                MiscUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.cleared.owner");
                             }
                         }
                     }
@@ -68,8 +67,7 @@ public class CommandClearOwner extends CommandBase {
                             if(stack.getItem() instanceof IPrivateArmor) {
                                 IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                                 armor.clearOwner(stack);
-                                playersender.addChatMessage(
-                                        new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.cleared.owner")));
+                                MiscUtils.sendMessageToPlayer(playersender, "command.wi.msg.cleared.owner");
                             }
                         }
                     } else {
@@ -82,14 +80,11 @@ public class CommandClearOwner extends CommandBase {
                                 armor.clearOwner(stack);
                                 if(!success)
                                     success = true;
-                                playermp.addChatMessage(
-                                        new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.cleared.from.inv")));
+                                MiscUtils.sendMessageToPlayer(playermp, "command.wi.msg.cleared.from.inv");
                             }
                         }
                         if(success)
-                            playersender.addChatMessage(
-                                    new ChatComponentTranslation(StatCollector.translateToLocal("command.wi.msg.cleared.owner.from")
-                                            + ": " + playermp.getGameProfile().getName()));
+                            MiscUtils.sendChatMessageMulti(playersender, "command.wi.msg.cleared.owner.from", new ChatComponentText(": " + playermp.getGameProfile().getName()));
                     }
                     break;
                 }

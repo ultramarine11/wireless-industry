@@ -11,12 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
+import ru.wirelesstools.utils.MiscUtils;
 
 import java.util.List;
 
@@ -55,25 +54,24 @@ public class ElectricDescaler extends Item implements IElectricItem {
 
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int i, int j, int k,
                                   int side, float a, float b, float c) {
-        if (!world.isRemote) {
+        if(!world.isRemote) {
             TileEntity te = world.getTileEntity(i, j, k);
-            if (te instanceof TileEntitySteamGenerator) {
-                TileEntitySteamGenerator steamgente = (TileEntitySteamGenerator) te;
+            if(te instanceof TileEntitySteamGenerator) {
+                TileEntitySteamGenerator steamGenTe = (TileEntitySteamGenerator) te;
                 try {
-                    if (ElectricItem.manager.canUse(stack, 1000.0)) {
-                        int calcification = ReflectionHelper.<Integer, TileEntitySteamGenerator>getPrivateValue(TileEntitySteamGenerator.class, steamgente, "calcification");
-                        if (calcification > 0) {
-                            ReflectionHelper.setPrivateValue(TileEntitySteamGenerator.class, steamgente, 0, "calcification");
-                            if (!player.capabilities.isCreativeMode)
+                    if(ElectricItem.manager.canUse(stack, 1000.0)) {
+                        int calcification = ReflectionHelper.<Integer, TileEntitySteamGenerator>getPrivateValue(TileEntitySteamGenerator.class, steamGenTe, "calcification");
+                        if(calcification > 0) {
+                            ReflectionHelper.setPrivateValue(TileEntitySteamGenerator.class, steamGenTe, 0, "calcification");
+                            if(!player.capabilities.isCreativeMode)
                                 ElectricItem.manager.use(stack, 1000.0, player);
-                            player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.message.scale.cleared")
-                                    + " " + EnumChatFormatting.GREEN + String.format("%.2f", (double) calcification / 1000.0) + "%"
-                                    + " " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("chat.message.of.calcification")));
+                            MiscUtils.sendChatMessageMulti(player, "chat.message.scale.cleared",
+                                    new ChatComponentText(" " + String.format("%.2f", (double) calcification / 1000.0) + "% ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)),
+                                    new ChatComponentTranslation("chat.message.of.calcification"));
                         }
                     }
-                } catch (Exception e) {
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED
-                            + StatCollector.translateToLocal("chat.message.descaler.error")));
+                } catch(Exception e) {
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.descaler.error", EnumChatFormatting.RED);
                 }
             }
             return true;

@@ -2,7 +2,6 @@ package ru.wirelesstools.blocks;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -59,7 +58,7 @@ public class BlockWStoragePersonal extends BlockContainer {
 				player.openGui(MainWI.instance, 1, world, x, y, z);
 			}
 			else {
-				player.addChatMessage(new ChatComponentTranslation("access.wsbp.not.allowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.wsbp.not.allowed"));
 
 			}
 

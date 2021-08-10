@@ -314,3 +314,5 @@ command.wi.msg.cleared.from.inv=Владелец брони был очищен 
 command.wi.msg.cleared.owner.from=Владелец брони очищен командой у игрока
 pfpconverter.name=Совершенный преобразователь на пламени чистилища
 tile.pfpconverter.name=Совершенный преобразователь на пламени чистилища
+command.wi.msg.changed.armor.owner=Владелец брони успешно изменён
+command.wi.msg.no.private.armor=Не найдено приватной брони в инвентаре

@@ -28,6 +28,7 @@ import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.tiles.TileVajraCharger;
+import ru.wirelesstools.utils.MiscUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -54,37 +55,31 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 
 	@Override
 	public boolean canProvideEnergy(ItemStack itemStack) {
-
 		return false;
 	}
 
 	@Override
 	public Item getChargedItem(ItemStack itemStack) {
-
 		return this;
 	}
 
 	@Override
 	public Item getEmptyItem(ItemStack itemStack) {
-
 		return this;
 	}
 
 	@Override
 	public double getMaxCharge(ItemStack itemStack) {
-
 		return this.maxCharge;
 	}
 
 	@Override
 	public int getTier(ItemStack itemStack) {
-
 		return this.tier;
 	}
 
 	@Override
 	public double getTransferLimit(ItemStack itemStack) {
-
 		return this.transferLimit;
 	}
 
@@ -118,15 +113,12 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 				Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
 				if (modenew) {
 					enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
-					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.AQUA + StatCollector.translateToLocal("chat.message.fortune.active")));
+					MiscUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
 				} else {
 					enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
-					EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
-					player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_PURPLE
-							+ StatCollector.translateToLocal("chat.message.fortune.none")));
+					MiscUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
 				}
+				EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
 			}
 		}
 		return stack;
@@ -145,7 +137,6 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 	}
 
 	public boolean canHarvestBlock(Block block, ItemStack stack) {
-
 		return block != Blocks.bedrock;
 	}
 
@@ -198,15 +189,21 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 
 	protected ItemStack getItemStack(double charge) {
 		ItemStack st = new ItemStack(this);
-		ElectricItem.manager.charge(st, charge, 2147483647, true, false);
+		ElectricItem.manager.charge(st, charge, Integer.MAX_VALUE, true, false);
 
 		return st;
 	}
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tabs, List itemList) {
-		itemList.add(getItemStack(Double.POSITIVE_INFINITY));
-		itemList.add(getItemStack(0.0D));
+		itemList.add(this.getItemStack(Double.POSITIVE_INFINITY));
+		itemList.add(this.getItemStack(0.0));
+		/*ItemStack enchanted = new ItemStack(this);
+		ElectricItem.manager.charge(enchanted, Double.POSITIVE_INFINITY, Integer.MAX_VALUE, true, false);
+		Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(enchanted);
+		enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
+		EnchantmentHelper.setEnchantments(enchantmentMaplocal, enchanted);
+		itemList.add(enchanted);*/
 	}
 
 }

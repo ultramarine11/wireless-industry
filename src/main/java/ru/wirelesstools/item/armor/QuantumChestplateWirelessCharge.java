@@ -40,13 +40,12 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     public double maxCharge;
     protected double transferLimit;
     protected int tier;
-
     protected static final List<Integer> listpotionsid = new ArrayList<>();
 
     public QuantumChestplateWirelessCharge(String name) {
         super(ArmorMaterial.DIAMOND, 0, 1);
         this.setUnlocalizedName(name);
-    //  this.setMaxStackSize(1);
+        //  this.setMaxStackSize(1);
         this.maxCharge = 500000000.0D;
         this.transferLimit = 500000.0D;
         this.tier = 4;
@@ -64,7 +63,6 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     }
 
     public EnumRarity getRarity(ItemStack itemstack) {
-
         return MainWI.RARITY_CHESTPLATE_WIRELESS;
     }
 
@@ -73,42 +71,35 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
         boolean active = nbt.getBoolean("active");
         boolean buffmode = nbt.getBoolean("potionbuffs");
         byte toggleTimer = nbt.getByte("toggleTimer");
-        if (IC2.keyboard.isModeSwitchKeyDown(player) && !player.isSneaking() && toggleTimer == 0) {
+        if(IC2.keyboard.isModeSwitchKeyDown(player) && !player.isSneaking() && toggleTimer == 0) {
             toggleTimer = 10;
             active = !active;
-            if (!world.isRemote) {
+            if(!world.isRemote) {
                 nbt.setBoolean("active", active);
-                if (active) {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_GREEN
-                            + StatCollector.translateToLocal("chat.message.wirelesscharge.on")));
+                if(active) {
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.on", EnumChatFormatting.DARK_GREEN);
                 } else {
-                    player.addChatMessage(new ChatComponentTranslation(
-                            EnumChatFormatting.DARK_RED
-                                    + StatCollector.translateToLocal("chat.message.wirelesscharge.off")));
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.off", EnumChatFormatting.DARK_RED);
                 }
             }
         }
 
-		if (IC2.keyboard.isBoostKeyDown(player) && player.isSneaking() && toggleTimer == 0) {
-			toggleTimer = 10;
+        if(IC2.keyboard.isBoostKeyDown(player) && player.isSneaking() && toggleTimer == 0) {
+            toggleTimer = 10;
             buffmode = !buffmode;
-			if (!world.isRemote) {
-				nbt.setBoolean("potionbuffs", buffmode);
-				if (buffmode) {
-					player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
-							+ StatCollector.translateToLocal("chat.message.chestplate.buffs1.on")));
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
-                            + StatCollector.translateToLocal("chat.message.chestplate.buffs2.on")));
-				} else {
-					player.addChatMessage(new ChatComponentTranslation(
-							EnumChatFormatting.YELLOW
-									+ StatCollector.translateToLocal("chat.message.chestplate.buffs.off")));
-				}
-			}
-		}
+            if(!world.isRemote) {
+                nbt.setBoolean("potionbuffs", buffmode);
+                if(buffmode) {
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs1.on", EnumChatFormatting.DARK_AQUA);
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs2.on", EnumChatFormatting.DARK_AQUA);
+                } else {
+                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs.off", EnumChatFormatting.YELLOW);
+                }
+            }
+        }
 
-        if (!world.isRemote) {
-            if (active)
+        if(!world.isRemote) {
+            if(active)
                 this.checkPlayers(player, world, stack);
 
             if(buffmode) {
@@ -136,42 +127,42 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             boolean jetpack = nbt.getBoolean("jetpack");
             boolean hoverMode = nbt.getBoolean("hoverMode");
             boolean jetpackUsed = false;
-            if (IC2.keyboard.isJumpKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
+            if(IC2.keyboard.isJumpKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
                 toggleTimer = 10;
                 hoverMode = !hoverMode;
                 nbt.setBoolean("hoverMode", hoverMode);
-                if (hoverMode) {
+                if(hoverMode) {
                     IC2.platform.messagePlayer(player, "Quantum Hover Mode enabled.");
                 } else {
                     IC2.platform.messagePlayer(player, "Quantum Hover Mode disabled.");
                 }
             }
 
-            if (IC2.keyboard.isBoostKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
+            if(IC2.keyboard.isBoostKeyDown(player) && IC2.keyboard.isModeSwitchKeyDown(player) && toggleTimer == 0) {
                 toggleTimer = 10;
                 jetpack = !jetpack;
                 nbt.setBoolean("jetpack", jetpack);
-                if (jetpack) {
+                if(jetpack) {
                     IC2.platform.messagePlayer(player, "Quantum Jetpack enabled.");
                 } else {
                     IC2.platform.messagePlayer(player, "Quantum Jetpack disabled.");
                 }
             }
 
-            if (jetpack && (IC2.keyboard.isJumpKeyDown(player) || hoverMode && player.motionY < -0.03)) {
+            if(jetpack && (IC2.keyboard.isJumpKeyDown(player) || hoverMode && player.motionY < -0.03)) {
                 jetpackUsed = this.useJetpack(player, hoverMode);
             }
 
-            if (jetpackUsed)
+            if(jetpackUsed)
                 player.inventoryContainer.detectAndSendChanges();
         }
 
-        if (IC2.platform.isSimulating() && toggleTimer > 0) {
+        if(IC2.platform.isSimulating() && toggleTimer > 0) {
             toggleTimer--;
             nbt.setByte("toggleTimer", toggleTimer);
         }
 
-        if (player.isBurning())
+        if(player.isBurning())
             player.extinguish();
     }
 
@@ -179,27 +170,27 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
         AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(player.posX - ConfigWI.chestplateChargingRadius, player.posY - ConfigWI.chestplateChargingRadius,
                 player.posZ - ConfigWI.chestplateChargingRadius, player.posX + ConfigWI.chestplateChargingRadius, player.posY + ConfigWI.chestplateChargingRadius, player.posZ + ConfigWI.chestplateChargingRadius);
         List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, axisalignedbb);
-        for (Entity entityinlist : list) {
-            if (entityinlist instanceof EntityPlayer) {
+        for(Entity entityinlist : list) {
+            if(entityinlist instanceof EntityPlayer) {
                 this.checkInvPlayer((EntityPlayer) entityinlist, thisarmor);
             }
         }
     }
 
     protected void checkInvPlayer(EntityPlayer player, ItemStack thisarmor) {
-        for (ItemStack current : player.inventory.armorInventory) {
-            if (current == null || current.getItem() instanceof ItemDebug)
+        for(ItemStack current : player.inventory.armorInventory) {
+            if(current == null || current.getItem() instanceof ItemDebug)
                 continue;
-            if (current.getItem() instanceof QuantumChestplateWirelessCharge)
+            if(current.getItem() instanceof QuantumChestplateWirelessCharge)
                 continue;
-            if (current.getItem() instanceof IElectricItem)
+            if(current.getItem() instanceof IElectricItem)
                 MiscUtils.chargeEUItemFromArmor(current, thisarmor);
         }
 
-        for (ItemStack current : player.inventory.mainInventory) {
-            if (current == null || current.getItem() instanceof ItemDebug)
+        for(ItemStack current : player.inventory.mainInventory) {
+            if(current == null || current.getItem() instanceof ItemDebug)
                 continue;
-            if (current.getItem() instanceof IElectricItem)
+            if(current.getItem() instanceof IElectricItem)
                 MiscUtils.chargeEUItemFromArmor(current, thisarmor);
         }
     }
@@ -208,49 +199,49 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
         int worldHeight;
         double y;
         ItemStack jetpack = player.inventory.armorInventory[2];
-        if (ElectricItem.manager.getCharge(jetpack) == 0.0)
+        if(ElectricItem.manager.getCharge(jetpack) == 0.0)
             return false;
         float power = 1.0f;
         float dropPercentage = 0.05f;
-        if (ElectricItem.manager.getCharge(jetpack) / this.getMaxCharge(jetpack) <= (double) dropPercentage) {
+        if(ElectricItem.manager.getCharge(jetpack) / this.getMaxCharge(jetpack) <= (double) dropPercentage) {
             power = (float) ((double) power * (ElectricItem.manager.getCharge(jetpack)
                     / (this.getMaxCharge(jetpack) * (double) dropPercentage)));
         }
-        if (IC2.keyboard.isForwardKeyDown(player)) {
+        if(IC2.keyboard.isForwardKeyDown(player)) {
             float forwardpower;
             float retruster = 3.5f;
-            if (hoverMode) {
+            if(hoverMode) {
                 retruster = 0.5f;
             }
-            if ((forwardpower = power * retruster * 2.0f) > 0.0f) {
+            if((forwardpower = power * retruster * 2.0f) > 0.0f) {
                 player.moveFlying(0.0f, 0.4f * forwardpower, 0.02f);
             }
         }
-        if ((y = player.posY) > (double) ((worldHeight = IC2.getWorldHeight(player.worldObj)) - 25)) {
-            if (y > (double) worldHeight) {
+        if((y = player.posY) > (double) ((worldHeight = IC2.getWorldHeight(player.worldObj)) - 25)) {
+            if(y > (double) worldHeight) {
                 y = worldHeight;
             }
             power = (float) ((double) power * (((double) worldHeight - y) / 25.0));
         }
         double prevmotion = player.motionY;
         player.motionY = Math.min(player.motionY + (double) (power * 0.2f), 0.6);
-        if (hoverMode) {
+        if(hoverMode) {
             float maxHoverY = -0.025f;
-            if (IC2.keyboard.isSneakKeyDown(player)) {
+            if(IC2.keyboard.isSneakKeyDown(player)) {
                 maxHoverY = -0.1f;
             }
-            if (IC2.keyboard.isJumpKeyDown(player)) {
+            if(IC2.keyboard.isJumpKeyDown(player)) {
                 maxHoverY = 0.1f;
             }
-            if (player.motionY > (double) maxHoverY) {
+            if(player.motionY > (double) maxHoverY) {
                 player.motionY = maxHoverY;
-                if (prevmotion > player.motionY) {
+                if(prevmotion > player.motionY) {
                     player.motionY = prevmotion;
                 }
             }
         }
         double consume = 8.0;
-        if (hoverMode)
+        if(hoverMode)
             consume = 10.0;
         ElectricItem.manager.discharge(jetpack, consume, Integer.MAX_VALUE, true, false, false);
         player.fallDistance = 0.0f;
@@ -263,7 +254,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
         NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
         list.add(StatCollector.translateToLocal("info.wirelesscharge.about"));
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             String isonoff = nbt.getBoolean("active") ? EnumChatFormatting.GREEN
                     + StatCollector.translateToLocal("info.yes") : EnumChatFormatting.RED
                     + StatCollector.translateToLocal("info.no");
@@ -281,8 +272,7 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("info.press.boost.key")
                     + " " + StatCollector.translateToLocal("info.and.sneak") + " "
                     + StatCollector.translateToLocal("info.to.switch.buff.mode"));
-        }
-        else {
+        } else {
             list.add(EnumChatFormatting.ITALIC + I18n.format("press.lshift"));
         }
     }
@@ -300,12 +290,10 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     }
 
     public boolean isRepairable() {
-
         return false;
     }
 
     public int getItemEnchantability() {
-
         return 0;
     }
 
@@ -342,56 +330,47 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
 
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
-
         return (int) Math.round(20.0 * this.getBaseAbsorptionRatio() * this.getDamageAbsorptionRatio());
     }
 
     @Override
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
-
         ElectricItem.manager.discharge(stack, damage * this.getEnergyPerDamage(), Integer.MAX_VALUE, true, false,
                 false);
     }
 
     @Override
     public boolean isMetalArmor(ItemStack arg0, EntityPlayer arg1) {
-
         return true;
     }
 
     @Override
     public boolean canProvideEnergy(ItemStack arg0) {
-
         return true;
     }
 
     @Override
     public Item getChargedItem(ItemStack arg0) {
-
         return this;
     }
 
     @Override
     public Item getEmptyItem(ItemStack arg0) {
-
         return this;
     }
 
     @Override
     public double getMaxCharge(ItemStack arg0) {
-
         return this.maxCharge;
     }
 
     @Override
     public int getTier(ItemStack arg0) {
-
         return this.tier;
     }
 
     @Override
     public double getTransferLimit(ItemStack arg0) {
-
         return this.transferLimit;
     }
 

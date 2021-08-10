@@ -1,24 +1,13 @@
 package ru.wirelesstools.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.item.tool.LuckyVajra;
 import ru.wirelesstools.tiles.TileVajraCharger;
 
 public class BlockVajraCharger extends Block implements ITileEntityProvider {

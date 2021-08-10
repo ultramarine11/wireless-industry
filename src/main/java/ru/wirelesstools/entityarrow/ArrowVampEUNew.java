@@ -21,6 +21,7 @@ import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import ru.wirelesstools.config.ConfigWI;
+import ru.wirelesstools.utils.MiscUtils;
 
 import java.util.List;
 
@@ -516,26 +517,18 @@ public class ArrowVampEUNew extends EntityArrow implements IProjectile {
                     }
                 }
                 if(ConfigWI.enableWeaponsChatMsgs) {
-                    shooter.addChatMessage(new ChatComponentTranslation(
-                            EnumChatFormatting.BLUE
-                                    + StatCollector.translateToLocal("chat.message.stolen.from.enemy.total")
-                                    + ": " + String.valueOf((int) totaldischargedamount) + " EU"));
-                    victim.addChatMessage(new ChatComponentTranslation(
-                            EnumChatFormatting.DARK_PURPLE
-                                    + StatCollector.translateToLocal("chat.message.somebody.has.stolen.energy")));
+                    MiscUtils.sendChatMessageColoredMulti(shooter, "chat.message.stolen.from.enemy.total", EnumChatFormatting.BLUE,
+                            new ChatComponentText(" " + String.valueOf((int) totaldischargedamount) + " EU").setChatStyle(new ChatStyle()
+                                    .setColor(EnumChatFormatting.DARK_AQUA)));
+                    MiscUtils.sendChatMessageColoredMulti(victim, "chat.message.somebody.has.stolen.energy", EnumChatFormatting.DARK_PURPLE);
                 }
             } else {
-                if(ConfigWI.enableWeaponsChatMsgs) {
-                    shooter.addChatMessage(new ChatComponentTranslation(
-                            EnumChatFormatting.YELLOW
-                                    + StatCollector.translateToLocal("chat.message.stolen.zero.amount.eu")));
-                }
+                if(ConfigWI.enableWeaponsChatMsgs)
+                    MiscUtils.sendChatMessageColoredMulti(shooter, "chat.message.stolen.zero.amount.eu", EnumChatFormatting.YELLOW);
             }
         } else {
             if(ConfigWI.enableWeaponsChatMsgs) {
-                shooter.addChatMessage(new ChatComponentTranslation(
-                        EnumChatFormatting.DARK_RED
-                                + StatCollector.translateToLocal("chat.message.no.electric.armor.on.you")));
+                MiscUtils.sendChatMessageColoredMulti(shooter, "chat.message.no.electric.armor.on.you", EnumChatFormatting.DARK_RED);
             }
         }
     }

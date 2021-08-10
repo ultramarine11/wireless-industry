@@ -82,7 +82,7 @@ public class BlockWirelessHSP extends BlockContainer {
 			}
 			else {
 
-				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed"));
 			}
 
 		}

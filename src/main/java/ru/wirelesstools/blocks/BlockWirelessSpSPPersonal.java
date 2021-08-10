@@ -3,7 +3,6 @@ package ru.wirelesstools.blocks;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,7 +12,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.tiles.TileWirelessQSP;
 import ru.wirelesstools.tiles.TileWirelessSpSPPersonal;
 
 public class BlockWirelessSpSPPersonal extends BlockContainer {
@@ -85,7 +83,7 @@ public class BlockWirelessSpSPPersonal extends BlockContainer {
 			}
 			else {
 				
-				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed", new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation("access.solarpanel.notallowed"));
 			}
 
 		}
