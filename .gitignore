@@ -133,7 +133,6 @@ run/
 .gradle/
 
 *.txt
-*.cfg
 *.properties
 *.prefs
 .project
@@ -154,18 +153,10 @@ run/
 *.lock
 *.baub
 *.thaum
-*.tmp
 
 *.zs
-
-libs/
 
 .idea
 .setting
 
-
-*.properties
-*.ini
-*.gradle
 *.bin
-*.lock
