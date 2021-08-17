@@ -21,7 +21,6 @@ public class GuiPFPConvertor extends GuiIC2 {
         String tileentityname = I18n.format(this.container.base.pfpconvertorname);
         int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
         this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 16766720); // цвет Gold #FFD700
-
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
@@ -40,7 +39,7 @@ public class GuiPFPConvertor extends GuiIC2 {
             this.drawTexturedModalRect(this.xoffset + 11, this.yoffset + 70 - l + 1, 178, 55 - l + 1, 10, l);
         }
 
-        int progress = (int)(22.0D * this.container.base.gaugeProgressScaled());
+        int progress = (int)(22 * this.container.base.gaugeProgressScaled());
         if (progress > 0) {
             this.drawTexturedModalRect(this.xoffset + 82, this.yoffset + 24,
                     177, 2, progress + 1, 16);
@@ -54,13 +53,11 @@ public class GuiPFPConvertor extends GuiIC2 {
 
     @Override
     public String getName() {
-
         return StatCollector.translateToLocal(this.container.base.pfpconvertorname);
     }
 
     @Override
     public ResourceLocation getResourceLocation() {
-
         return new ResourceLocation(Reference.IDNAME, "textures/gui/gui_pfp1_1.png");
     }
 }

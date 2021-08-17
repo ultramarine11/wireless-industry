@@ -61,9 +61,8 @@ public class CommandChangeOwnerArmor extends CommandBase {
     @Override
     public void processCommand(ICommandSender commandSender, String[] args) {
         if(commandSender instanceof EntityPlayer) {
-            if(args.length > 2) {
+            if(args.length > 2 || args.length == 0)
                 throw new WrongUsageException(this.getCommandUsage(commandSender));
-            }
 
             boolean found_armor;
             EntityPlayerMP playerSender = CommandBase.getCommandSenderAsPlayer(commandSender);
@@ -82,7 +81,6 @@ public class CommandChangeOwnerArmor extends CommandBase {
                 MiscUtils.sendMessageToPlayer(playerSender, "command.wi.msg.no.private.armor");
             }
         }
-
     }
 
     private boolean checkPlayerTargetInv(EntityPlayerMP targetPlayer, EntityPlayerMP newOwner) {

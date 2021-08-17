@@ -30,6 +30,7 @@ import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.entityarrow.ArrowVampEUNew;
 import ru.wirelesstools.entityarrow.ArrowVampXPNew;
+import ru.wirelesstools.utils.MiscUtils;
 
 import java.util.List;
 
@@ -102,18 +103,15 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
     }
 
     public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-
         return EnumAction.bow;
     }
 
     public int getMaxItemUseDuration(ItemStack par1ItemStack) {
-
         return 72000;
     }
 
     public boolean onBlockDestroyed(ItemStack par1ItemStack, World world, Block block, int par4, int par5, int par6,
                                     EntityLivingBase par7EntityLiving) {
-
         return true;
     }
 
@@ -147,7 +145,6 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
 
     @Override
     public boolean isFull3D() {
-
         return true;
     }
 
@@ -177,11 +174,13 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
             nbt.setBoolean("vampiremode", vampmodenew);
             if(ConfigWI.enableWeaponsChatMsgs) {
                 if(vampmodenew) {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
-                            + StatCollector.translateToLocal("info.chatmessage.vampmode.xp")));
+                    MiscUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.xp", EnumChatFormatting.YELLOW);
+                    /*player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
+                            + StatCollector.translateToLocal("info.chatmessage.vampmode.xp")));*/
                 } else {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
-                            + StatCollector.translateToLocal("info.chatmessage.vampmode.eu")));
+                    MiscUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.eu", EnumChatFormatting.DARK_AQUA);
+                    /*player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
+                            + StatCollector.translateToLocal("info.chatmessage.vampmode.eu")));*/
                 }
             }
             return itemStack;
@@ -292,48 +291,40 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
     }
 
     public int getItemEnchantability() {
-
         return 0;
     }
 
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-
         return false;
     }
 
     @Override
     public boolean canProvideEnergy(ItemStack arg0) {
-
         return false;
     }
 
     @Override
     public Item getChargedItem(ItemStack arg0) {
-
         return this;
     }
 
     @Override
     public Item getEmptyItem(ItemStack arg0) {
-
         return this;
     }
 
     @Override
     public double getMaxCharge(ItemStack arg0) {
-
         return this.maxenergy;
     }
 
     @Override
     public int getTier(ItemStack arg0) {
-
         return this.tier;
     }
 
     @Override
     public double getTransferLimit(ItemStack arg0) {
-
         return this.transferlimit;
     }
 

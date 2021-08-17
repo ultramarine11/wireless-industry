@@ -43,7 +43,6 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
                 StatCollector.translateToLocal("info.button.iscollectoron") : StatCollector.translateToLocal("info.button.iscollectoroff");
         int nmPos3 = (this.xSize - this.fontRendererObj.getStringWidth(isActive)) / 2;
         this.fontRendererObj.drawString(isActive, nmPos3 + 60, 47, 4210752);
-
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
@@ -86,13 +85,11 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
 
     @Override
     public String getName() {
-
         return StatCollector.translateToLocal(this.container.base.mattercollectorname);
     }
 
     @Override
     public ResourceLocation getResourceLocation() {
-
         return new ResourceLocation(Reference.IDNAME, "textures/gui/GUILiquidMatterCollector.png");
     }
 }

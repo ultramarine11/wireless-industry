@@ -129,4 +129,7 @@ public class ConfigWI {
 
 	public static int permissionLevelCommandChangeOwner;
 	public static int permissionLevelCommandClearOwner;
+
+	public static int machinesChargerMaxEnergy;
+	public static int machinesChargerTier;
 }

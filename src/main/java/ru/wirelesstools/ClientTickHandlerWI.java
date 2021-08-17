@@ -9,7 +9,7 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import ru.wirelesstools.utils.UtilFormatGUI;
+import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class ClientTickHandlerWI {
 
@@ -25,7 +25,7 @@ public class ClientTickHandlerWI {
 			int yPos1 = 0;
 			int xPos2 = 0;
 			if (itemvajra != null && itemvajra.getItem() == MainWI.luckyVajra) {
-				String scharge = UtilFormatGUI.formatNumber(ElectricItem.manager.getCharge(itemvajra));
+				String scharge = UtilFormatNumber.formatNumber(ElectricItem.manager.getCharge(itemvajra));
 				String elevelname = I18n.format("message.text.vajra.energyLevel") + ": ";
 				String stringCharge = elevelname + scharge + " Eu";
 				xPos1 = 2;
@@ -37,7 +37,7 @@ public class ClientTickHandlerWI {
 				double currChargeArmor = ElectricItem.manager.getCharge(itemarmorchest);
 				float chargestatus = ((float) currChargeArmor
 						/ (float) ((IElectricItem) itemarmorchest.getItem()).getMaxCharge(itemarmorchest)) * 100.0F;
-				String schargearmor = UtilFormatGUI.formatNumber(currChargeArmor);
+				String schargearmor = UtilFormatNumber.formatNumber(currChargeArmor);
 				String echargenamearmor = I18n.format("info.text.wirelesschestplate.energyLevel") + ": ";
 				String stringChargeArmor = echargenamearmor + schargearmor + " Eu";
 				String elevelarmor = ClientTickHandlerWI.getTextEnergyStatus(chargestatus);

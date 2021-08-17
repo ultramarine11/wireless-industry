@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerWirelessMachinesCharger;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
-import ru.wirelesstools.utils.UtilFormatGUI;
+import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiWirelessMachinesCharger extends GuiContainer {
 
@@ -36,7 +36,6 @@ public class GuiWirelessMachinesCharger extends GuiContainer {
 		this.drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
 
 		if (this.tile.energy > 0) {
-
 			int l = this.tile.gaugeEnergyScaled(77);
 			this.drawTexturedModalRect(h + 49, k + 41, 177, 15, l + 1, 10);
 		}
@@ -47,8 +46,8 @@ public class GuiWirelessMachinesCharger extends GuiContainer {
 
 		String tileentityname = I18n.format(this.tile.chargername);
 		String storageString = I18n.format("gui.wirind.wirelessmachineschargerstorage") + ": ";
-		String energyformatted = UtilFormatGUI.formatNumber(this.tile.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tile.getMaxChargerEnergy());
+		String energyformatted = UtilFormatNumber.formatNumber(this.tile.energy);
+		String maxstorageformatted = UtilFormatNumber.formatNumber(this.tile.getMaxChargerEnergy());
 
 		String stringEnergyAll = storageString + energyformatted + " / " + maxstorageformatted + " EU";
 

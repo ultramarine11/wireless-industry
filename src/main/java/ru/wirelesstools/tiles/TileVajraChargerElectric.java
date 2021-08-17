@@ -139,107 +139,89 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 
 	@Override
 	public int getStored() {
-
 		return (int) this.energy;
 	}
 
 	@Override
 	public void setStored(int energy) {
-
 		this.energy = energy;
 	}
 
 	@Override
 	public int addEnergy(int amount) {
-
 		this.energy += amount;
-		return getStored();
+		return amount;
 	}
 
 	@Override
 	public int getCapacity() {
-
 		return this.maxStorage;
 	}
 
 	@Override
 	public int getOutput() {
-
 		return this.output;
 	}
 
 	@Override
 	public double getOutputEnergyUnitsPerTick() {
-
 		return 128;
 	}
 
 	@Override
 	public boolean isTeleporterCompatible(ForgeDirection side) {
-
 		return false;
 	}
 
 	@Override
 	public int getSizeInventory() {
-
 		return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int p_70301_1_) {
-
 		return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-
 		return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-
 		return null;
 	}
 
 	@Override
 	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
-
 	}
 
 	@Override
 	public String getInventoryName() {
-
 		return null;
 	}
 
 	@Override
 	public boolean hasCustomInventoryName() {
-
 		return false;
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-
 		return 0;
 	}
 
 	@Override
 	public void openInventory() {
-
 	}
 
 	@Override
 	public void closeInventory() {
-
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-
 		return true;
 	}
 

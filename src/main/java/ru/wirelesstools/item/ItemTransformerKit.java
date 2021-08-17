@@ -45,7 +45,6 @@ public class ItemTransformerKit extends Item {
 
     @Override
     public EnumRarity getRarity(ItemStack p_77613_1_) {
-
         return this.kit_type == 0 ? EnumRarity.common : EnumRarity.epic;
     }
 

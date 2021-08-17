@@ -18,6 +18,5 @@ public class WIEventHandler {
                     + ": " + "/" + CommandClearOwner.NAME_COMMAND + " "
                     + StatCollector.translateToLocal("chat.message.wi.and") + " " + "/" + CommandClearOwner.ALIAS_1));
         }
-
     }
 }

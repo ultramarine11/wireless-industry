@@ -1,9 +1,11 @@
 package ru.wirelesstools.tiles;
 
+import ru.wirelesstools.config.ConfigWI;
+
 public class TileMachinesCharger extends TileWirelessMachinesChargerBase {
 
 	public TileMachinesCharger() {
-		super(1000000000, 11, "wirind.tilemachinescharger");
+		super(ConfigWI.machinesChargerMaxEnergy, ConfigWI.machinesChargerTier, "wirind.tilemachinescharger");
 		
 	}
 

@@ -9,7 +9,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerWChargerNew;
-import ru.wirelesstools.utils.UtilFormatGUI;
+import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiWChargerNew extends GuiIC2 {
 
@@ -37,8 +37,8 @@ public class GuiWChargerNew extends GuiIC2 {
 
 		String tileentityname = I18n.format(this.container.base.chargerName);
 		String storageString = I18n.format("gui.wirind.wirelesschargerstorage") + ": ";
-		String energyformatted = UtilFormatGUI.formatNumber(this.container.base.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber(this.container.base.maxStorage);
+		String energyformatted = UtilFormatNumber.formatNumber(this.container.base.energy);
+		String maxstorageformatted = UtilFormatNumber.formatNumber(this.container.base.maxStorage);
 		String tileowner = I18n.format("gui.wirind.wirelesscharger.owner") + ": ";
 		String radiusString = I18n.format("gui.wirind.radiusofcharge") + ": ";
 		String noownerwhy = I18n.format("gui.wirind.noowner.why");
@@ -58,15 +58,12 @@ public class GuiWChargerNew extends GuiIC2 {
 
 		if (this.container.base.getIsPrivate()) {
 			if (this.container.base.getOwnerCharger() != null) {
-
 				this.fontRendererObj.drawString(ownerAll, nmPos6, 14, 4210752);
 			} else {
-
 				this.fontRendererObj.drawString(noownerwhy, nmPosNoOwner, 14, 4210752);
 			}
 
 		} else {
-
 			this.fontRendererObj.drawString(playercountStringAll, nmPos5, 14, 4210752);
 		}
 
@@ -125,12 +122,10 @@ public class GuiWChargerNew extends GuiIC2 {
 	protected void actionPerformed(GuiButton guibutton) {
 		super.actionPerformed(guibutton);
 		if (guibutton.id == 0) {
-
 			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 0);
 		}
 
 		if (guibutton.id == 1) {
-
 			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
 		}
 	}

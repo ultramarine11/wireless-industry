@@ -15,79 +15,71 @@ import ru.wirelesstools.Reference;
 import ru.wirelesstools.tiles.TileEntityWirelessChargerPrivate;
 
 public class BlockWirelessChargerPrivate extends BlockContainer {
-	
-	private IIcon[] icons;
 
-	public BlockWirelessChargerPrivate(String unlocalizedName) {
-		super(Material.rock);
-		this.setBlockName(unlocalizedName);
-		this.setCreativeTab(MainWI.tabwi);
-		setHardness(3.0F);
-	}
-	
-	public void registerBlockIcons(IIconRegister reg) {
-		this.icons = new IIcon[3];
-		this.icons[0] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_bottom_top");
-		this.icons[1] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_private_side_active");
-		this.icons[2] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_private_side_inactive");
-	}
-	
-	public IIcon getIcon(int side, int metadata) {
-		switch (side) {
+    private IIcon[] icons;
 
-		case 0:
-			return this.icons[0];
-		case 1:
-			return this.icons[0];
-		case 2:
-			return this.icons[1];
-		case 3:
-			return this.icons[1];
-		case 4:
-			return this.icons[1];
-		case 5:
-			return this.icons[1];
+    public BlockWirelessChargerPrivate(String unlocalizedName) {
+        super(Material.rock);
+        this.setBlockName(unlocalizedName);
+        this.setCreativeTab(MainWI.tabwi);
+        setHardness(3.0F);
+    }
 
-		}
+    public void registerBlockIcons(IIconRegister reg) {
+        this.icons = new IIcon[3];
+        this.icons[0] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_bottom_top");
+        this.icons[1] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_private_side_active");
+        this.icons[2] = reg.registerIcon(Reference.PathTex + "wirelessitemcharger_private_side_inactive");
+    }
 
-		return this.icons[1];
-	}
+    public IIcon getIcon(int side, int metadata) {
+        switch(side) {
 
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-			TileEntityWirelessChargerPrivate tile = (TileEntityWirelessChargerPrivate)world.getTileEntity(x, y, z);
-			if (entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer)entity;
-				tile.setPlayerProfile(player.getGameProfile());
-			}
-		
-	}
-	
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
-			float subY, float subZ) {
-		if (!world.isRemote) {
-			TileEntityWirelessChargerPrivate tile = (TileEntityWirelessChargerPrivate)world.getTileEntity(x, y, z);
-			boolean access = tile.permitsAccess(player.getGameProfile());
-			if (access) {
+            case 0:
+            case 1:
+                return this.icons[0];
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return this.icons[1];
+        }
 
-				player.openGui(MainWI.instance, 1, world, x, y, z);
-			}
-			else if(player.capabilities.isCreativeMode) {
+        return this.icons[1];
+    }
 
-				player.openGui(MainWI.instance, 1, world, x, y, z);
-			}
-			else {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+        TileEntityWirelessChargerPrivate tile = (TileEntityWirelessChargerPrivate) world.getTileEntity(x, y, z);
+        if(entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            tile.setPlayerProfile(player.getGameProfile());
+        }
+    }
 
-				player.addChatMessage(new ChatComponentTranslation("access.wirelesscharger.notallowed"));
-			}
-		}
-		
-		return true;
-	}
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
+                                    float subY, float subZ) {
+        if(!world.isRemote) {
+            TileEntityWirelessChargerPrivate tile = (TileEntityWirelessChargerPrivate) world.getTileEntity(x, y, z);
+            boolean access = tile.permitsAccess(player.getGameProfile());
+            if(access) {
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		
-		return new TileEntityWirelessChargerPrivate();
-	}
+                player.openGui(MainWI.instance, 1, world, x, y, z);
+            } else if(player.capabilities.isCreativeMode) {
+
+                player.openGui(MainWI.instance, 1, world, x, y, z);
+            } else {
+
+                player.addChatMessage(new ChatComponentTranslation("access.wirelesscharger.notallowed"));
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+
+        return new TileEntityWirelessChargerPrivate();
+    }
 
 }

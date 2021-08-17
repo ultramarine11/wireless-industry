@@ -9,7 +9,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TickHandlerWI {
 
 	public TickHandlerWI() {
-
 		FMLCommonHandler.instance().bus().register(this);
 	}
 

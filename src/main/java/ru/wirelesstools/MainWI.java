@@ -51,7 +51,6 @@ import ru.wirelesstools.item.weapon.ItemSaberLoot3;
 import ru.wirelesstools.item.weapon.ItemSaberLoot5;
 import ru.wirelesstools.item.weapon.VampireQuantumBow;
 import ru.wirelesstools.itemblock.*;
-import ru.wirelesstools.packets.WIPacketHandler;
 import ru.wirelesstools.proxy.ClientProxy;
 import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
@@ -160,9 +159,9 @@ public class MainWI {
                     .getInt(1024);
 
             int helmetChargingRadiuslocal = config.get(categoryTOOLS_ARMOR, "Helmet radius", 15, "Wireless Helmet charging radius (blocks)").getInt(15);
-            ConfigWI.helmetChargingRadius = helmetChargingRadiuslocal < 1 ? 1 : helmetChargingRadiuslocal;
+            ConfigWI.helmetChargingRadius = Math.max(1, helmetChargingRadiuslocal);
             int chestplateChargingRadiuslocal = config.get(categoryTOOLS_ARMOR, "Chestplate radius", 15, "Wireless Chestplate charging radius (blocks)").getInt(15);
-            ConfigWI.chestplateChargingRadius = chestplateChargingRadiuslocal < 1 ? 1 : chestplateChargingRadiuslocal;
+            ConfigWI.chestplateChargingRadius = Math.max(1, chestplateChargingRadiuslocal);
 
             ConfigWI.waspgenday = config.get("Advanced Solar", "Day Generation", 10).getInt(10);
             ConfigWI.waspgennight = config.get("Advanced Solar", "Night Generation", 5).getInt(5);
@@ -260,15 +259,15 @@ public class MainWI {
                     .getInt(32768);
 
             ConfigWI.maxstorageofchargers = config
-                    .get(categoryWIRELESSCHARGER, "MaxStorage", 100000000, "Maximum storage of wireless chargers (EU)")
+                    .get(categoryWIRELESSCHARGER, "MaxStorage", 100000000, "Maximum storage of wireless player chargers (EU)")
                     .getInt(100000000);
-            ConfigWI.tierofchargers = config.get(categoryWIRELESSCHARGER, "Tier", 10, "Tier of wireless chargers").getInt(10);
+            ConfigWI.tierofchargers = config.get(categoryWIRELESSCHARGER, "Tier", 10, "Tier of wireless player chargers").getInt(10);
 
             int secondslocal = config.get(categoryXPSENDER, "Interval", 1, "Delay (in seconds) to send XP to players, not less than 1").getInt(1);
-            ConfigWI.secondsXPSender = secondslocal < 1 ? 1 : secondslocal;
+            ConfigWI.secondsXPSender = Math.max(1, secondslocal);
 
             int xpgivenlocal = config.get(categoryXPSENDER, "XP amount", 2, "XP amount given to player per 1 operation").getInt(2);
-            ConfigWI.amountXPsent = xpgivenlocal < 1 ? 1 : xpgivenlocal;
+            ConfigWI.amountXPsent = Math.max(1, xpgivenlocal);
 
             ConfigWI.maxstorageXPSender = config.get(categoryXPSENDER, "MaxStorage", 40000000, "Maximum storage of energy")
                     .getInt(40000000);
@@ -280,10 +279,10 @@ public class MainWI {
             int stolenEUlocal = config
                     .get(categoryVAMPIREWEAPONS, "EU Stolen", 120000, "Stolen amount of EU energy from one armor part")
                     .getInt(120000);
-            ConfigWI.stolenEnergyEUFromArmor = stolenEUlocal > 0 ? stolenEUlocal : 0;
+            ConfigWI.stolenEnergyEUFromArmor = Math.max(0, stolenEUlocal);
 
             int vbowenergycost = config.get(categoryVAMPIREWEAPONS, "Cost", 1000, "EU cost per vamp bow shot").getInt(1000);
-            ConfigWI.vampBowShotEnergyCost = vbowenergycost > 0 ? vbowenergycost : 0;
+            ConfigWI.vampBowShotEnergyCost = Math.max(0, vbowenergycost);
 
             ConfigWI.vampBowMaxCharge = config.get(categoryVAMPIREWEAPONS, "MaxCharge", 300000, "Maximum charge (EU) of vampire bow").getInt(300000);
 
@@ -306,22 +305,25 @@ public class MainWI {
 
             int vajramaxchargelocal = config
                     .get(categoryTOOLS_ARMOR, "MaxCharge", 6000000, "Maximum charge of Lucky Vajra, not less than 3M EU").getInt(6000000);
-            ConfigWI.maxVajraCharge = vajramaxchargelocal < 3000000 ? 3000000 : vajramaxchargelocal;
+            ConfigWI.maxVajraCharge = Math.max(3000000, vajramaxchargelocal);
             int energyperoperationlocal = config
                     .get(categoryTOOLS_ARMOR, "Break cost", 3000, "Vajra energy using per block break, not more than half of maxcharge").getInt(3000);
-            int peroperationlimitlocal = ConfigWI.maxVajraCharge / 2;
-            ConfigWI.vajraEnergyPerOperation = energyperoperationlocal > peroperationlimitlocal
-                    ? peroperationlimitlocal : energyperoperationlocal;
+            ConfigWI.vajraEnergyPerOperation = Math.min(energyperoperationlocal, ConfigWI.maxVajraCharge / 2);
 
             ConfigWI.isServerJoinedChatMsgEnabled = config.get(categoryOTHER, "Enable message", false, "Determines if the message of available WI commands is shown when player joined server").getBoolean(false);
-            ConfigWI.isModLogEnabled = config.get(categoryOTHER, "Logging", true, "Enables console logging of Wireless Industry mod. Strongly recommended not to change this value").getBoolean(true);
-            ConfigWI.isIU_EuRf_priority = config.get(categoryENERGYBALANCE, "IU priority", true, "If true, the RF/EU multiplier will be loaded from Industrial Upgrade mod instead of WI mod").getBoolean(true);
+            ConfigWI.isModLogEnabled = config.get(categoryOTHER, "Logging", true, "Enables console logging of Wireless Industry mod. It is recommended to keep this value true").getBoolean(true);
+            ConfigWI.isIU_EuRf_priority = config.get(categoryENERGYBALANCE, "IU priority", true, "If true, the RF/EU multiplier will be loaded from Industrial Upgrade config instead of WI config").getBoolean(true);
 
             ConfigWI.enableWeaponsChatMsgs = config.get(categoryVAMPIREWEAPONS, "Enable chat msgs", true, "Enables player receiving info chat messages (e.g. when shooter absorbes XP from enemy who is hit by vampiric arrow)").getBoolean(true);
             ConfigWI.permissionLevelCommandClearOwner = config.get(categoryCOMMANDS, "permissionLevelCLO", 2, "Required permission level for /clo command")
                     .getInt(2);
             ConfigWI.permissionLevelCommandChangeOwner = config.get(categoryCOMMANDS, "permissionLevelSTOW", 2, "Required permission level for /stow command")
                     .getInt(2);
+
+            ConfigWI.machinesChargerMaxEnergy = config.get(categoryWIRELESSCHARGER, "MaxStorageMCh", 1000000000, "Maximum storage of wireless machines charger (EU)")
+                    .getInt(1000000000);
+            ConfigWI.machinesChargerTier = config.get(categoryWIRELESSCHARGER, "TierMCh", 11, "Tier of wireless machines charger")
+                    .getInt(11);
 
 
             if(ConfigWI.isModLogEnabled)
@@ -342,7 +344,7 @@ public class MainWI {
         } catch(Exception e) {
             if(ConfigWI.isModLogEnabled) {
                 LogHelperWI.error("CANNOT read \\\"coefficient rf\\\" value from " + IU_config);
-                LogHelperWI.warning("Setting the value of RF/EU multiplier from WI mod...");
+                LogHelperWI.warning("Setting the value of RF/EU multiplier from WI config...");
             }
         } finally {
             if(EuRf_WI_Config < 1) EuRf_WI_Config = 1;
@@ -353,7 +355,7 @@ public class MainWI {
                 ConfigWI.EUToRF_Multiplier = EuRf_WI_Config;
 
             if(ConfigWI.isModLogEnabled)
-                LogHelperWI.info("RF/EU multiplier was loaded from Industrial Upgrade mod, " + String.valueOf(ConfigWI.EUToRF_Multiplier)
+                LogHelperWI.info("RF/EU multiplier was loaded from Industrial Upgrade config, " + String.valueOf(ConfigWI.EUToRF_Multiplier)
                         + " RF = 1 EU");
         }
 
@@ -526,7 +528,6 @@ public class MainWI {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        WIPacketHandler.load();
         th = new TickHandlerWI();
 
         ServerProxy.Init();

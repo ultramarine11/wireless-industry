@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerXPSenderNew;
-import ru.wirelesstools.utils.UtilFormatGUI;
+import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiXPSenderNew extends GuiIC2 {
 
@@ -36,8 +36,8 @@ public class GuiXPSenderNew extends GuiIC2 {
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		String tileentityname = I18n.format(this.container.base.xpsendername);
 		String storageString = I18n.format("gui.wirind.xpsenderstorage") + ": ";
-		String energyformatted = UtilFormatGUI.formatNumber(this.container.base.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber(this.container.base.maxStorage);
+		String energyformatted = UtilFormatNumber.formatNumber(this.container.base.energy);
+		String maxstorageformatted = UtilFormatNumber.formatNumber(this.container.base.maxStorage);
 		String totalspentString = I18n.format("gui.wirind.xpsendertotalspent") + ": ";
 		String spentPerPlayerString = I18n.format("gui.wirind.per.player");
 		String radiusString = I18n.format("gui.wirind.radius.xp.send") + ": ";

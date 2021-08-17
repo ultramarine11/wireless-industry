@@ -35,9 +35,8 @@ public class CommandClearOwner extends CommandBase {
     @Override
     public void processCommand(ICommandSender commandSender, String[] args) {
         if(commandSender instanceof EntityPlayer) {
-            if(args.length > 1) {
+            if(args.length > 1)
                 throw new WrongUsageException(this.getCommandUsage(commandSender));
-            }
 
             switch(args.length) {
                 case 0: {

@@ -485,7 +485,6 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
     private void tryTransferXPToVamp(EntityPlayer victim, EntityPlayer shooter) {
 
         int victimplayerXP = ExperienceUtils.getPlayerXP(victim);
-
         if(victimplayerXP <= 0)
             return;
 

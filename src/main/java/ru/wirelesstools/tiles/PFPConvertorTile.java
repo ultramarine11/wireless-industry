@@ -56,7 +56,7 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
         this.tier = 8;
         this.pfpconvertorname = "pfpconverter.name";
         this.maxStorageEU = 10000000;
-        this.hot_energy_amount = 1000000.0;
+        this.hot_energy_amount = 1500000.0;
         this.outputSlot = new InvSlotOutput(this, "blockoutput", 1, 1);
         this.inputSlotA = new InvSlotProcessablePFP(this, "oreinput", 1, 1);
     }
@@ -96,7 +96,6 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
     public void operate(RecipeOutput output) {
         this.inputSlotA.consume();
         this.outputSlot.add(output.items);
-
     }
 
     public void setHotState(double amount) {
@@ -119,7 +118,7 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
         boolean needsInvUpdate = false;
 
         if(this.energyEU > 0) {
-            this.energyEU -= Math.min(125, this.energyEU);
+            this.energyEU -= Math.min(128, this.energyEU);
         }
 
         RecipeOutput output = this.getOutput();
@@ -129,12 +128,12 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
                 //    IC2.network.get().initiateTileEntityEvent(this, 0, true);
             }
 
-            ++this.progress;
+            this.progress++;
             this.energyEU -= (double) this.energyPerTick;
             if(this.progress >= this.operationLength) {
                 this.operate(output);
-                needsInvUpdate = true;
                 this.progress = 0;
+                needsInvUpdate = true;
                 //    IC2.network.get().initiateTileEntityEvent(this, 2, true);
             }
         } else {
@@ -179,7 +178,7 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
 
     public double gaugeProgressScaled() {
 
-        return (double) this.progress / (double) this.operationLength;
+        return this.progress / (double) this.operationLength;
     }
 
     public void writeToNBT(NBTTagCompound nbttagcompound) {

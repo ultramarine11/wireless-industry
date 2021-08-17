@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerVajraCharger;
 import ru.wirelesstools.tiles.TileVajraChargerElectric;
-import ru.wirelesstools.utils.UtilFormatGUI;
+import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiVajraCharger extends GuiContainer {
 
@@ -49,8 +49,8 @@ public class GuiVajraCharger extends GuiContainer {
 		String storageString = I18n.format("gui.wirind.vajrachargerstorage") + ": ";
 		String aboutstring = I18n.format("gui.wirind.vajracharger.about");
 
-		String energyformatted = UtilFormatGUI.formatNumber(this.tileentity.energy);
-		String maxstorageformatted = UtilFormatGUI.formatNumber(this.tileentity.maxStorage);
+		String energyformatted = UtilFormatNumber.formatNumber(this.tileentity.energy);
+		String maxstorageformatted = UtilFormatNumber.formatNumber(this.tileentity.maxStorage);
 
 		int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
 		int nmPos2 = (this.xSize
