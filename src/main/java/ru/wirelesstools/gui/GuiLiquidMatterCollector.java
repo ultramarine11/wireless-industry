@@ -42,7 +42,7 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
         String isActive = this.container.base.getIsActive() ?
                 StatCollector.translateToLocal("info.button.iscollectoron") : StatCollector.translateToLocal("info.button.iscollectoroff");
         int nmPos3 = (this.xSize - this.fontRendererObj.getStringWidth(isActive)) / 2;
-        this.fontRendererObj.drawString(isActive, nmPos3 + 60, 47, 4210752);
+        this.fontRendererObj.drawString(isActive, nmPos3 + 60, 57, 4210752);
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
@@ -72,7 +72,7 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
         int xGuiPos = (this.width - this.xSize) / 2;
         int yGuiPos = (this.height - this.ySize) / 2;
 
-        this.buttonList.add(new GuiButton(1, xGuiPos + 127, yGuiPos + 34, 40, 12,
+        this.buttonList.add(new GuiButton(1, xGuiPos + 123, yGuiPos + 34, 48, 20,
                 I18n.format("button.tooltip.toggle")));
     }
 

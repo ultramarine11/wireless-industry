@@ -2,6 +2,7 @@ package ru.wirelesstools.gui;
 
 import com.mojang.authlib.GameProfile;
 import ic2.core.IC2;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,6 +17,7 @@ public class GuiWPPersonal extends GuiContainer {
 
     private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/wirelesssolarpanel.png");
 
+    private GuiTextField textField;
     private TileWPBasePersonal tileentity;
 
     private GameProfile owner;
@@ -52,7 +54,6 @@ public class GuiWPPersonal extends GuiContainer {
                 this.drawTexturedModalRect(h + 24, k + 42, 210, 15, 14, 14);
             }
         }
-
     }
 
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
@@ -82,19 +83,31 @@ public class GuiWPPersonal extends GuiContainer {
 
     /*public void initGui() {
         super.initGui();
-        int xGuiPos = (this.width - this.xSize) / 2;
-        int yGuiPos = (this.height - this.ySize) / 2;
+        int guiX = (this.width - this.xSize) / 2;
+        int guiY = (this.height - this.ySize) / 2;
 
+        this.textField = new GuiTextField(this.fontRendererObj, guiX + 62, guiY + 24, 103, 12);
+        this.textField.setTextColor(-1);
+        this.textField.setDisabledTextColour(-1);
+        this.textField.setEnableBackgroundDrawing(false);
+        this.textField.setMaxStringLength(40);
         // 1 аргумент - ID кнопки,
         // 2 аргумент - её X позиция,
         // 3 аргумент - её Y позиция,
         // 4 аргумент - ширина,
         // 5 аргумент - высота,
         // 6 аргумент - текст.
-        this.buttonList.add(new GuiButton(2, xGuiPos + 18, yGuiPos + 62, 20, 20,
+        this.buttonList.add(new GuiButton(2, guiX + 18, guiY + 62, 20, 20,
                 I18n.format("button.increment.channel")));
-        this.buttonList.add(new GuiButton(3, xGuiPos + 45, yGuiPos + 62, 20, 20,
+        this.buttonList.add(new GuiButton(3, guiX + 45, guiY + 62, 20, 20,
                 I18n.format("button.decrement.channel")));
+    }*/
+
+    /*public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
+        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        this.textField.drawTextBox();
     }*/
 
     protected void mouseClicked(int i, int j, int k) {

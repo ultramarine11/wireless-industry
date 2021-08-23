@@ -2,7 +2,6 @@ package ru.wirelesstools.gui;
 
 import ic2.core.GuiIC2;
 import ic2.core.IC2;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -69,7 +68,7 @@ public class GuiXPSenderNew extends GuiIC2 {
 		
 		this.fontRendererObj.drawString(totalSpentAll, nmPos3, 27, 4210752);
 		this.fontRendererObj.drawString(playercountStringAll, nmPos4, 66, 4210752);
-		this.fontRendererObj.drawString(radiusAll, nmPos5 + 26, 53, 4210752);
+		this.fontRendererObj.drawString(radiusAll, nmPos5/* + 26*/, 54, 4210752);
 		this.fontRendererObj.drawString(xpAmountGiven, nmPos6 + 53, 40, 4210752);
 
 	}
@@ -86,8 +85,24 @@ public class GuiXPSenderNew extends GuiIC2 {
 			this.drawTexturedModalRect(this.xoffset + 63, this.yoffset + 39, 177, 15, l + 1, 10);
 		}
 	}
+
+	protected void mouseClicked(int i, int j, int k) {
+		super.mouseClicked(i, j, k);
+		int xMin = (this.width - this.xSize) / 2;
+		int yMin = (this.height - this.ySize) / 2;
+		int x = i - xMin;
+		int y = j - yMin;
+
+		if(x >= 8 && x <= 18 && y >= 51 && y <= 61) {
+			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 0);
+		}
+
+		if(x >= 24 && x <= 34 && y >= 51 && y <= 61) {
+			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
+		}
+	}
 	
-	public void initGui() {
+	/*public void initGui() {
 		super.initGui();
 		int xGuiPos = (this.width - this.xSize) / 2;
 		int yGuiPos = (this.height - this.ySize) / 2;
@@ -101,9 +116,9 @@ public class GuiXPSenderNew extends GuiIC2 {
 				I18n.format("button.xpsender.increment")));
 		this.buttonList.add(new GuiButton(1, xGuiPos + 7, yGuiPos + 50, 22, 12,
 				I18n.format("button.xpsender.decrement")));
-	}
+	}*/
 	
-	protected void actionPerformed(GuiButton guibutton) {
+	/*protected void actionPerformed(GuiButton guibutton) {
 		super.actionPerformed(guibutton);
 		if (guibutton.id == 0) {
 			
@@ -114,6 +129,6 @@ public class GuiXPSenderNew extends GuiIC2 {
 			
 			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
 		}
-	}
+	}*/
 
 }

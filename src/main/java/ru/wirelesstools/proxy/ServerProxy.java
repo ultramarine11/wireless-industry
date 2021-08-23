@@ -8,12 +8,14 @@ import net.minecraft.world.World;
 import ru.wirelesstools.command.CommandChangeOwnerArmor;
 import ru.wirelesstools.command.CommandClearOwner;
 import ru.wirelesstools.fluidmachines.TileExpGen;
+import ru.wirelesstools.recipes.Recipes;
 import ru.wirelesstools.tiles.*;
 
 public class ServerProxy implements IGuiHandler {
 
     public void initRecipes() {
-        PFPConvertorTile.init();
+       // PFPConvertorTile.init();
+        Recipes.initPFPRecipes();
     }
 
     public static void Init() {
