@@ -2,7 +2,6 @@ package ru.wirelesstools.gui;
 
 import ic2.core.GuiIC2;
 import ic2.core.IC2;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -32,7 +31,7 @@ public class GuiWChargerNew extends GuiIC2 {
 		return new ResourceLocation(Reference.IDNAME, "textures/gui/GuiWCharger.png");
 	}
 
-	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String ownername = this.container.base.getOwnerCharger().getName();
 
 		String tileentityname = I18n.format(this.container.base.chargerName);
@@ -58,17 +57,17 @@ public class GuiWChargerNew extends GuiIC2 {
 
 		if (this.container.base.getIsPrivate()) {
 			if (this.container.base.getOwnerCharger() != null) {
-				this.fontRendererObj.drawString(ownerAll, nmPos6, 14, 4210752);
+				this.fontRendererObj.drawString(ownerAll, nmPos6, 15, 4210752);
 			} else {
-				this.fontRendererObj.drawString(noownerwhy, nmPosNoOwner, 14, 4210752);
+				this.fontRendererObj.drawString(noownerwhy, nmPosNoOwner, 15, 4210752);
 			}
 
 		} else {
-			this.fontRendererObj.drawString(playercountStringAll, nmPos5, 14, 4210752);
+			this.fontRendererObj.drawString(playercountStringAll, nmPos5, 15, 4210752);
 		}
 
 		this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 4210752);
-		this.fontRendererObj.drawString(stringEnergyAll, nmPos2, 23, 4210752);
+		this.fontRendererObj.drawString(stringEnergyAll, nmPos2, 25, 4210752);
 		this.fontRendererObj.drawString(radiusAll, nmPos4, 50, 4210752);
 
 	}
@@ -99,7 +98,23 @@ public class GuiWChargerNew extends GuiIC2 {
 		}
 	}
 
-	public void initGui() {
+	protected void mouseClicked(int i, int j, int k) {
+		super.mouseClicked(i, j, k);
+		int xMin = (this.width - this.xSize) / 2;
+		int yMin = (this.height - this.ySize) / 2;
+		int x = i - xMin;
+		int y = j - yMin;
+
+		if(x >= 70 && x <= 80 && y >= 61 && y <= 71) {
+			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 0);
+		}
+
+		if(x >= 86 && x <= 96 && y >= 61 && y <= 71) {
+			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
+		}
+	}
+
+	/*public void initGui() {
 		super.initGui();
 		int xGuiPos = (this.width - this.xSize) / 2;
 		int yGuiPos = (this.height - this.ySize) / 2;
@@ -117,9 +132,9 @@ public class GuiWChargerNew extends GuiIC2 {
 				I18n.format("button.wcharger.increment")));
 		this.buttonList.add(new GuiButton(1, realcenter - centerOffsetButton - 11, yGuiPos + 60, xButtonSize, 12,
 				I18n.format("button.wcharger.decrement")));
-	}
+	}*/
 
-	protected void actionPerformed(GuiButton guibutton) {
+	/*protected void actionPerformed(GuiButton guibutton) {
 		super.actionPerformed(guibutton);
 		if (guibutton.id == 0) {
 			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 0);
@@ -128,6 +143,6 @@ public class GuiWChargerNew extends GuiIC2 {
 		if (guibutton.id == 1) {
 			IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
 		}
-	}
+	}*/
 
 }

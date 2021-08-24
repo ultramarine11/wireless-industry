@@ -23,7 +23,7 @@ public class ClientProxy extends ServerProxy {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(x, y, z);
 
-		if (te != null) {
+		/*if (te != null) {*/
 
 			if (te instanceof TileWPBasePersonal) {
 
@@ -57,7 +57,7 @@ public class ClientProxy extends ServerProxy {
 
 			if (te instanceof TileWirelessMachinesChargerBase) {
 
-				return new GuiWirelessMachinesCharger(player.inventory, (TileWirelessMachinesChargerBase) te);
+				return ((TileWirelessMachinesChargerBase) te).getGui(player, false);
 			}
 
 			if (te instanceof WirelessQuantumGeneratorBase) {
@@ -80,7 +80,7 @@ public class ClientProxy extends ServerProxy {
 				return ((PFPConvertorTile) te).getGui(player, false);
 			}
 
-		}
+		/*}*/
 
 		return null;
 	}

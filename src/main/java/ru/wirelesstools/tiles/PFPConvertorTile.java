@@ -118,7 +118,7 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
         boolean needsInvUpdate = false;
 
         if(this.energyEU > 0) {
-            this.energyEU -= Math.min(128, this.energyEU);
+            this.energyEU -= Math.min(256, this.energyEU);
         }
 
         RecipeOutput output = this.getOutput();
@@ -159,7 +159,6 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToEnergyNet = true;
         }
-
     }
 
     public void onUnloaded() {
@@ -167,17 +166,14 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
             this.addedToEnergyNet = false;
         }
-
         super.onUnloaded();
     }
 
     public int gaugeEnergyScaled(int i) {
-
         return (int) (this.energyEU * i / this.maxStorageEU);
     }
 
     public double gaugeProgressScaled() {
-
         return this.progress / (double) this.operationLength;
     }
 

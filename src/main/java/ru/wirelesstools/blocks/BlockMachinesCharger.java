@@ -12,32 +12,30 @@ import ru.wirelesstools.tiles.TileMachinesCharger;
 
 public class BlockMachinesCharger extends BlockContainer {
 
-	private IIcon[] icons;
+    private IIcon[] icons;
 
-	public BlockMachinesCharger(String unlocalizedName) {
-		super(Material.rock);
-		this.setBlockName(unlocalizedName);
-		this.setCreativeTab(MainWI.tabwi);
-		this.setBlockTextureName(Reference.PathTex + "blockLampCharger2");
-		this.setHardness(3.0F);
-		this.setResistance(5.0F);
-	}
+    public BlockMachinesCharger(String unlocalizedName) {
+        super(Material.rock);
+        this.setBlockName(unlocalizedName);
+        this.setCreativeTab(MainWI.tabwi);
+        this.setBlockTextureName(Reference.PathTex + "blockLampCharger2");
+        this.setHardness(3.0F);
+        this.setResistance(5.0F);
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 
-		return new TileMachinesCharger();
-	}
+        return new TileMachinesCharger();
+    }
 
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
-			float subY, float subZ) {
-		if (!world.isRemote) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
+                                    float subY, float subZ) {
+        if(!world.isRemote)
+            player.openGui(MainWI.instance, 1, world, x, y, z);
 
-			player.openGui(MainWI.instance, 1, world, x, y, z);
-		}
+        return true;
 
-		return true;
-
-	}
+    }
 
 }

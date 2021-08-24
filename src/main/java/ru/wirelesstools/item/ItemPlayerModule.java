@@ -9,11 +9,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
+import ru.wirelesstools.utils.MiscUtils;
+
 import java.util.List;
 
 public class ItemPlayerModule extends Item {
@@ -39,28 +41,25 @@ public class ItemPlayerModule extends Item {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityliving) {
-		if (entityliving.worldObj.isRemote) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingTarget) {
+		if (entityLivingTarget.worldObj.isRemote) {
 			return false;
 		}
 		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
 		if (player.isSneaking()) {
-			if (entityliving instanceof EntityPlayer) {
-				EntityPlayer playertarget = (EntityPlayer) entityliving;
+			if (entityLivingTarget instanceof EntityPlayer) {
+				EntityPlayer playerTarget = (EntityPlayer) entityLivingTarget;
 				NBTTagCompound ownerNbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(ownerNbt, playertarget.getGameProfile());
+				NBTUtil.func_152460_a(ownerNbt, playerTarget.getGameProfile());
 				nbt.setTag("playerModulegameprofile", ownerNbt);
-				player.addChatMessage(new ChatComponentTranslation(
-						EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("chat.message.module.player.set")
-								+ ": " + playertarget.getGameProfile().getName()));
+				MiscUtils.sendChatMessageColoredMulti(player, "chat.message.module.player.set", EnumChatFormatting.DARK_GREEN,
+						new ChatComponentText(": " + playerTarget.getGameProfile().getName()));
 				return true;
 			} else {
-				player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.LIGHT_PURPLE
-						+ StatCollector.translateToLocal("chat.message.module.only.player")));
+				MiscUtils.sendColoredMessageToPlayer(player, "chat.message.module.only.player", EnumChatFormatting.LIGHT_PURPLE);
 			}
 		} else {
-			player.addChatMessage(new ChatComponentTranslation(
-					EnumChatFormatting.RED + StatCollector.translateToLocal("chat.message.module.sneak")));
+			MiscUtils.sendColoredMessageToPlayer(player, "chat.message.module.sneak", EnumChatFormatting.RED);
 		}
 		return false;
 	}

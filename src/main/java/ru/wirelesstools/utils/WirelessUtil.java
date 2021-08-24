@@ -80,17 +80,21 @@ public class WirelessUtil {
         return ret;
     }
 
-    public static void iterateIEnergySinkTiles(TileWirelessMachinesChargerBase charger) {
+    public static void iterateIEnergySinkTiles(TileWirelessMachinesChargerBase charger, boolean chargeEU, boolean chargeRF) {
         if(!charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap
                 .isEmpty()) {
             for(TileEntity tile : new ArrayList<TileEntity>(charger.getWorldObj()
                     .getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap.values())) {
                 if(tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
-                    IEnergySink sink = (IEnergySink) tile;
-                    WirelessUtil.sendEnergyToEnergySink(charger, sink);
+                    if(chargeEU) {
+                        IEnergySink sink = (IEnergySink) tile;
+                        WirelessUtil.sendEnergyToEnergySink(charger, sink);
+                    }
                 } else if(tile instanceof IEnergyReceiver && !(tile instanceof IEnergySink) && !(tile instanceof TileWirelessMachinesChargerBase)) {
-                    IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                    WirelessUtil.sendEnergyToRFReceiver(charger, receiver);
+                    if(chargeRF) {
+                        IEnergyReceiver receiver = (IEnergyReceiver) tile;
+                        WirelessUtil.sendEnergyToRFReceiver(charger, receiver);
+                    }
                 }
             }
         }

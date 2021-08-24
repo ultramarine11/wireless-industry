@@ -314,3 +314,5 @@ pfpconverter.name=Purgatory-Flaming Perfect Converter
 tile.pfpconverter.name=Purgatory-Flaming Perfect Converter
 command.wi.msg.changed.armor.owner=Successfully changed armor owner
 command.wi.msg.no.private.armor=No private armor was found in inventory
+gui.wirind.tooltip.charger.switch.eu=Click to toggle EU charging
+gui.wirind.tooltip.charger.switch.rf=Click to toggle RF charging

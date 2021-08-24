@@ -28,7 +28,7 @@ public class ServerProxy implements IGuiHandler {
 
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if(te != null) {
+        /*if(te != null) {*/
 
             if(te instanceof TileWPBasePersonal) {
 
@@ -57,7 +57,7 @@ public class ServerProxy implements IGuiHandler {
 
             if(te instanceof TileWirelessMachinesChargerBase) {
 
-                return ((TileWirelessMachinesChargerBase) te).getGuiContainer(player.inventory);
+                return ((TileWirelessMachinesChargerBase) te).getGuiContainer(player);
             }
 
             if(te instanceof WirelessQuantumGeneratorBase) {
@@ -80,7 +80,7 @@ public class ServerProxy implements IGuiHandler {
                 return ((PFPConvertorTile) te).getGuiContainer(player);
             }
 
-        }
+        /*}*/
 
         return null;
     }

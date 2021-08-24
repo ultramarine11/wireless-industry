@@ -25,17 +25,13 @@ public class BlockPFPConverter extends BlockContainer {
 
     public IIcon getIcon(int side, int metadata) {
         // 0=bottom, 1=top, 2,3,4,5 = sides
-        switch (side) {
+        switch(side) {
             case 0:
-                return this.icons[0];
             case 1:
                 return this.icons[0];
             case 2:
-                return this.icons[2];
             case 3:
-                return this.icons[2];
             case 4:
-                return this.icons[2];
             case 5:
                 return this.icons[2];
         }
@@ -57,7 +53,7 @@ public class BlockPFPConverter extends BlockContainer {
 
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
                                     float subY, float subZ) {
-        if (!world.isRemote) {
+        if(!world.isRemote) {
             if(!player.isSneaking())
                 player.openGui(MainWI.instance, 1, world, x, y, z);
         }
