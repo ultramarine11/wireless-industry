@@ -37,12 +37,9 @@ public class WirelessUtil {
     }
 
     private static void sendEnergyToRFReceiver(IWirelessMachineCharger charger, IEnergyReceiver receiver) {
-        int demandedenergy = receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN);
-        if(demandedenergy > 0) {
-            double energytosend = charger.getChargerEnergy() * ConfigWI.EUToRF_Multiplier;
-            int euFinallySent = receiver.receiveEnergy(ForgeDirection.UNKNOWN, (int) (charger.getChargerEnergy() * ConfigWI.EUToRF_Multiplier),
-                    false) / ConfigWI.EUToRF_Multiplier;
-            charger.decreaseEnergy(euFinallySent);
+        if((receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN)) > 0) {
+            int sentRF = receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false);
+            charger.decreaseEnergyRF(sentRF);
         }
     }
 
@@ -55,7 +52,7 @@ public class WirelessUtil {
         }
     }
 
-    public static boolean iterateIEnergySinkTilesQGenBool(WirelessQuantumGeneratorBase qgen) {
+    public static boolean iterateEnergyTilesQGen(WirelessQuantumGeneratorBase qgen) {
         boolean ret = false;
         if(!qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap.isEmpty()) {
             for(TileEntity tile : new ArrayList<TileEntity>(qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
@@ -80,7 +77,7 @@ public class WirelessUtil {
         return ret;
     }
 
-    public static void iterateIEnergySinkTiles(TileWirelessMachinesChargerBase charger, boolean chargeEU, boolean chargeRF) {
+    public static void iterateEnergyTiles(TileWirelessMachinesChargerBase charger, boolean chargeEU, boolean chargeRF) {
         if(!charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap
                 .isEmpty()) {
             for(TileEntity tile : new ArrayList<TileEntity>(charger.getWorldObj()

@@ -16,7 +16,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -30,7 +29,7 @@ import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.entityarrow.ArrowVampEUNew;
 import ru.wirelesstools.entityarrow.ArrowVampXPNew;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.List;
 
@@ -173,15 +172,10 @@ public class VampireQuantumBow extends ItemBow implements IElectricItem {
             boolean vampmodenew = !nbt.getBoolean("vampiremode");
             nbt.setBoolean("vampiremode", vampmodenew);
             if(ConfigWI.enableWeaponsChatMsgs) {
-                if(vampmodenew) {
-                    MiscUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.xp", EnumChatFormatting.YELLOW);
-                    /*player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.YELLOW
-                            + StatCollector.translateToLocal("info.chatmessage.vampmode.xp")));*/
-                } else {
-                    MiscUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.eu", EnumChatFormatting.DARK_AQUA);
-                    /*player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.DARK_AQUA
-                            + StatCollector.translateToLocal("info.chatmessage.vampmode.eu")));*/
-                }
+                if(vampmodenew)
+                    HelperUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.xp", EnumChatFormatting.YELLOW);
+                else
+                    HelperUtils.sendColoredMessageToPlayer(player, "info.chatmessage.vampmode.eu", EnumChatFormatting.DARK_AQUA);
             }
             return itemStack;
         }

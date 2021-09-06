@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.item.armor.IPrivateArmor;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +47,10 @@ public class CommandClearOwner extends CommandBase {
                         if(stack.getItem() instanceof IPrivateArmor) {
                             IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                             if(armor.getArmorOwner(stack) == null) {
-                                MiscUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.no.owner");
+                                HelperUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.no.owner");
                             } else {
                                 armor.clearOwner(stack);
-                                MiscUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.cleared.owner");
+                                HelperUtils.sendMessageToPlayer(senderplayer, "command.wi.msg.cleared.owner");
                             }
                         }
                     }
@@ -66,7 +66,7 @@ public class CommandClearOwner extends CommandBase {
                             if(stack.getItem() instanceof IPrivateArmor) {
                                 IPrivateArmor armor = (IPrivateArmor) stack.getItem();
                                 armor.clearOwner(stack);
-                                MiscUtils.sendMessageToPlayer(playersender, "command.wi.msg.cleared.owner");
+                                HelperUtils.sendMessageToPlayer(playersender, "command.wi.msg.cleared.owner");
                             }
                         }
                     } else {
@@ -79,11 +79,11 @@ public class CommandClearOwner extends CommandBase {
                                 armor.clearOwner(stack);
                                 if(!success)
                                     success = true;
-                                MiscUtils.sendMessageToPlayer(playermp, "command.wi.msg.cleared.from.inv");
+                                HelperUtils.sendMessageToPlayer(playermp, "command.wi.msg.cleared.from.inv");
                             }
                         }
                         if(success)
-                            MiscUtils.sendChatMessageMulti(playersender, "command.wi.msg.cleared.owner.from", new ChatComponentText(": " + playermp.getGameProfile().getName()));
+                            HelperUtils.sendChatMessageMulti(playersender, "command.wi.msg.cleared.owner.from", new ChatComponentText(": " + playermp.getGameProfile().getName()));
                     }
                     break;
                 }

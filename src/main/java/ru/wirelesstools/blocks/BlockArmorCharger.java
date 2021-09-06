@@ -12,7 +12,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 public class BlockArmorCharger extends Block implements ITileEntityProvider {
 
@@ -26,7 +26,6 @@ public class BlockArmorCharger extends Block implements ITileEntityProvider {
     }
 
     public TileEntity createNewTileEntity(World world, int meta) {
-
         return null;
     }
 
@@ -40,16 +39,16 @@ public class BlockArmorCharger extends Block implements ITileEntityProvider {
                     player.inventoryContainer.detectAndSendChanges();
                     switch(i) {
                         case 0:
-                            MiscUtils.sendColoredMessageToPlayer(player, "boots.successfully.charged", EnumChatFormatting.AQUA);
+                            HelperUtils.sendColoredMessageToPlayer(player, "boots.successfully.charged", EnumChatFormatting.AQUA);
                             break;
                         case 1:
-                            MiscUtils.sendColoredMessageToPlayer(player, "leggings.successfully.charged", EnumChatFormatting.GREEN);
+                            HelperUtils.sendColoredMessageToPlayer(player, "leggings.successfully.charged", EnumChatFormatting.GREEN);
                             break;
                         case 2:
-                            MiscUtils.sendColoredMessageToPlayer(player, "armorchest.successfully.charged", EnumChatFormatting.RED);
+                            HelperUtils.sendColoredMessageToPlayer(player, "armorchest.successfully.charged", EnumChatFormatting.RED);
                             break;
                         case 3:
-                            MiscUtils.sendColoredMessageToPlayer(player, "helmet.successfully.charged", EnumChatFormatting.YELLOW);
+                            HelperUtils.sendColoredMessageToPlayer(player, "helmet.successfully.charged", EnumChatFormatting.YELLOW);
                             break;
                     }
                 }
@@ -79,7 +78,6 @@ public class BlockArmorCharger extends Block implements ITileEntityProvider {
         }
 
         return true;
-
     }
 
 }

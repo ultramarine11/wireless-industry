@@ -29,7 +29,7 @@ import org.lwjgl.input.Keyboard;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -77,9 +77,9 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             if(!world.isRemote) {
                 nbt.setBoolean("active", active);
                 if(active) {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.on", EnumChatFormatting.DARK_GREEN);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.on", EnumChatFormatting.DARK_GREEN);
                 } else {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.off", EnumChatFormatting.DARK_RED);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesscharge.off", EnumChatFormatting.DARK_RED);
                 }
             }
         }
@@ -90,10 +90,10 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             if(!world.isRemote) {
                 nbt.setBoolean("potionbuffs", buffmode);
                 if(buffmode) {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs1.on", EnumChatFormatting.DARK_AQUA);
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs2.on", EnumChatFormatting.DARK_AQUA);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs1.on", EnumChatFormatting.DARK_AQUA);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs2.on", EnumChatFormatting.DARK_AQUA);
                 } else {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs.off", EnumChatFormatting.YELLOW);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.chestplate.buffs.off", EnumChatFormatting.YELLOW);
                 }
             }
         }
@@ -184,14 +184,14 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
             if(current.getItem() instanceof QuantumChestplateWirelessCharge)
                 continue;
             if(current.getItem() instanceof IElectricItem)
-                MiscUtils.chargeEUItemFromArmor(current, thisarmor);
+                HelperUtils.chargeEUItemFromArmor(current, thisarmor);
         }
 
         for(ItemStack current : player.inventory.mainInventory) {
             if(current == null || current.getItem() instanceof ItemDebug)
                 continue;
             if(current.getItem() instanceof IElectricItem)
-                MiscUtils.chargeEUItemFromArmor(current, thisarmor);
+                HelperUtils.chargeEUItemFromArmor(current, thisarmor);
         }
     }
 

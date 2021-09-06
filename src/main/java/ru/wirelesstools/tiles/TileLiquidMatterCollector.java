@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
+import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerLiquidMatterCollector;
 import ru.wirelesstools.gui.GuiLiquidMatterCollector;
 
@@ -34,7 +35,7 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
     }
 
     public TileLiquidMatterCollector(String collectorname) {
-        this.fluidTank = new FluidTank(1000000); // default 1000000
+        this.fluidTank = new FluidTank(ConfigWI.matterCollectorCapacity);
         this.mattercollectorname = collectorname;
     //    this.outputSlot = new InvSlotOutput(this, "output", 1, 1);
     //    this.containerslot = new InvSlotConsumableLiquidByList(this, "containerslot", 2, InvSlot.Access.I, 1, InvSlot.InvSide.TOP, InvSlotConsumableLiquid.OpType.Fill, new Fluid[]{BlocksItems.getFluid(InternalName.fluidUuMatter)});
@@ -56,34 +57,28 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
     }
 
     public int getPercentagePart(int factor) {
-
         return this.getFluidTank().getFluidAmount() <= 0
                 ? 0 : (int)(factor * (double)this.getFluidTank().getFluidAmount() / this.getFluidTank().getCapacity());
     }
 
     public double getLiquidAmountPercentage() {
-
         return this.getFluidTank().getFluidAmount() <= 0
                 ? 0.0 : 100.0 * (double)this.getFluidTank().getFluidAmount() / (double)this.getFluidTank().getCapacity();
     }
 
     public int getIntegerPercentage() {
-
         return (int) this.getLiquidAmountPercentage();
     }
 
     public boolean getIsActive() {
-
         return this.isActive;
     }
 
     public void reverseActive() {
-
         this.isActive = !this.isActive;
     }
 
     public FluidTank getFluidTank() {
-
         return this.fluidTank;
     }
 
@@ -95,21 +90,19 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
                 if(drainedsim != null) {
                     int fillsim = this.getFluidTank().fill(drainedsim, false);
                     int realtransferred = Math.min(fillsim, drainedsim.amount);
-                    int filled = this.getFluidTank().fill(tiletank.getFluidTank().drain(realtransferred, true), true);
+                    this.getFluidTank().fill(tiletank.getFluidTank().drain(realtransferred, true), true);
                 }
             }
         }
     }
 
     public int gaugeLiquidScaled(int i) {
-
         return this.getFluidTank().getFluidAmount() <= 0
                 ? 0 : this.getFluidTank().getFluidAmount() * i / this.getFluidTank().getCapacity();
     }
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-
         return !this.canFill(from, resource.getFluid()) ? 0 : this.getFluidTank().fill(resource, doFill);
     }
 
@@ -124,31 +117,26 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-
         return !this.canDrain(from, null) ? null : this.getFluidTank().drain(maxDrain, doDrain);
     }
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
-
         return fluid == BlocksItems.getFluid(InternalName.fluidUuMatter);
     }
 
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
-
         return true;
     }
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-
         return new FluidTankInfo[]{this.getFluidTank().getInfo()};
     }
 
     @Override
     public String getInventoryName() {
-
         return null;
     }
 
@@ -168,19 +156,16 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
 
     @Override
     public ContainerBase<?> getGuiContainer(EntityPlayer player) {
-
         return new ContainerLiquidMatterCollector(player, this);
     }
 
     @SideOnly(value = Side.CLIENT)
     public GuiScreen getGui(EntityPlayer player, boolean isAdmin) {
-
         return new GuiLiquidMatterCollector(new ContainerLiquidMatterCollector(player, this));
     }
 
     @Override
     public void onGuiClosed(EntityPlayer entityPlayer) {
-
     }
 
     @Override

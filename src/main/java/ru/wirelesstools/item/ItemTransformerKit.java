@@ -7,7 +7,6 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -15,7 +14,7 @@ import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.fluidmachines.TileExpGen;
 import ru.wirelesstools.tiles.*;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class ItemTransformerKit extends Item {
                     if (telocal instanceof WirelessQuantumGeneratorBase) {
                         WirelessQuantumGeneratorBase teqgen = (WirelessQuantumGeneratorBase) telocal;
                         teqgen.setPlayerProfile(player.getGameProfile());
-                        MiscUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
                         /*player.addChatMessage(new ChatComponentTranslation(
                                 EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("chat.message.now.you.are.owner")));*/
                         return true;
@@ -84,7 +83,7 @@ public class ItemTransformerKit extends Item {
                     if (telocal instanceof TileWirelessStorageBasePersonal) {
                         TileWirelessStorageBasePersonal tewsp = (TileWirelessStorageBasePersonal) telocal;
                         tewsp.setPlayerProfile(player.getGameProfile());
-                        MiscUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
                         /*player.addChatMessage(new ChatComponentTranslation(
                                 EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("chat.message.now.you.are.owner")));*/
                         return true;
@@ -93,7 +92,7 @@ public class ItemTransformerKit extends Item {
                     if (telocal instanceof TileEntityWirelessChargerPrivate) {
                         TileEntityWirelessChargerPrivate tewchp = (TileEntityWirelessChargerPrivate) telocal;
                         tewchp.setPlayerProfile(player.getGameProfile());
-                        MiscUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
                         /*player.addChatMessage(new ChatComponentTranslation(
                                 EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("chat.message.now.you.are.owner")));*/
                         return true;
@@ -102,7 +101,7 @@ public class ItemTransformerKit extends Item {
                     if (telocal instanceof TileWPBasePersonal) {
                         TileWPBasePersonal tewp = (TileWPBasePersonal) telocal;
                         tewp.setPlayerProfile(player.getGameProfile());
-                        MiscUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.now.you.are.owner", EnumChatFormatting.LIGHT_PURPLE);
                         /*player.addChatMessage(new ChatComponentTranslation(
                                 EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("chat.message.now.you.are.owner")));*/
                         return true;

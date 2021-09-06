@@ -25,7 +25,7 @@ import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.tiles.TileVajraCharger;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 import ru.wirelesstools.utils.UtilFormatNumber;
 
 import java.util.HashSet;
@@ -87,12 +87,12 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
             TileEntity te = world.getTileEntity(i, j, k);
             if(te instanceof TileVajraCharger) {
                 TileVajraCharger tilewch = (TileVajraCharger) te;
-                if(tilewch.getStored() > 0 && ElectricItem.manager.charge(itemstack, Integer.MAX_VALUE,
+                if(tilewch.energy > 0 && ElectricItem.manager.charge(itemstack, Integer.MAX_VALUE,
                         Integer.MAX_VALUE, true, true) > 0) {
-                    double energySent = ElectricItem.manager.charge(itemstack, tilewch.getStored(),
+                    double energySent = ElectricItem.manager.charge(itemstack, tilewch.energy,
                             Integer.MAX_VALUE, true, false);
-                    tilewch.addEnergy((int) -energySent);
-                    MiscUtils.sendChatMessageColoredMulti(entityplayer, "chat.message.luckyvajra.charged", EnumChatFormatting.BLUE,
+                    tilewch.decreaseEnergy(energySent);
+                    HelperUtils.sendChatMessageColoredMulti(entityplayer, "chat.message.luckyvajra.charged", EnumChatFormatting.BLUE,
                             new ChatComponentText(" " + UtilFormatNumber.formatNumber(energySent) + " EU").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.AQUA)));
                 }
                 return true;
@@ -107,16 +107,37 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
         if(!world.isRemote) {
             if(player.isSneaking()) {
                 boolean modenew = !nbt.getBoolean("vajramode");
-                nbt.setBoolean("vajramode", modenew);
-                Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
-                if(modenew) {
-                    enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
-                } else {
-                    enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
+                if(ConfigWI.enableVajraDischargingAfterEnchant) {
+                    if(ElectricItem.manager.getCharge(stack) < ConfigWI.vajraEnchantDischargeEnergyAmount) {
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.vajra.not.enough.energy", EnumChatFormatting.RED);
+                        return stack;
+                    }
+                    else {
+                        nbt.setBoolean("vajramode", modenew);
+                        Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
+                        if(modenew) {
+                            enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
+                            HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
+                        } else {
+                            enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
+                            HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
+                        }
+                        ElectricItem.manager.discharge(stack, ConfigWI.vajraEnchantDischargeEnergyAmount, Integer.MAX_VALUE, true, false, false);
+                        EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
+                    }
                 }
-                EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
+                else {
+                    nbt.setBoolean("vajramode", modenew);
+                    Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
+                    if(modenew) {
+                        enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
+                    } else {
+                        enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
+                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
+                    }
+                    EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
+                }
             }
         }
         return stack;

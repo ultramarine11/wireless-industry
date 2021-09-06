@@ -36,7 +36,6 @@ public class GuiVajraCharger extends GuiContainer {
 		// Последние два - ширина и высота объекта (x пикселей, y пикселей).
 		this.drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
 		if (this.tileentity.energy > 0) {
-
 			int l = this.tileentity.gaugeEnergyScaled(77);
 			this.drawTexturedModalRect(h + 49, k + 41, 177, 15, l + 1, 10);
 		}

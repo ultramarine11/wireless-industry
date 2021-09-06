@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.container.ContainerLiquidMatterCollector;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 public class GuiLiquidMatterCollector extends GuiIC2  {
 
@@ -64,7 +64,7 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
             }
         }
 
-        MiscUtils.renderPercentageCircle(this, this.container.base.getPercentagePart(32), this.xoffset, this.yoffset);
+        HelperUtils.renderPercentageCircle(this, this.container.base.getPercentagePart(32), this.xoffset, this.yoffset);
     }
 
     public void initGui() {

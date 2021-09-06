@@ -24,7 +24,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
 import ru.wirelesstools.config.ConfigWI;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -196,7 +196,7 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
                     continue;
                 if(st2.getItem() instanceof IEnergyContainerItem) {
                     if(ElectricItem.manager.getCharge(stack) > 0.0)
-                        MiscUtils.chargeRFItemFromArmor2(stack, st2);
+                        HelperUtils.chargeRFItemFromArmor2(stack, st2);
                 }
             }
         }
@@ -219,9 +219,9 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
             if(IC2.platform.isSimulating()) {
                 nbt.setBoolean("active", active);
                 if(active) {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesschargerf.on", EnumChatFormatting.DARK_GREEN);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesschargerf.on", EnumChatFormatting.DARK_GREEN);
                 } else {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesschargerf.off", EnumChatFormatting.DARK_RED);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.wirelesschargerf.off", EnumChatFormatting.DARK_RED);
                 }
             }
         }
@@ -272,14 +272,14 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
             if(current == null)
                 continue;
             if(current.getItem() instanceof IEnergyContainerItem)
-                MiscUtils.chargeRFItemFromArmor2(thisarmor, current);
+                HelperUtils.chargeRFItemFromArmor2(thisarmor, current);
         }
 
         for(ItemStack current : player.inventory.mainInventory) {
             if(current == null)
                 continue;
             if(current.getItem() instanceof IEnergyContainerItem)
-                MiscUtils.chargeRFItemFromArmor2(thisarmor, current);
+                HelperUtils.chargeRFItemFromArmor2(thisarmor, current);
         }
     }
 

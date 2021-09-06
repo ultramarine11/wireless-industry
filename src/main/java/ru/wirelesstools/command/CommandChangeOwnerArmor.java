@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.item.armor.IPrivateArmor;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,16 +76,16 @@ public class CommandChangeOwnerArmor extends CommandBase {
             }
 
             if(found_armor) {
-                MiscUtils.sendMessageToPlayer(playerSender, "command.wi.msg.changed.armor.owner");
+                HelperUtils.sendMessageToPlayer(playerSender, "command.wi.msg.changed.armor.owner");
             } else {
-                MiscUtils.sendMessageToPlayer(playerSender, "command.wi.msg.no.private.armor");
+                HelperUtils.sendMessageToPlayer(playerSender, "command.wi.msg.no.private.armor");
             }
         }
     }
 
     private boolean checkPlayerTargetInv(EntityPlayerMP targetPlayer, EntityPlayerMP newOwner) {
         boolean found = false;
-        for(ItemStack stack : MiscUtils.getTotalPlayerInventory(targetPlayer)) {
+        for(ItemStack stack : HelperUtils.getTotalPlayerInventory(targetPlayer)) {
             if(stack == null)
                 continue;
             if(stack.getItem() instanceof IPrivateArmor) {

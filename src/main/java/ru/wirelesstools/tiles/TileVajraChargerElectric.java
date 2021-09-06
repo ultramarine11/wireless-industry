@@ -3,7 +3,6 @@ package ru.wirelesstools.tiles;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.tile.IEnergyStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -15,20 +14,17 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerVajraCharger;
 
-public class TileVajraChargerElectric extends TileEntity implements IEnergySink, IEnergyStorage, IInventory {
+public class TileVajraChargerElectric extends TileEntity implements IEnergySink, IInventory {
 
 	public int tier;
 	public int maxStorage;
-	public int output;
 	public double energy = 0;
 	private boolean addedToEnergyNet;
-	public boolean loaded;
+	public boolean loaded = false;
 
-	public TileVajraChargerElectric(int tier1, int output1, int storage1) {
+	public TileVajraChargerElectric(int tier1, int storage1) {
 		this.tier = tier1;
-		this.output = output1;
 		this.maxStorage = storage1;
-		this.loaded = false;
 	}
 
 	public void validate() {
@@ -51,6 +47,10 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 		super.invalidate();
 	}
 
+	public void decreaseEnergy(double amountdecrease) {
+		this.energy -= Math.min(this.energy, amountdecrease);
+	}
+
 	public void onUnloaded() {
 		if (!this.worldObj.isRemote && this.addedToEnergyNet) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
@@ -60,12 +60,10 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 	}
 
 	public Container getGuiContainer(InventoryPlayer inventoryplayer) {
-
 		return new ContainerVajraCharger(inventoryplayer, this);
 	}
 
 	public int gaugeEnergyScaled(int i) {
-
 		return (int) (this.energy * i / this.maxStorage);
 	}
 
@@ -77,47 +75,37 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 		}
 
 		if (this.energy > this.maxStorage) {
-			
 			this.energy = this.maxStorage;
 		}
-		
-		this.markDirty();
-
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-
 		return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
 	}
 
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
 		this.energy = nbttagcompound.getDouble("energy");
 	}
 
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
 		nbttagcompound.setDouble("energy", this.energy);
 	}
 
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity nameTileEntity, ForgeDirection nameForgeDirection) {
-
 		return true;
 	}
 
 	@Override
 	public double getDemandedEnergy() {
-
 		return (double) this.maxStorage - this.energy;
 	}
 
 	@Override
 	public int getSinkTier() {
-
 		return this.tier;
 	}
 
@@ -135,42 +123,6 @@ public class TileVajraChargerElectric extends TileEntity implements IEnergySink,
 			this.energy += amount;
 			return 0.0D;
 		}
-	}
-
-	@Override
-	public int getStored() {
-		return (int) this.energy;
-	}
-
-	@Override
-	public void setStored(int energy) {
-		this.energy = energy;
-	}
-
-	@Override
-	public int addEnergy(int amount) {
-		this.energy += amount;
-		return amount;
-	}
-
-	@Override
-	public int getCapacity() {
-		return this.maxStorage;
-	}
-
-	@Override
-	public int getOutput() {
-		return this.output;
-	}
-
-	@Override
-	public double getOutputEnergyUnitsPerTick() {
-		return 128;
-	}
-
-	@Override
-	public boolean isTeleporterCompatible(ForgeDirection side) {
-		return false;
 	}
 
 	@Override

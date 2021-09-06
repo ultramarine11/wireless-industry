@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerWirelessMachinesChargerNew;
 import ru.wirelesstools.gui.GuiWirelessMachinesChargerNew;
 import ru.wirelesstools.utils.WirelessUtil;
@@ -23,8 +22,10 @@ import ru.wirelesstools.utils.WirelessUtil;
 public class TileWirelessMachinesChargerBase extends TileEntityInventory
         implements IEnergySink, IWirelessMachineCharger, IEnergyReceiver, INetworkClientTileEntityEventListener, IHasGui {
 
-    protected int maxStorage;
-    public double energy;
+    public int energyRF;
+    protected int maxStorageRF;
+    protected double maxStorageEU;
+    public double energyEU;
     protected int tier;
     public String chargername;
     private boolean addedToEnergyNet = false;
@@ -32,17 +33,23 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     private boolean chargeEU;
     private boolean chargeRF;
 
-    public TileWirelessMachinesChargerBase(int maxStorage, int tier, String name) {
-        this.energy = 0.0D;
-        this.maxStorage = maxStorage;
+    public TileWirelessMachinesChargerBase(double maxStorageEU, int maxStorageRF, int tier, String name) {
+        this.energyEU = 0.0;
+        this.maxStorageEU = maxStorageEU;
+        this.energyRF = 0;
+        this.maxStorageRF = maxStorageRF;
         this.chargername = name;
         this.tier = tier;
         this.chargeEU = true;
         this.chargeRF = true;
     }
 
-    public int gaugeEnergyScaled(int i) {
-        return (int) (this.energy * i / this.maxStorage);
+    public int gaugeEUScaled(int i) {
+        return (int) (this.energyEU * i / this.maxStorageEU);
+    }
+
+    public int gaugeRFScaled(int i) {
+        return (int) ((double) this.energyRF * i / this.maxStorageRF);
     }
 
     public boolean isChargingEU() {
@@ -59,7 +66,6 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToEnergyNet = true;
         }
-
     }
 
     public void onUnloaded() {
@@ -67,63 +73,20 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
             this.addedToEnergyNet = false;
         }
-
         super.onUnloaded();
     }
 
     @Override
     protected void updateEntityServer() {
         super.updateEntityServer();
-
-        if(this.energy > this.maxStorage) {
-            this.energy = this.maxStorage;
-            this.markDirty();
-        }
-
-        if(this.energy > 0.0)
-            WirelessUtil.iterateIEnergySinkTiles(this, this.chargeEU, this.chargeRF);
+        WirelessUtil.iterateEnergyTiles(this, this.chargeEU, this.chargeRF);
     }
-
-    /*@Override
-    public void updateEntity() {
-        super.updateEntity();
-        if(this.worldObj.isRemote)
-            return;
-
-        if(this.energy > this.maxStorage) {
-            this.energy = this.maxStorage;
-            this.markDirty();
-        }
-
-        if(this.energy > 0.0)
-            WirelessUtil.iterateIEnergySinkTiles(this, this.chargeEU, this.chargeRF);
-    }*/
-
-    /*public void validate() {
-        super.validate();
-        if(!this.worldObj.isRemote) {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-            this.addedToEnergyNet = true;
-        }
-        this.loaded = true;
-    }*/
-
-    /*public void invalidate() {
-        if(this.loaded) {
-            if(!this.worldObj.isRemote && this.addedToEnergyNet) {
-                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-                this.addedToEnergyNet = false;
-            }
-            this.loaded = false;
-        }
-        super.invalidate();
-    }*/
 
     @Override
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
-        nbttagcompound.setDouble("energy", this.energy);
-        nbttagcompound.setInteger("maxenergy", this.maxStorage);
+        nbttagcompound.setDouble("energy", this.energyEU);
+        nbttagcompound.setInteger("energyRF", this.energyRF);
         nbttagcompound.setBoolean("chargeEU", this.chargeEU);
         nbttagcompound.setBoolean("chargeRF", this.chargeRF);
     }
@@ -136,14 +99,19 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
-        this.energy = nbttagcompound.getDouble("energy");
-        this.maxStorage = nbttagcompound.getInteger("maxenergy");
+        this.energyEU = nbttagcompound.getDouble("energy");
+        this.energyRF = nbttagcompound.getInteger("energyRF");
         this.chargeEU = nbttagcompound.getBoolean("chargeEU");
         this.chargeRF = nbttagcompound.getBoolean("chargeRF");
     }
 
     public void decreaseEnergy(double amountdecrease) {
-        this.energy -= Math.min(this.energy, amountdecrease);
+        this.energyEU -= Math.min(this.energyEU, amountdecrease);
+    }
+
+    @Override
+    public void decreaseEnergyRF(int amount) {
+        this.energyRF -= amount;
     }
 
     @Override
@@ -153,7 +121,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
 
     @Override
     public double getDemandedEnergy() {
-        return (double) this.maxStorage - this.energy;
+        return this.maxStorageEU - this.energyEU;
     }
 
     @Override
@@ -164,26 +132,35 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     @Override
     public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
         double de = this.getDemandedEnergy();
-        if(amount == 0.0D) {
-            return 0.0D;
-        } else if(de <= 0.0D) {
+        if(amount == 0.0)
+            return 0.0;
+        else if(de <= 0.0)
             return amount;
-        } else if(amount >= de) {
-            this.energy += de;
+        else if(amount >= de) {
+            this.energyEU += de;
             return amount - de;
         } else {
-            this.energy += amount;
-            return 0.0D;
+            this.energyEU += amount;
+            return 0.0;
         }
     }
 
     @Override
     public double getChargerEnergy() {
-        return this.energy;
+        return this.energyEU;
     }
 
-    public int getMaxChargerEnergy() {
-        return this.maxStorage;
+    @Override
+    public int getChargerEnergyRF() {
+        return this.energyRF;
+    }
+
+    public double getMaxChargerEUEnergy() {
+        return this.maxStorageEU;
+    }
+
+    public int getMaxChargerRFEnergy() {
+        return this.maxStorageRF;
     }
 
     @Override
@@ -194,24 +171,19 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         int energyReceivedRF = Math.min(this.getMaxEnergyStored(from) - this.getEnergyStored(from), maxReceive);
-        if(!simulate) {
-            this.addRfEnergy(energyReceivedRF);
-        }
+        if(!simulate)
+            this.energyRF += energyReceivedRF;
         return energyReceivedRF;
     }
 
     @Override
     public int getEnergyStored(ForgeDirection var1) {
-        return (int) this.energy * ConfigWI.EUToRF_Multiplier;
+        return this.energyRF;
     }
 
     @Override
     public int getMaxEnergyStored(ForgeDirection var1) {
-        return this.maxStorage * ConfigWI.EUToRF_Multiplier;
-    }
-
-    protected void addRfEnergy(int RFamount) {
-        this.energy += (double) RFamount / ConfigWI.EUToRF_Multiplier;
+        return this.maxStorageRF;
     }
 
     @Override

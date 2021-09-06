@@ -47,7 +47,7 @@ public class TileXPSenderElectric extends TileEntity
 
     public void validate() {
         super.validate();
-        if (!this.worldObj.isRemote) {
+        if(!this.worldObj.isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToEnergyNet = true;
         }
@@ -55,8 +55,8 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     public void invalidate() {
-        if (this.loaded) {
-            if (!this.worldObj.isRemote && this.addedToEnergyNet) {
+        if(this.loaded) {
+            if(!this.worldObj.isRemote && this.addedToEnergyNet) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
                 this.addedToEnergyNet = false;
             }
@@ -67,57 +67,44 @@ public class TileXPSenderElectric extends TileEntity
 
     public void updateEntity() {
         super.updateEntity();
-        if (this.worldObj.isRemote) {
+        if(this.worldObj.isRemote) {
             return;
         }
 
-        if (this.energy > this.maxStorage) {
-
+        if(this.energy > this.maxStorage)
             this.energy = this.maxStorage;
-        }
 
         this.countPlayers(this.sendradius);
-
     }
 
-    protected void consumeEnergyXPSender() {
-        double localenergy = this.energy;
-        localenergy -= this.getTotalSpentEUValue();
-        if (localenergy < 0) {
-            localenergy = 0;
-        }
-        this.energy = localenergy;
+    protected void consumeEnergyXPSender(double amount) {
+        this.energy = this.energy - amount < 0 ? 0 : this.energy - amount;
     }
 
     public int getTotalSpentEUValue() {
-
         return this.energyperpoint * this.pointsxp;
     }
-    
+
     public int getXPPointsToSend() {
-    	
-    	return this.pointsxp;
+        return this.pointsxp;
     }
 
     protected void countPlayers(int radius) {
         AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord - radius, this.yCoord - radius,
                 this.zCoord - radius, this.xCoord + radius, this.yCoord + radius, this.zCoord + radius);
         List<EntityPlayer> list = this.getWorldObj().getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
-        if ((this.worldObj.getTotalWorldTime() % (ConfigWI.secondsXPSender * 20L)) == 0) {
-
+        if((this.worldObj.getTotalWorldTime() % (ConfigWI.secondsXPSender * 20L)) == 0)
             this.sendXPToPlayersAround(this.pointsxp, list);
-        }
-
         this.playercountinradius = list.size();
     }
 
     protected void sendXPToPlayersAround(int points, List<EntityPlayer> list) {
-        for (EntityPlayer player : list) {
-            if (player != null) {
-                if (this.energy > this.getTotalSpentEUValue()) {
+        double consume = this.getTotalSpentEUValue();
+        for(EntityPlayer player : list) {
+            if(player != null) {
+                if(this.energy > consume) {
                     player.addExperience(points);
-                    // was ExperienceUtils.addPlayerXP(player, points);
-                    this.consumeEnergyXPSender();
+                    this.consumeEnergyXPSender(consume);
                 }
             }
         }
@@ -125,15 +112,14 @@ public class TileXPSenderElectric extends TileEntity
 
     public void changeRadius(int value) {
         int localradius = this.sendradius;
-        if (value < 0) {
+        if(value < 0) {
             localradius += value;
-            if (localradius < 1) {
+            if(localradius < 1) {
                 localradius = 1;
             }
-
-        } else if (value > 0) {
+        } else if(value > 0) {
             localradius += value;
-            if (localradius > 25) {
+            if(localradius > 25) {
                 localradius = 25;
             }
         }
@@ -142,17 +128,14 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     public int getSendRadius() {
-
         return this.sendradius;
     }
 
     public int getPlayerCount() {
-
         return this.playercountinradius;
     }
 
     public int gaugeEnergyScaled(int i) {
-
         return (int) (this.energy * i / this.maxStorage);
     }
 
@@ -160,37 +143,31 @@ public class TileXPSenderElectric extends TileEntity
         super.readFromNBT(nbttagcompound);
         this.energy = nbttagcompound.getDouble("energy");
         this.sendradius = nbttagcompound.getInteger("radius");
-
     }
 
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setDouble("energy", this.energy);
         nbttagcompound.setInteger("radius", this.sendradius);
-
     }
 
     @Override
     public boolean acceptsEnergyFrom(TileEntity tile, ForgeDirection dir) {
-
         return true;
     }
 
     @Override
     public int getSizeInventory() {
-
         return 0;
     }
 
     @Override
     public ItemStack getStackInSlot(int p_70301_1_) {
-
         return null;
     }
 
     @Override
     public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-
         return null;
     }
 
@@ -202,69 +179,59 @@ public class TileXPSenderElectric extends TileEntity
 
     @Override
     public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
-
     }
 
     @Override
     public String getInventoryName() {
-
         return null;
     }
 
     @Override
     public boolean hasCustomInventoryName() {
-
         return false;
     }
 
     @Override
     public int getInventoryStackLimit() {
-
         return 0;
     }
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-
         return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
     }
 
     @Override
     public void openInventory() {
-
     }
 
     @Override
     public void closeInventory() {
-
     }
 
     @Override
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-
         return false;
     }
 
     @Override
     public double getDemandedEnergy() {
-
         return (double) this.maxStorage - this.energy;
     }
 
     @Override
     public int getSinkTier() {
-
         return this.tier;
     }
 
     @Override
     public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
         double de = this.getDemandedEnergy();
-        if (amount == 0.0D) {
+        if(amount == 0.0D) {
             return 0.0D;
-        } else if (de <= 0.0D) {
+        } else if(de <= 0.0D) {
             return amount;
-        } else if (amount >= de) {
+        } else if(amount >= de) {
             this.energy += de;
             return amount - de;
         } else {
@@ -275,24 +242,21 @@ public class TileXPSenderElectric extends TileEntity
 
     @SideOnly(value = Side.CLIENT)
     public GuiScreen getGui(EntityPlayer player, boolean isAdmin) {
-
         return new GuiXPSenderNew(new ContainerXPSenderNew(player, this));
     }
 
     @Override
     public ContainerBase<?> getGuiContainer(EntityPlayer player) {
-
         return new ContainerXPSenderNew(player, this);
     }
 
     @Override
     public void onGuiClosed(EntityPlayer player) {
-
     }
 
     @Override
     public void onNetworkEvent(EntityPlayer player, int event) {
-        switch (event) {
+        switch(event) {
             case 0:
                 this.changeRadius(1);
                 break;

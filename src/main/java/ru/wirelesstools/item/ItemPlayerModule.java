@@ -14,7 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.List;
 
@@ -52,14 +52,14 @@ public class ItemPlayerModule extends Item {
 				NBTTagCompound ownerNbt = new NBTTagCompound();
 				NBTUtil.func_152460_a(ownerNbt, playerTarget.getGameProfile());
 				nbt.setTag("playerModulegameprofile", ownerNbt);
-				MiscUtils.sendChatMessageColoredMulti(player, "chat.message.module.player.set", EnumChatFormatting.DARK_GREEN,
+				HelperUtils.sendChatMessageColoredMulti(player, "chat.message.module.player.set", EnumChatFormatting.DARK_GREEN,
 						new ChatComponentText(": " + playerTarget.getGameProfile().getName()));
 				return true;
 			} else {
-				MiscUtils.sendColoredMessageToPlayer(player, "chat.message.module.only.player", EnumChatFormatting.LIGHT_PURPLE);
+				HelperUtils.sendColoredMessageToPlayer(player, "chat.message.module.only.player", EnumChatFormatting.LIGHT_PURPLE);
 			}
 		} else {
-			MiscUtils.sendColoredMessageToPlayer(player, "chat.message.module.sneak", EnumChatFormatting.RED);
+			HelperUtils.sendColoredMessageToPlayer(player, "chat.message.module.sneak", EnumChatFormatting.RED);
 		}
 		return false;
 	}

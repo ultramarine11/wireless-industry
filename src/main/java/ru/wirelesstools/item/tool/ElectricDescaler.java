@@ -15,7 +15,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.List;
 
@@ -65,13 +65,13 @@ public class ElectricDescaler extends Item implements IElectricItem {
                             ReflectionHelper.setPrivateValue(TileEntitySteamGenerator.class, steamGenTe, 0, "calcification");
                             if(!player.capabilities.isCreativeMode)
                                 ElectricItem.manager.use(stack, 1000.0, player);
-                            MiscUtils.sendChatMessageMulti(player, "chat.message.scale.cleared",
+                            HelperUtils.sendChatMessageMulti(player, "chat.message.scale.cleared",
                                     new ChatComponentText(" " + String.format("%.2f", (double) calcification / 1000.0) + "% ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)),
                                     new ChatComponentTranslation("chat.message.of.calcification"));
                         }
                     }
                 } catch(Exception e) {
-                    MiscUtils.sendColoredMessageToPlayer(player, "chat.message.descaler.error", EnumChatFormatting.RED);
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.descaler.error", EnumChatFormatting.RED);
                 }
             }
             return true;

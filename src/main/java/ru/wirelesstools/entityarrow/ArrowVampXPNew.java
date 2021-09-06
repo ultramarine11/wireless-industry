@@ -20,7 +20,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.utils.ExperienceUtils;
-import ru.wirelesstools.utils.MiscUtils;
+import ru.wirelesstools.utils.HelperUtils;
 
 import java.util.List;
 
@@ -494,10 +494,10 @@ public class ArrowVampXPNew extends EntityArrow implements IProjectile {
         ExperienceUtils.addPlayerXP(shooter, stolenXP);
 
         if(ConfigWI.enableWeaponsChatMsgs) {
-            MiscUtils.sendChatMessageColoredMulti(victim, "chat.message.xp.lost", EnumChatFormatting.YELLOW,
+            HelperUtils.sendChatMessageColoredMulti(victim, "chat.message.xp.lost", EnumChatFormatting.YELLOW,
                     new ChatComponentText(" " + stolenXP + " ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)),
                     new ChatComponentTranslation("chat.message.xp.points").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-            MiscUtils.sendChatMessageColoredMulti(shooter, "chat.message.xp.gained.vamp", EnumChatFormatting.GREEN,
+            HelperUtils.sendChatMessageColoredMulti(shooter, "chat.message.xp.gained.vamp", EnumChatFormatting.GREEN,
                     new ChatComponentText(" " + stolenXP + " ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)),
                     new ChatComponentTranslation("chat.message.xp.points").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)));
         }

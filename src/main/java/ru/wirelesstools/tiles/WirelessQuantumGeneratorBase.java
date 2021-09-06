@@ -25,242 +25,234 @@ import java.util.List;
 import java.util.Vector;
 
 public class WirelessQuantumGeneratorBase extends TileEntity
-		implements IEnergySource, INetworkDataProvider, INetworkUpdateListener, IInventory {
+        implements IEnergySource, INetworkDataProvider, INetworkUpdateListener, IInventory {
 
-	private boolean addedToEnergyNet;
-	private boolean loaded = false;
-	protected int output;
-	protected int tier;
-	protected GameProfile owner = null;
+    private boolean addedToEnergyNet;
+    private boolean loaded = false;
+    protected int output;
+    protected int tier;
+    protected GameProfile owner = null;
 
-	public String wirelessQGenName;
-	protected int wirelesstransferlimit;
+    public String wirelessQGenName;
+    protected int wirelesstransferlimit;
 
-	public boolean isCharging = false;
+    public boolean isCharging = false;
 
-	public WirelessQuantumGeneratorBase(int output, int tier, String name, int limit) {
-		this.output = output;
-		this.tier = tier;
-		this.wirelessQGenName = name;
-		this.wirelesstransferlimit = limit;
-	}
+    public WirelessQuantumGeneratorBase(int output, int tier, String name, int limit) {
+        this.output = output;
+        this.tier = tier;
+        this.wirelessQGenName = name;
+        this.wirelesstransferlimit = limit;
+    }
 
-	public void validate() {
-		super.validate();
-		if (!this.worldObj.isRemote) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-			this.addedToEnergyNet = true;
-		}
+    public void validate() {
+        super.validate();
+        if(!this.worldObj.isRemote) {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            this.addedToEnergyNet = true;
+        }
+        this.loaded = true;
+    }
 
-		this.loaded = true;
-	}
+    public void invalidate() {
+        if(this.loaded) {
+            if(!this.worldObj.isRemote && this.addedToEnergyNet) {
+                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+                this.addedToEnergyNet = false;
+            }
+            this.loaded = false;
+        }
+        super.invalidate();
+    }
 
-	public void invalidate() {
-		if (this.loaded) {
-			if (!this.worldObj.isRemote && this.addedToEnergyNet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-				this.addedToEnergyNet = false;
-			}
-			this.loaded = false;
-		}
-		super.invalidate();
-	}
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if(!this.worldObj.isRemote) {
+            this.isCharging = WirelessUtil.iterateEnergyTilesQGen(this);
+            this.operateWirelessTransferFromQGen();
+        }
+    }
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if (!this.worldObj.isRemote) {
+    public Container getGuiContainer(InventoryPlayer inventoryplayer) {
 
-			this.isCharging = WirelessUtil.iterateIEnergySinkTilesQGenBool(this);
+        return new ContainerQGenWireless(inventoryplayer, this);
+    }
 
-			this.operateWirelessTransferFromQGen();
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        super.writeToNBT(nbttagcompound);
+        if(this.owner != null) {
+            NBTTagCompound ownerNbt = new NBTTagCompound();
+            NBTUtil.func_152460_a(ownerNbt, this.owner);
+            nbttagcompound.setTag("ownerGameProfile", ownerNbt);
+        }
+        nbttagcompound.setBoolean("isCharging", this.isCharging);
+    }
 
-			this.markDirty();
-		}
-	}
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
+        super.readFromNBT(nbttagcompound);
+        if(nbttagcompound.hasKey("ownerGameProfile")) {
+            this.owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("ownerGameProfile"));
+        }
+        this.isCharging = nbttagcompound.getBoolean("isCharging");
+    }
 
-	public Container getGuiContainer(InventoryPlayer inventoryplayer) {
+    protected void operateWirelessTransferFromQGen() {
+        if(!this.isInvalid()) {
+            if(TileWirelessStorageBasePersonal.mapofThis.containsKey(true) & TileWirelessStorageBasePersonal.mapofThis
+                    .containsValue(TileWirelessStorageBasePersonal.listofstorages)) {
+                if(!(TileWirelessStorageBasePersonal.mapofThis.get(true).isEmpty())) {
+                    for(TileWirelessStorageBasePersonal te : TileWirelessStorageBasePersonal.mapofThis.get(true)) {
+                        if(areSameOwners(this.owner, te.owner)) {
+                            WirelessTransfer.transmithandler.transmitEnergyWireleslyQGen(te, this);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-		return new ContainerQGenWireless(inventoryplayer, this);
-	}
+    public void setPlayerProfile(GameProfile profile) {
+        this.owner = profile;
+        IC2.network.get().updateTileEntityField(this, "owner");
+    }
 
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		if (this.owner != null) {
-			NBTTagCompound ownerNbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(ownerNbt, this.owner);
-			nbttagcompound.setTag("ownerGameProfile", ownerNbt);
-		}
-		nbttagcompound.setBoolean("isCharging", this.isCharging);
-	}
+    private static boolean areSameOwners(GameProfile id1, GameProfile id2) {
+        return ((id1 != null) && (id1.equals(id2))) || (id1 == id2);
+    }
 
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		if (nbttagcompound.hasKey("ownerGameProfile")) {
-			this.owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("ownerGameProfile"));
-		}
+    public int getWirelessTransferLimitQGen() {
 
-		this.isCharging = nbttagcompound.getBoolean("isCharging");
-	}
+        return wirelesstransferlimit;
+    }
 
-	protected void operateWirelessTransferFromQGen() {
-		if (!this.isInvalid()) {
-			if (TileWirelessStorageBasePersonal.mapofThis.containsKey(true) & TileWirelessStorageBasePersonal.mapofThis
-					.containsValue(TileWirelessStorageBasePersonal.listofstorages)) {
-				if (!(TileWirelessStorageBasePersonal.mapofThis.get(true).isEmpty())) {
-					for (TileWirelessStorageBasePersonal te : TileWirelessStorageBasePersonal.mapofThis.get(true)) {
-						if (areSameOwners(this.owner, te.owner)) {
+    @Override
+    public boolean emitsEnergyTo(TileEntity arg0, ForgeDirection arg1) {
 
-							WirelessTransfer.transmithandler.transmitEnergyWireleslyQGen(te, this);
-						}
-					}
-				}
-			}
-		}
-	}
+        return true;
+    }
 
-	public void setPlayerProfile(GameProfile profile) {
-		this.owner = profile;
-		IC2.network.get().updateTileEntityField(this, "owner");
-	}
+    @Override
+    public void drawEnergy(double arg0) {
 
-	private static boolean areSameOwners(GameProfile id1, GameProfile id2) {
+        // TODO nothing here
+    }
 
-		return ((id1 != null) && (id1.equals(id2))) || (id1 == id2);
-	}
+    @Override
+    public double getOfferedEnergy() {
 
-	public int getWirelessTransferLimitQGen() {
+        return this.output;
+    }
 
-		return wirelesstransferlimit;
-	}
+    public int getOutput() {
 
-	@Override
-	public boolean emitsEnergyTo(TileEntity arg0, ForgeDirection arg1) {
+        return this.output;
+    }
 
-		return true;
-	}
+    @Override
+    public int getSourceTier() {
 
-	@Override
-	public void drawEnergy(double arg0) {
+        return this.tier;
+    }
 
-		// TODO nothing here
-	}
+    public GameProfile getOwner() {
 
-	@Override
-	public double getOfferedEnergy() {
+        return this.owner;
+    }
 
-		return this.output;
-	}
-	
-	public int getOutput() {
-		
-		return this.output;
-	}
+    public boolean permitsAccess(GameProfile profile) {
+        if(profile == null)
+            return (this.owner == null);
 
-	@Override
-	public int getSourceTier() {
+        if(!this.worldObj.isRemote) {
+            if(this.owner == null) {
+                this.owner = profile;
+                IC2.network.get().updateTileEntityField(this, "owner");
+                return true;
+            }
+        }
+        return this.owner.equals(profile);
+    }
 
-		return this.tier;
-	}
+    @Override
+    public void onNetworkUpdate(String arg0) {
 
-	public GameProfile getOwner() {
+    }
 
-		return this.owner;
-	}
+    @Override
+    public List<String> getNetworkedFields() {
+        List<String> ret = new Vector<String>(1);
+        ret.add("owner");
+        return ret;
+    }
 
-	public boolean permitsAccess(GameProfile profile) {
-		if (profile == null)
-			return (this.owner == null);
+    @Override
+    public int getSizeInventory() {
 
-		if (!this.worldObj.isRemote) {
-			if (this.owner == null) {
-				this.owner = profile;
-				IC2.network.get().updateTileEntityField(this, "owner");
-				return true;
-			}
-		}
-		return this.owner.equals(profile);
-	}
+        return 0;
+    }
 
-	@Override
-	public void onNetworkUpdate(String arg0) {
+    @Override
+    public ItemStack getStackInSlot(int p_70301_1_) {
 
-	}
+        return null;
+    }
 
-	@Override
-	public List<String> getNetworkedFields() {
-		List<String> ret = new Vector<String>(1);
-		ret.add("owner");
-		return ret;
-	}
+    @Override
+    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
 
-	@Override
-	public int getSizeInventory() {
+        return null;
+    }
 
-		return 0;
-	}
+    @Override
+    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
 
-	@Override
-	public ItemStack getStackInSlot(int p_70301_1_) {
+        return null;
+    }
 
-		return null;
-	}
+    @Override
+    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
 
-	@Override
-	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+    }
 
-		return null;
-	}
+    @Override
+    public String getInventoryName() {
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+        return null;
+    }
 
-		return null;
-	}
+    @Override
+    public boolean hasCustomInventoryName() {
 
-	@Override
-	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+        return false;
+    }
 
-	}
+    @Override
+    public int getInventoryStackLimit() {
 
-	@Override
-	public String getInventoryName() {
+        return 0;
+    }
 
-		return null;
-	}
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
 
-	@Override
-	public boolean hasCustomInventoryName() {
+        return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
+    }
 
-		return false;
-	}
+    @Override
+    public void openInventory() {
 
-	@Override
-	public int getInventoryStackLimit() {
+    }
 
-		return 0;
-	}
+    @Override
+    public void closeInventory() {
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+    }
 
-		return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
-	}
+    @Override
+    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 
-	@Override
-	public void openInventory() {
-
-	}
-
-	@Override
-	public void closeInventory() {
-
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-
-		return true;
-	}
+        return true;
+    }
 
 }
