@@ -12,7 +12,7 @@ import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiVajraCharger extends GuiContainer {
 
-	private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GuiVajraCharger.png");
+	private static final ResourceLocation tex = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiVajraCharger.png");
 	private final TileVajraChargerElectric tileentity;
 
 	public GuiVajraCharger(InventoryPlayer inventoryplayer, TileVajraChargerElectric tile) {
@@ -30,10 +30,10 @@ public class GuiVajraCharger extends GuiContainer {
 		int h = (this.width - this.xSize) / 2; // = 0 ?
 		int k = (this.height - this.ySize) / 2; // = 0 ?
 
-		// Всего 6 аргументов.
-		// Первые два - где нарисовать объект (x, y) начальные,
-		// Вторые два - где располагается сам объект (x, y) начальные,
-		// Последние два - ширина и высота объекта (x пикселей, y пикселей).
+		// пїЅпїЅпїЅпїЅпїЅ 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (x пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, y пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
 		this.drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
 		if (this.tileentity.energy > 0) {
 			int l = this.tileentity.gaugeEnergyScaled(77);

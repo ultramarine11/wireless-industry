@@ -43,7 +43,6 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, euAll, 18, 28, 29, 68);
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, rfAll, 144, 28, 155, 68);
 
-        //TODO add AreaTooltips!
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, StatCollector.translateToLocal("gui.wirind.tooltip.charger.switch.eu"), 63, 55, 80, 73);
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, StatCollector.translateToLocal("gui.wirind.tooltip.charger.switch.rf"), 96, 55, 113, 73);
     }
@@ -100,6 +99,6 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
 
     @Override
     public ResourceLocation getResourceLocation() {
-        return new ResourceLocation(Reference.IDNAME, "textures/gui/GuiWirelessMachinesCharger2.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiWirelessMachinesCharger2.png");
     }
 }

@@ -69,7 +69,7 @@ public class NeiPFPConverter extends MachineRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return Reference.IDNAME + ":textures/gui/gui_pfp1_nei.png";
+        return Reference.MOD_ID + ":textures/gui/gui_pfp1_nei.png";
     }
 
     @Override

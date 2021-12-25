@@ -125,6 +125,7 @@ public class ConfigWI {
 
     public static int maxVajraCharge;
     public static int vajraEnergyPerOperation;
+    public static int vajraFortuneEnchantmentlevel;
 
     public static int helmetChargingRadius;
     public static int chestplateChargingRadius;
@@ -133,6 +134,7 @@ public class ConfigWI {
     public static boolean isModLogEnabled;
     public static boolean isIU_EuRf_priority;
     public static boolean enableWeaponsChatMsgs;
+    public static boolean enableWICommands;
 
     public static int permissionLevelCommandChangeOwner;
     public static int permissionLevelCommandClearOwner;
@@ -275,7 +277,7 @@ public class ConfigWI {
             ConfigWI.energyperxppointXPSender = config.get(categoryXPSENDER, "EU per point", 25000, "EU energy consumed per 1 XP point")
                     .getInt(25000);
 
-            ConfigWI.tierXPSender = config.get(categoryXPSENDER, "Tier", 7).getInt(7);
+            ConfigWI.tierXPSender = config.get(categoryXPSENDER, "Tier", 8, "Tier of XP sender").getInt();
 
             int stolenEUlocal = config
                     .get(categoryVAMPIREWEAPONS, "EU Stolen", 120000, "Stolen amount of EU energy from one armor part")
@@ -293,47 +295,49 @@ public class ConfigWI {
             else
                 ConfigWI.vampBowXPVampiredAmount = Math.min(vbowxpvampired, 20);
 
-            int chargevaluelocal = config
-                    .get(categoryTOOLS_ARMOR, "Self-Recharge", 8, "Ender Quamtum Armor self-charging EU/t amount, not more than 16").getInt(8);
-            if(chargevaluelocal < 0)
-                ConfigWI.enderChargeArmorValue = 0;
-            else
-                ConfigWI.enderChargeArmorValue = Math.min(chargevaluelocal, 16);
+
+            ConfigWI.enderChargeArmorValue = config.getInt("Self-Recharge", categoryTOOLS_ARMOR, 8,
+                    0, 16, "Ender Quamtum Armor self-charging EU/t amount, not more than 16");
 
             int vajramaxchargelocal = config
-                    .get(categoryTOOLS_ARMOR, "MaxCharge", 6000000, "Maximum charge of Lucky Vajra, not less than 3M EU").getInt(6000000);
+                    .get(categoryTOOLS_ARMOR, "MaxCharge", 6000000, "Maximum charge of Lucky Vajra, not less than 3M EU").getInt();
             ConfigWI.maxVajraCharge = Math.max(3000000, vajramaxchargelocal);
+
+            vajraFortuneEnchantmentlevel = config.getInt("FortuneLevel", categoryTOOLS_ARMOR, 5,
+                    1, Integer.MAX_VALUE, "The Fortune enchantment level of Lucky Vajra");
+
             int energyperoperationlocal = config
-                    .get(categoryTOOLS_ARMOR, "Break cost", 3000, "Vajra energy using per block break, not more than half of maxcharge").getInt(3000);
+                    .get(categoryTOOLS_ARMOR, "Break cost", 3000, "Vajra energy using per block break, not more than half of maxcharge").getInt();
             ConfigWI.vajraEnergyPerOperation = Math.min(energyperoperationlocal, ConfigWI.maxVajraCharge / 2);
 
-            ConfigWI.isServerJoinedChatMsgEnabled = config.get(categoryOTHER, "EnableJoinMsg", false, "Determines if the message of available WI commands is shown when player joined server").getBoolean(false);
-            ConfigWI.isModLogEnabled = config.get(categoryOTHER, "Logging", true, "Enables console logging of Wireless Industry mod. It is recommended to keep this value true").getBoolean(true);
-            ConfigWI.isIU_EuRf_priority = config.get(categoryENERGYBALANCE, "IU priority", true, "If true, the RF/EU multiplier will be loaded from Industrial Upgrade config instead of WI config").getBoolean(true);
+            ConfigWI.isServerJoinedChatMsgEnabled = config.get(categoryOTHER, "EnableJoinMsg", false, "Determines if the message of available WI commands is shown when player joined server").getBoolean();
+            ConfigWI.isModLogEnabled = config.get(categoryOTHER, "Logging", true, "Enables console logging of Wireless Industry mod").getBoolean();
+            ConfigWI.isIU_EuRf_priority = config.get(categoryENERGYBALANCE, "IU priority", true, "If true, the RF/EU multiplier will be loaded from Industrial Upgrade config instead of WI config").getBoolean();
+            enableWICommands = config.get(categoryOTHER, "EnableModCommands", true, "Enables commands /clo and /stow").getBoolean();
 
-            ConfigWI.enableWeaponsChatMsgs = config.get(categoryVAMPIREWEAPONS, "ChatMsgs", true, "Enables player receiving info chat messages (e.g. when shooter absorbes XP from enemy who is hit by vampiric arrow)").getBoolean(true);
+            ConfigWI.enableWeaponsChatMsgs = config.get(categoryVAMPIREWEAPONS, "ChatMsgs", true, "Enables player receiving info chat messages (e.g. when shooter absorbes XP from enemy who is hit by vampiric arrow)").getBoolean();
             ConfigWI.permissionLevelCommandClearOwner = config.get(categoryCOMMANDS, "permissionLevelCLO", 2, "Required permission level for /clo command")
-                    .getInt(2);
+                    .getInt();
             ConfigWI.permissionLevelCommandChangeOwner = config.get(categoryCOMMANDS, "permissionLevelSTOW", 2, "Required permission level for /stow command")
-                    .getInt(2);
+                    .getInt();
 
-            ConfigWI.machinesChargerMaxEnergyDouble = config.get(categoryWIRELESSCHARGER, "MaxStorageMChEU", 10000000000.0, "Maximum storage of wireless machines charger (EU)").getDouble(10000000000.0);
+            ConfigWI.machinesChargerMaxEnergyDouble = config.get(categoryWIRELESSCHARGER, "MaxStorageMChEU", 10000000000.0, "Maximum storage of wireless machines charger (EU)").getDouble();
             ConfigWI.machinesChargerMaxEnergyRF = config.get(categoryWIRELESSCHARGER, "MaxStorageMChRF", 2145000000, "Maximum storage of wireless machines charger (RF)")
-                    .getInt(2145000000);
-            ConfigWI.machinesChargerTier = config.get(categoryWIRELESSCHARGER, "TierMCh", 11, "Tier of wireless machines charger")
-                    .getInt(11);
+                    .getInt();
+            ConfigWI.machinesChargerTier = config.get(categoryWIRELESSCHARGER, "TierMCh", 14, "Tier of wireless machines charger")
+                    .getInt();
 
             ConfigWI.matterCollectorCapacity = config.get(categoryOTHER, "TankCapacity", 1000000, "The capacity of internal tank (mB) of Liquid Matter Collector")
-                    .getInt(1000000);
+                    .getInt();
 
             ConfigWI.vajraChargerMaxStorage = config.get(categoryOTHER, "MaxStorageVCh", 30000000, "Maximum storage of Instant Vajra Charger")
-                    .getInt(30000000);
+                    .getInt();
             ConfigWI.tierVajraCharger = config.get(categoryOTHER, "TierVCh", 5, "Tier of Instant Vajra Charger")
-                    .getInt(5);
+                    .getInt();
 
-            ConfigWI.enableVajraDischargingAfterEnchant = config.get(categoryTOOLS_ARMOR, "EnchDischarge", false, "Enables Lucky Vajra discharging some amount of energy after enchanted").getBoolean(false);
+            ConfigWI.enableVajraDischargingAfterEnchant = config.get(categoryTOOLS_ARMOR, "EnchDischarge", false, "Enables Lucky Vajra discharging some amount of energy after enchanted").getBoolean();
             ConfigWI.vajraEnchantDischargeEnergyAmount = config.get(categoryTOOLS_ARMOR, "DischargeAmount", 100000, "The amount of energy for which Lucky Vajra is discharged")
-                    .getInt(100000);
+                    .getInt();
 
 
             if(ConfigWI.isModLogEnabled)

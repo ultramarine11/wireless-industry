@@ -11,7 +11,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class Recipes {
 
-    public static IPFPRecipeManager pfprecipes;
     public static IMachineRecipeManager PFP_RecipeManager;
 
     public static void initPFPRecipes() {
@@ -26,13 +25,14 @@ public class Recipes {
 
         Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreCopper"), null, OreDictionary.getOres("blockCopper").get(0));
         Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreTin"), null, OreDictionary.getOres("blockTin").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreSilver"), null, OreDictionary.getOres("blockSilver").get(0));
+        // there was silver recipe
         Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreLead"), null, OreDictionary.getOres("blockLead").get(0));
 
         if(Loader.isModLoaded("ThermalFoundation")) {
             Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreNickel"), null, OreDictionary.getOres("blockNickel").get(0));
             Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("orePlatinum"), null, OreDictionary.getOres("blockPlatinum").get(0));
             Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreMithril"), null, OreDictionary.getOres("blockMithril").get(0));
+            Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreSilver"), null, OreDictionary.getOres("blockSilver").get(0));
         }
 
         if(Loader.isModLoaded("DraconicEvolution")) {

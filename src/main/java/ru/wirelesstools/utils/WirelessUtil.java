@@ -2,11 +2,11 @@ package ru.wirelesstools.utils;
 
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyReceiver;
-import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.item.ElectricItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.tiles.IWirelessCharger;
@@ -14,7 +14,7 @@ import ru.wirelesstools.tiles.IWirelessMachineCharger;
 import ru.wirelesstools.tiles.TileWirelessMachinesChargerBase;
 import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class WirelessUtil {
 
@@ -36,17 +36,18 @@ public class WirelessUtil {
         }
     }
 
-    private static void sendEnergyToRFReceiver(IWirelessMachineCharger charger, IEnergyReceiver receiver) {
-        if((receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN)) > 0) {
-            int sentRF = receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false);
-            charger.decreaseEnergyRF(sentRF);
+    private static void sendRFToReceiver(IWirelessMachineCharger charger, IEnergyReceiver receiver) {
+        if((receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN)) > 0
+                && charger.getChargerEnergyRF() > 0) {
+            // int sentRF = receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false);
+            charger.decreaseEnergyRF(receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false));
         }
     }
 
-    private static void sendEnergyToEnergySink(IWirelessMachineCharger charger, IEnergySink sink) {
-        if(sink.getDemandedEnergy() > 0) {
-            double sentreal = Math.min(EnergyNet.instance.getPowerFromTier(sink.getSinkTier()),
-                    charger.getChargerEnergy());
+    private static void sendEUToEnergySink(IWirelessMachineCharger charger, IEnergySink sink) {
+        double demEnergy = sink.getDemandedEnergy();
+        if(demEnergy > 0.0) {
+            double sentreal = Math.min(demEnergy, charger.getChargerEnergy());
             sink.injectEnergy(ForgeDirection.UNKNOWN, sentreal, 1);
             charger.decreaseEnergy(sentreal);
         }
@@ -54,22 +55,22 @@ public class WirelessUtil {
 
     public static boolean iterateEnergyTilesQGen(WirelessQuantumGeneratorBase qgen) {
         boolean ret = false;
-        if(!qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap.isEmpty()) {
-            for(TileEntity tile : new ArrayList<TileEntity>(qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord,
-                    qgen.zCoord).chunkTileEntityMap.values())) {
+        Map<ChunkPosition, TileEntity> teMap = qgen.getWorldObj().getChunkFromBlockCoords(qgen.xCoord, qgen.zCoord).chunkTileEntityMap;
+        if(!teMap.isEmpty()) {
+            for(TileEntity tile : teMap.values()) {
                 if(tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
                     IEnergySink sink = (IEnergySink) tile;
-                    if(sink.getDemandedEnergy() > 0) {
+                    double demEnergy = sink.getDemandedEnergy();
+                    if(demEnergy > 0.0) {
                         ret = true;
-                        sink.injectEnergy(ForgeDirection.UNKNOWN,
-                                EnergyNet.instance.getPowerFromTier(sink.getSinkTier()), 1);
+                        sink.injectEnergy(ForgeDirection.UNKNOWN, demEnergy, 1);
                     }
                 } else if(tile instanceof IEnergyReceiver && !(tile instanceof IEnergySink)) {
                     IEnergyReceiver receiver = (IEnergyReceiver) tile;
                     int demandedenergy = receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN);
                     if(demandedenergy > 0) {
                         ret = true;
-                        receiver.receiveEnergy(ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false);
+                        receiver.receiveEnergy(ForgeDirection.UNKNOWN, demandedenergy, false);
                     }
                 }
             }
@@ -78,19 +79,16 @@ public class WirelessUtil {
     }
 
     public static void iterateEnergyTiles(TileWirelessMachinesChargerBase charger, boolean chargeEU, boolean chargeRF) {
-        if(!charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap
-                .isEmpty()) {
-            for(TileEntity tile : new ArrayList<TileEntity>(charger.getWorldObj()
-                    .getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap.values())) {
+        Map<ChunkPosition, TileEntity> teMap = charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap;
+        if(!teMap.isEmpty()) {
+            for(TileEntity tile : teMap.values()) {
                 if(tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {
                     if(chargeEU) {
-                        IEnergySink sink = (IEnergySink) tile;
-                        WirelessUtil.sendEnergyToEnergySink(charger, sink);
+                        WirelessUtil.sendEUToEnergySink(charger, (IEnergySink) tile);
                     }
-                } else if(tile instanceof IEnergyReceiver && !(tile instanceof IEnergySink) && !(tile instanceof TileWirelessMachinesChargerBase)) {
+                } else if(tile instanceof IEnergyReceiver && !(tile instanceof IEnergySink)) {
                     if(chargeRF) {
-                        IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                        WirelessUtil.sendEnergyToRFReceiver(charger, receiver);
+                        WirelessUtil.sendRFToReceiver(charger, (IEnergyReceiver) tile);
                     }
                 }
             }

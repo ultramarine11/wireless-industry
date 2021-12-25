@@ -7,10 +7,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.network.INetworkClientTileEntityEventListener;
-import ic2.api.recipe.RecipeInputItemStack;
-import ic2.api.recipe.RecipeInputOreDict;
 import ic2.api.recipe.RecipeOutput;
-import ic2.core.BasicMachineRecipeManager;
 import ic2.core.ContainerBase;
 import ic2.core.IC2;
 import ic2.core.IHasGui;
@@ -19,19 +16,13 @@ import ic2.core.block.invslot.InvSlotOutput;
 import ic2.core.block.invslot.InvSlotProcessable;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
 import ru.wirelesstools.config.ConfigWI;
 import ru.wirelesstools.container.ContainerPFPConverter;
 import ru.wirelesstools.gui.GuiPFPConvertor;
-import ru.wirelesstools.recipes.Recipes;
 import ru.wirelesstools.slots.InvSlotProcessablePFP;
 
 public class PFPConvertorTile extends TileEntityInventory implements IEnergySink, IHasGui, INetworkClientTileEntityEventListener,
@@ -59,25 +50,6 @@ public class PFPConvertorTile extends TileEntityInventory implements IEnergySink
         this.hot_energy_amount = 1500000.0;
         this.outputSlot = new InvSlotOutput(this, "blockoutput", 1, 1);
         this.inputSlotA = new InvSlotProcessablePFP(this, "oreinput", 1, 1);
-    }
-
-    public static void init() {
-        Recipes.PFP_RecipeManager = new BasicMachineRecipeManager();
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.gold_ore)), null, new ItemStack(Blocks.gold_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.iron_ore)), null, new ItemStack(Blocks.iron_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.coal_ore)), null, new ItemStack(Blocks.coal_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.diamond_ore)), null, new ItemStack(Blocks.diamond_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.redstone_ore)), null, new ItemStack(Blocks.redstone_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.quartz_ore)), null, new ItemStack(Blocks.quartz_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputItemStack(new ItemStack(Blocks.emerald_ore)), null, new ItemStack(Blocks.emerald_block));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreCopper"), null, OreDictionary.getOres("blockCopper").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreTin"), null, OreDictionary.getOres("blockTin").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreSilver"), null, OreDictionary.getOres("blockSilver").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreLead"), null, OreDictionary.getOres("blockLead").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreNickel"), null, OreDictionary.getOres("blockNickel").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("orePlatinum"), null, OreDictionary.getOres("blockPlatinum").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreMithril"), null, OreDictionary.getOres("blockMithril").get(0));
-        Recipes.PFP_RecipeManager.addRecipe(new RecipeInputOreDict("oreDraconium"), null, OreDictionary.getOres("blockDraconium").get(0));
     }
 
     public RecipeOutput getOutput() {

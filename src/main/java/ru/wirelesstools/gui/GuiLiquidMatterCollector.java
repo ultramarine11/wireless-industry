@@ -90,6 +90,6 @@ public class GuiLiquidMatterCollector extends GuiIC2  {
 
     @Override
     public ResourceLocation getResourceLocation() {
-        return new ResourceLocation(Reference.IDNAME, "textures/gui/GUILiquidMatterCollector.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/GUILiquidMatterCollector.png");
     }
 }

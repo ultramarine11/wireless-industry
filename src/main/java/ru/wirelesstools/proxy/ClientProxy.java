@@ -13,76 +13,70 @@ import ru.wirelesstools.tiles.*;
 
 public class ClientProxy extends ServerProxy {
 
-	@SideOnly(Side.CLIENT)
-	public static void Init() {
+    @SideOnly(Side.CLIENT)
+    public static void Init() {
+        MinecraftForge.EVENT_BUS.register(new TextureHooks());
+    }
 
-		MinecraftForge.EVENT_BUS.register(new TextureHooks());
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
 
-	}
+        if(te instanceof TileWPBasePersonal) {
 
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te = world.getTileEntity(x, y, z);
+            return new GuiWPPersonal(player.inventory, (TileWPBasePersonal) te);
 
-		/*if (te != null) {*/
+        }
 
-			if (te instanceof TileWPBasePersonal) {
+        if(te instanceof TileWirelessStorageBasePersonal) {
 
-				return new GuiWPPersonal(player.inventory, (TileWPBasePersonal) te);
+            return new GuiWSBPersonal(player.inventory, (TileWirelessStorageBasePersonal) te);
 
-			}
+        }
 
-			if (te instanceof TileWirelessStorageBasePersonal) {
+        if(te instanceof TileExpGen) {
 
-				return new GuiWSBPersonal(player.inventory, (TileWirelessStorageBasePersonal) te);
+            return new GuiExpGen(player.inventory, (TileExpGen) te);
 
-			}
+        }
 
-			if (te instanceof TileExpGen) {
+        if(te instanceof TileVajraChargerElectric) {
 
-				return new GuiExpGen(player.inventory, (TileExpGen) te);
+            return new GuiVajraCharger(player.inventory, (TileVajraChargerElectric) te);
 
-			}
+        }
 
-			if (te instanceof TileVajraChargerElectric) {
+        if(te instanceof TileEntityWirelessCharger) {
 
-				return new GuiVajraCharger(player.inventory, (TileVajraChargerElectric) te);
+            return ((TileEntityWirelessCharger) te).getGui(player, false);
 
-			}
+        }
 
-			if (te instanceof TileEntityWirelessCharger) {
+        if(te instanceof TileWirelessMachinesChargerBase) {
 
-				return ((TileEntityWirelessCharger) te).getGui(player, false);
+            return ((TileWirelessMachinesChargerBase) te).getGui(player, false);
+        }
 
-			}
+        if(te instanceof WirelessQuantumGeneratorBase) {
 
-			if (te instanceof TileWirelessMachinesChargerBase) {
+            return new GuiWirelessQGen(player.inventory, (WirelessQuantumGeneratorBase) te);
+        }
 
-				return ((TileWirelessMachinesChargerBase) te).getGui(player, false);
-			}
+        if(te instanceof TileXPSenderElectric) {
 
-			if (te instanceof WirelessQuantumGeneratorBase) {
+            return ((TileXPSenderElectric) te).getGui(player, false);
+        }
 
-				return new GuiWirelessQGen(player.inventory, (WirelessQuantumGeneratorBase) te);
-			}
-			
-			if (te instanceof TileXPSenderElectric) {
-				
-				return ((TileXPSenderElectric) te).getGui(player, false);
-			}
+        if(te instanceof TileLiquidMatterCollector) {
 
-			if (te instanceof TileLiquidMatterCollector) {
+            return ((TileLiquidMatterCollector) te).getGui(player, false);
+        }
 
-				return ((TileLiquidMatterCollector) te).getGui(player, false);
-			}
+        if(te instanceof PFPConvertorTile) {
 
-			if (te instanceof PFPConvertorTile) {
+            return ((PFPConvertorTile) te).getGui(player, false);
+        }
 
-				return ((PFPConvertorTile) te).getGui(player, false);
-			}
-
-		/*}*/
-
-		return null;
-	}
+        return null;
+    }
 
 }

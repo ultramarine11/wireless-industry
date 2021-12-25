@@ -17,13 +17,12 @@ public interface IPrivateArmor {
 		return NBTUtil.func_152459_a(StackUtil.getOrCreateNbtData(stack).getCompoundTag("ownerGameProfile"));
 	}
 
-	default GameProfile setArmorOwner(ItemStack stack, EntityPlayer ownerplayer) {
-		NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-		GameProfile ownerprofile = ownerplayer.getGameProfile();
+	default GameProfile setArmorOwner(ItemStack stack, EntityPlayer newOwnerPlayer) {
+		GameProfile ownerProfile = newOwnerPlayer.getGameProfile();
 		NBTTagCompound ownerNbt = new NBTTagCompound();
-		NBTUtil.func_152460_a(ownerNbt, ownerprofile);
-		nbt.setTag("ownerGameProfile", ownerNbt);
-		return ownerprofile;
+		NBTUtil.func_152460_a(ownerNbt, ownerProfile);
+		StackUtil.getOrCreateNbtData(stack).setTag("ownerGameProfile", ownerNbt);
+		return ownerProfile;
 	}
 
 }

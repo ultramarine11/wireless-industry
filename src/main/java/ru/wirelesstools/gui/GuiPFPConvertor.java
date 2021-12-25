@@ -20,7 +20,7 @@ public class GuiPFPConvertor extends GuiIC2 {
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         String tileentityname = I18n.format(this.container.base.pfpconvertorname);
         int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
-        this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 16766720); // цвет Gold #FFD700
+        this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 16766720); // пїЅпїЅпїЅпїЅ Gold #FFD700
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
@@ -28,10 +28,10 @@ public class GuiPFPConvertor extends GuiIC2 {
         this.mc.getTextureManager().bindTexture(this.getResourceLocation());
         this.xoffset = (this.width - this.xSize) / 2;
         this.yoffset = (this.height - this.ySize) / 2;
-        // Всего 6 аргументов.
-        // Первые два - где нарисовать объект (x, y) начальные,
-        // Вторые два - где располагается сам объект (x, y) начальные,
-        // Последние два - ширина и высота объекта (x пикселей, y пикселей).
+        // пїЅпїЅпїЅпїЅпїЅ 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (x пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, y пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
         this.drawTexturedModalRect(this.xoffset, this.yoffset, 0, 0, this.xSize, this.ySize);
 
         if (this.container.base.energyEU > 0) {
@@ -58,6 +58,6 @@ public class GuiPFPConvertor extends GuiIC2 {
 
     @Override
     public ResourceLocation getResourceLocation() {
-        return new ResourceLocation(Reference.IDNAME, "textures/gui/gui_pfp1_1.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_pfp1_1.png");
     }
 }

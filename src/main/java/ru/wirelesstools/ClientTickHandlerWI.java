@@ -74,11 +74,11 @@ public class ClientTickHandlerWI {
 
 	public static String getTextEnergyStatus(float energyStatus) {
 		if (energyStatus <= 60.0F && energyStatus > 30.0F) {
-			return "\u00A7e" + "(" + Integer.toString(Math.round(energyStatus)) + "%" + ")";
+			return "\u00A7e" + "(" + Math.round(energyStatus) + "%" + ")";
 		} else if (energyStatus <= 30.0F) {
-			return "\u00A7c" + "(" + Integer.toString(Math.round(energyStatus)) + "%" + ")";
+			return "\u00A7c" + "(" + Math.round(energyStatus) + "%" + ")";
 		} else {
-			return "\u00A7a" + "(" + Integer.toString(Math.round(energyStatus)) + "%" + ")";
+			return "\u00A7a" + "(" + Math.round(energyStatus) + "%" + ")";
 		}
 	}
 

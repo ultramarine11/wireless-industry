@@ -300,10 +300,10 @@ public class QuantumChestplateWirelessCharge extends ItemArmor implements IElect
     @SideOnly(value = Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         ItemStack stack = new ItemStack(this, 1);
-        ElectricItem.manager.charge(stack, 0.0, Integer.MAX_VALUE, true, false);
+        ElectricItem.manager.charge(stack, 2.147483647E9, Integer.MAX_VALUE, true, false);
         list.add(stack);
         ItemStack stack1 = new ItemStack(this, 1);
-        ElectricItem.manager.charge(stack1, 2.147483647E9, Integer.MAX_VALUE, true, false);
+        ElectricItem.manager.charge(stack1, 0.0, Integer.MAX_VALUE, true, false);
         list.add(stack1);
     }
 

@@ -15,7 +15,7 @@ import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiWPPersonal extends GuiContainer {
 
-    private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/wirelesssolarpanel.png");
+    private static final ResourceLocation tex = new ResourceLocation(Reference.MOD_ID, "textures/gui/wirelesssolarpanel.png");
 
     private GuiTextField textField;
     private TileWPBasePersonal tileentity;
@@ -37,10 +37,6 @@ public class GuiWPPersonal extends GuiContainer {
         int h = (this.width - this.xSize) / 2; // = 0 ?
         int k = (this.height - this.ySize) / 2; // = 0 ?
 
-        // Всего 6 аргументов.
-        // Первые два - где нарисовать объект(x, y),
-        // Вторые два - где располагается сам объект (x, y),
-        // Последние два - ширина и высота объекта (x пикселей, y пикселей).
         this.drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
         if(this.tileentity.storage > 0) {
             int l = this.tileentity.gaugeEnergyScaled(47);
@@ -56,7 +52,7 @@ public class GuiWPPersonal extends GuiContainer {
         }
     }
 
-    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+    protected void drawGuiContainerForegroundLayer(int mX, int mY) {
         this.owner = this.tileentity.getOwner();
         String formatPanelName = I18n.format(this.tileentity.panelName);
         int nmPos = (this.xSize - this.fontRendererObj.getStringWidth(formatPanelName)) / 2;
@@ -80,35 +76,6 @@ public class GuiWPPersonal extends GuiContainer {
         this.fontRendererObj.drawString(channelString + this.tileentity.getChannel(), 77, 62, 13487565);
 
     }
-
-    /*public void initGui() {
-        super.initGui();
-        int guiX = (this.width - this.xSize) / 2;
-        int guiY = (this.height - this.ySize) / 2;
-
-        this.textField = new GuiTextField(this.fontRendererObj, guiX + 62, guiY + 24, 103, 12);
-        this.textField.setTextColor(-1);
-        this.textField.setDisabledTextColour(-1);
-        this.textField.setEnableBackgroundDrawing(false);
-        this.textField.setMaxStringLength(40);
-        // 1 аргумент - ID кнопки,
-        // 2 аргумент - её X позиция,
-        // 3 аргумент - её Y позиция,
-        // 4 аргумент - ширина,
-        // 5 аргумент - высота,
-        // 6 аргумент - текст.
-        this.buttonList.add(new GuiButton(2, guiX + 18, guiY + 62, 20, 20,
-                I18n.format("button.increment.channel")));
-        this.buttonList.add(new GuiButton(3, guiX + 45, guiY + 62, 20, 20,
-                I18n.format("button.decrement.channel")));
-    }*/
-
-    /*public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
-        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        this.textField.drawTextBox();
-    }*/
 
     protected void mouseClicked(int i, int j, int k) {
         super.mouseClicked(i, j, k);

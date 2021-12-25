@@ -10,7 +10,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.tiles.WirelessQGen;
+import ru.wirelesstools.tiles.WirelessQGenerator;
 
 public class BlockWirelessQuantumGenerator extends BlockContainer {
 
@@ -25,12 +25,11 @@ public class BlockWirelessQuantumGenerator extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-
-		return new WirelessQGen();
+		return new WirelessQGenerator();
 	}
 
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-		WirelessQGen tile = (WirelessQGen) world.getTileEntity(x, y, z);
+		WirelessQGenerator tile = (WirelessQGenerator) world.getTileEntity(x, y, z);
 		if (entity instanceof EntityPlayer) {
 			tile.setPlayerProfile(((EntityPlayer) entity).getGameProfile());
 		}
@@ -39,7 +38,7 @@ public class BlockWirelessQuantumGenerator extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
 			float subY, float subZ) {
 		if (!world.isRemote) {
-			WirelessQGen tile = (WirelessQGen) world.getTileEntity(x, y, z);
+			WirelessQGenerator tile = (WirelessQGenerator) world.getTileEntity(x, y, z);
 			if (tile.permitsAccess(player.getGameProfile()) || player.capabilities.isCreativeMode) {
 
 				player.openGui(MainWI.instance, 1, world, x, y, z);

@@ -23,7 +23,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -56,9 +55,7 @@ import ru.wirelesstools.proxy.ServerProxy;
 import ru.wirelesstools.tiles.*;
 import ru.wirelesstools.utils.RecipeUtil;
 
-import java.io.File;
-
-@Mod(modid = Reference.IDNAME, name = Reference.NAME_MOD, version = "0.7.9.6", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
+@Mod(modid = Reference.MOD_ID, name = Reference.NAME_MOD, version = "0.7.10", dependencies = "required-after:IC2;after:OpenBlocks;after:GraviSuite;after:CoFHCore;after:DraconicEvolution")
 public class MainWI {
 
     @SidedProxy(clientSide = "ru.wirelesstools.proxy.ClientProxy", serverSide = "ru.wirelesstools.proxy.ServerProxy")
@@ -133,7 +130,7 @@ public class MainWI {
         public static Fluid xpJuice = new Fluid("xpjuicewv");
     }
 
-    @Instance(Reference.IDNAME)
+    @Instance(Reference.MOD_ID)
     public static MainWI instance = new MainWI();
 
     @EventHandler
@@ -269,9 +266,9 @@ public class MainWI {
 
         GameRegistry.registerTileEntity(TileWirelessStoragePersonal1.class, "TileStorageWireless1Personal");
 
-        GameRegistry.registerTileEntity(TileMachinesCharger.class, "TileEntityMachinesCharger");
+        GameRegistry.registerTileEntity(TileWirelessMachinesCharger.class, "TileEntityMachinesCharger");
 
-        GameRegistry.registerTileEntity(WirelessQGen.class, "TileEntityWirelessQGen");
+        GameRegistry.registerTileEntity(WirelessQGenerator.class, "TileEntityWirelessQGen");
 
         GameRegistry.registerTileEntity(TileXPSender.class, "TileEntityXPSender");
 
@@ -444,7 +441,7 @@ public class MainWI {
         GameRegistry.addShapelessRecipe(new ItemStack(blockwirelesschargerprivate, 1),
                 new ItemStack(blockwirelesschargerpublic), Items.book, Blocks.emerald_block);
 
-        // TODO подумать над интеграцией с industrial upgrade
+        // TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ industrial upgrade
         if(Loader.isModLoaded("GraviSuite")) {
             GameRegistry.addRecipe(new ItemStack(wirelessChestPlate, 1, OreDictionary.WILDCARD_VALUE),
                     new Object[] {"C C", "BAB", "C C", 'A',

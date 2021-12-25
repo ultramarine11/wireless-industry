@@ -29,7 +29,7 @@ public class GuiXPSenderNew extends GuiIC2 {
 	@Override
 	public ResourceLocation getResourceLocation() {
 
-		return new ResourceLocation(Reference.IDNAME, "textures/gui/GuiXPSender.png");
+		return new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiXPSender.png");
 	}
 
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
@@ -106,12 +106,12 @@ public class GuiXPSenderNew extends GuiIC2 {
 		super.initGui();
 		int xGuiPos = (this.width - this.xSize) / 2;
 		int yGuiPos = (this.height - this.ySize) / 2;
-		// 1 аргумент - ID кнопки,
-		// 2 аргумент - её X позиция,
-		// 3 аргумент - её Y позиция,
-		// 4 аргумент - ширина,
-		// 5 аргумент - высота,
-		// 6 аргумент - текст.
+		// 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - ID пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ X пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 3 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ Y пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 5 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ.
 		this.buttonList.add(new GuiButton(0, xGuiPos + 36, yGuiPos + 50, 22, 12,
 				I18n.format("button.xpsender.increment")));
 		this.buttonList.add(new GuiButton(1, xGuiPos + 7, yGuiPos + 50, 22, 12,

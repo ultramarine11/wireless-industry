@@ -14,7 +14,7 @@ import ru.wirelesstools.utils.UtilFormatNumber;
 
 public class GuiWSBPersonal extends GuiContainer {
 
-    private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GuiTWSBPersonal.png");
+    private static final ResourceLocation tex = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiTWSBPersonal.png");
 
     private TileWirelessStorageBasePersonal tileentity;
 
@@ -36,10 +36,10 @@ public class GuiWSBPersonal extends GuiContainer {
         int h = (this.width - this.xSize) / 2; // = 0 ?
         int k = (this.height - this.ySize) / 2; // = 0 ?
 
-        // Всего 6 аргументов.
-        // Первые два - где нарисовать объект,
-        // Вторые два - где располагается сам объект,
-        // Последние два - ширина и высота объекта.
+        // пїЅпїЅпїЅпїЅпїЅ 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ,
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ,
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
         if(this.tileentity.energy > 0) {
 
@@ -93,12 +93,12 @@ public class GuiWSBPersonal extends GuiContainer {
         int xGuiPos = (this.width - this.xSize) / 2;
         int yGuiPos = (this.height - this.ySize) / 2;
 
-        // 1 аргумент - ID кнопки,
-        // 2 аргумент - её X позиция,
-        // 3 аргумент - её Y позиция,
-        // 4 аргумент - ширина,
-        // 5 аргумент - высота,
-        // 6 аргумент - текст.
+        // 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - ID пїЅпїЅпїЅпїЅпїЅпїЅ,
+        // 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ X пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+        // 3 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ Y пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+        // 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+        // 5 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+        // 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ.
         this.buttonList.add(new GuiButton(4, xGuiPos + 18, yGuiPos + 50, 20, 20,
                 I18n.format("button.increment.channel")));
         this.buttonList.add(new GuiButton(5, xGuiPos + 50, yGuiPos + 50, 20, 20,

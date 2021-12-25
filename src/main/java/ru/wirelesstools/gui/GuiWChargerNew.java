@@ -28,7 +28,7 @@ public class GuiWChargerNew extends GuiIC2 {
 	@Override
 	public ResourceLocation getResourceLocation() {
 
-		return new ResourceLocation(Reference.IDNAME, "textures/gui/GuiWCharger.png");
+		return new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiWCharger.png");
 	}
 
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
@@ -77,10 +77,10 @@ public class GuiWChargerNew extends GuiIC2 {
 		this.mc.getTextureManager().bindTexture(this.getResourceLocation());
 		this.xoffset = (this.width - this.xSize) / 2;
 		this.yoffset = (this.height - this.ySize) / 2;
-		// Всего 6 аргументов.
-		// Первые два - где нарисовать объект (x, y) начальные,
-		// Вторые два - где располагается сам объект (x, y) начальные,
-		// Последние два - ширина и высота объекта (x пикселей, y пикселей).
+		// пїЅпїЅпїЅпїЅпїЅ 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (x, y) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (x пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, y пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
 		this.drawTexturedModalRect(this.xoffset, this.yoffset, 0, 0, this.xSize, this.ySize);
 
 		if (this.container.base.getIsPrivate()) {
@@ -122,12 +122,12 @@ public class GuiWChargerNew extends GuiIC2 {
 		int realcenter = xGuiPos + guiCenter;
 		int xButtonSize = 22;
 		int centerOffsetButton = xButtonSize / 2 + 2;
-		// 1 аргумент - ID кнопки,
-		// 2 аргумент - её X позиция,
-		// 3 аргумент - её Y позиция,
-		// 4 аргумент - ширина,
-		// 5 аргумент - высота,
-		// 6 аргумент - текст.
+		// 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - ID пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ X пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 3 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ Y пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 5 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ,
+		// 6 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ.
 		this.buttonList.add(new GuiButton(0, realcenter + centerOffsetButton - 11, yGuiPos + 60, xButtonSize, 12,
 				I18n.format("button.wcharger.increment")));
 		this.buttonList.add(new GuiButton(1, realcenter - centerOffsetButton - 11, yGuiPos + 60, xButtonSize, 12,

@@ -44,7 +44,6 @@ public class ItemSolarWirelessEURFHelmet extends ItemArmor implements IElectricI
     public ItemSolarWirelessEURFHelmet(String name) {
         super(ArmorMaterial.DIAMOND, 0, 0);
         this.setUnlocalizedName(name);
-        //	this.setMaxStackSize(1);
         this.maxenergyEU = 250000000.0D;
         this.transferLimit = 250000.0D;
         this.tier = 4;

@@ -8,7 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.wirelesstools.MainWI;
 import ru.wirelesstools.Reference;
-import ru.wirelesstools.tiles.TileMachinesCharger;
+import ru.wirelesstools.tiles.TileWirelessMachinesCharger;
 
 public class BlockMachinesCharger extends BlockContainer {
 
@@ -26,7 +26,7 @@ public class BlockMachinesCharger extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 
-        return new TileMachinesCharger();
+        return new TileWirelessMachinesCharger();
     }
 
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,

@@ -12,7 +12,7 @@ import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public class GuiWirelessQGen extends GuiContainer {
 
-    private static final ResourceLocation tex = new ResourceLocation(Reference.IDNAME, "textures/gui/GUIQuantumGenerator.png");
+    private static final ResourceLocation tex = new ResourceLocation(Reference.MOD_ID, "textures/gui/GUIQuantumGenerator.png");
 
     private WirelessQuantumGeneratorBase tile;
 

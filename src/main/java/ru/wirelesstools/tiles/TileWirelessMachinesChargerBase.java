@@ -1,6 +1,8 @@
 package ru.wirelesstools.tiles;
 
 import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -28,7 +30,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     public double energyEU;
     protected int tier;
     public String chargername;
-    private boolean addedToEnergyNet = false;
+    protected boolean addedToEnergyNet = false;
 
     private boolean chargeEU;
     private boolean chargeRF;
@@ -85,7 +87,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     @Override
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
-        nbttagcompound.setDouble("energy", this.energyEU);
+        nbttagcompound.setDouble("energyEU", this.energyEU);
         nbttagcompound.setInteger("energyRF", this.energyRF);
         nbttagcompound.setBoolean("chargeEU", this.chargeEU);
         nbttagcompound.setBoolean("chargeRF", this.chargeRF);
@@ -99,7 +101,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
-        this.energyEU = nbttagcompound.getDouble("energy");
+        this.energyEU = nbttagcompound.getDouble("energyEU");
         this.energyRF = nbttagcompound.getInteger("energyRF");
         this.chargeEU = nbttagcompound.getBoolean("chargeEU");
         this.chargeRF = nbttagcompound.getBoolean("chargeRF");
@@ -203,7 +205,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
         return new ContainerWirelessMachinesChargerNew(entityPlayer, this);
     }
 
-    @Override
+    @SideOnly(value = Side.CLIENT)
     public GuiScreen getGui(EntityPlayer player, boolean isAdmin) {
         return new GuiWirelessMachinesChargerNew(new ContainerWirelessMachinesChargerNew(player, this));
     }

@@ -18,7 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import ru.wirelesstools.MainWI;
@@ -34,7 +37,7 @@ import java.util.Map;
 
 public class LuckyVajra extends ItemTool implements IElectricItem {
 
-    public double maxCharge;
+    protected double maxCharge;
     protected int tier;
     protected int energyPerOperation;
     protected double transferLimit;
@@ -87,8 +90,8 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
             TileEntity te = world.getTileEntity(i, j, k);
             if(te instanceof TileVajraCharger) {
                 TileVajraCharger tilewch = (TileVajraCharger) te;
-                if(tilewch.energy > 0 && ElectricItem.manager.charge(itemstack, Integer.MAX_VALUE,
-                        Integer.MAX_VALUE, true, true) > 0) {
+                if(tilewch.energy > 0.0 && ElectricItem.manager.charge(itemstack, Integer.MAX_VALUE,
+                        Integer.MAX_VALUE, true, true) > 0.0) {
                     double energySent = ElectricItem.manager.charge(itemstack, tilewch.energy,
                             Integer.MAX_VALUE, true, false);
                     tilewch.decreaseEnergy(energySent);
@@ -107,37 +110,25 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
         if(!world.isRemote) {
             if(player.isSneaking()) {
                 boolean modenew = !nbt.getBoolean("vajramode");
-                if(ConfigWI.enableVajraDischargingAfterEnchant) {
+                if(ConfigWI.enableVajraDischargingAfterEnchant)
                     if(ElectricItem.manager.getCharge(stack) < ConfigWI.vajraEnchantDischargeEnergyAmount) {
                         HelperUtils.sendColoredMessageToPlayer(player, "chat.message.vajra.not.enough.energy", EnumChatFormatting.RED);
                         return stack;
                     }
-                    else {
-                        nbt.setBoolean("vajramode", modenew);
-                        Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
-                        if(modenew) {
-                            enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
-                            HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
-                        } else {
-                            enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
-                            HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
-                        }
-                        ElectricItem.manager.discharge(stack, ConfigWI.vajraEnchantDischargeEnergyAmount, Integer.MAX_VALUE, true, false, false);
-                        EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
-                    }
+
+                nbt.setBoolean("vajramode", modenew);
+                Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
+                if(modenew) {
+                    enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(ConfigWI.vajraFortuneEnchantmentlevel));
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
+                } else {
+                    enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
+                    HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
                 }
-                else {
-                    nbt.setBoolean("vajramode", modenew);
-                    Map<Integer, Integer> enchantmentMaplocal = EnchantmentHelper.getEnchantments(stack);
-                    if(modenew) {
-                        enchantmentMaplocal.put(Integer.valueOf(Enchantment.fortune.effectId), Integer.valueOf(5));
-                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.active", EnumChatFormatting.AQUA);
-                    } else {
-                        enchantmentMaplocal.remove(Integer.valueOf(Enchantment.fortune.effectId));
-                        HelperUtils.sendColoredMessageToPlayer(player, "chat.message.fortune.none", EnumChatFormatting.DARK_PURPLE);
-                    }
-                    EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
-                }
+
+                if(ConfigWI.enableVajraDischargingAfterEnchant)
+                    ElectricItem.manager.discharge(stack, ConfigWI.vajraEnchantDischargeEnergyAmount, Integer.MAX_VALUE, true, false, false);
+                EnchantmentHelper.setEnchantments(enchantmentMaplocal, stack);
             }
         }
         return stack;
@@ -195,9 +186,9 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
 
     @SideOnly(value = Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if(org.lwjgl.input.Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             info.add(I18n.format("about.ench1") + " " + EnumChatFormatting.AQUA
-                    + I18n.format("tooltip.fortune"));
+                    + I18n.format("tooltip.fortune") + " " + ConfigWI.vajraFortuneEnchantmentlevel);
             info.add(I18n.format("about.ench2"));
         } else {
             info.add(EnumChatFormatting.ITALIC + I18n.format("press.lshift"));
