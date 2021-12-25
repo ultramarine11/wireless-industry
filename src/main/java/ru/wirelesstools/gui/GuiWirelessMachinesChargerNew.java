@@ -22,32 +22,29 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
 
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String tileentityname = I18n.format(this.container.base.chargername);
-        String autoMode = I18n.format("gui.wmcharger.mode.automatic");
-        String euAll = UtilFormatNumber.formatNumber(this.container.base.energyEU) + " / "
-                + UtilFormatNumber.formatNumber(this.container.base.getMaxChargerEUEnergy()) + " EU";
-        String rfAll = UtilFormatNumber.formatNumber(this.container.base.energyRF) + " / "
-                + UtilFormatNumber.formatNumber(this.container.base.getMaxChargerRFEnergy()) + " RF";
+        String storageString = I18n.format("gui.wirind.wirelessmachineschargerstorage") + ": ";
 
-        this.fontRendererObj.drawString(tileentityname,
-                (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2, 5, 4210752);
+        String energyEUformatted = UtilFormatNumber.formatNumber(this.container.base.energyEU);
+        String maxstorageEUformatted = UtilFormatNumber.formatNumber(this.container.base.getMaxChargerEUEnergy());
+        String euAll = energyEUformatted + " / " + maxstorageEUformatted + " EU";
 
-        if(this.container.base.getMode() == 8) {
-            this.fontRendererObj.drawString(autoMode,
-                    (this.xSize - this.fontRendererObj.getStringWidth(autoMode)) / 2, 22, 4210752);
-        }
-        else {
-            String rate = String.format("%d", (int)this.container.base.getChargeRate()) + " Eu/t";
-            this.fontRendererObj.drawString(rate,
-                    (this.xSize - this.fontRendererObj.getStringWidth(rate)) / 2, 22, 4210752);
-        }
+        String energyRFformatted = UtilFormatNumber.formatNumber(this.container.base.energyRF);
+        String maxstorageRFformatted = UtilFormatNumber.formatNumber(this.container.base.getMaxChargerRFEnergy());
+        String rfAll = energyRFformatted + " / " + maxstorageRFformatted + " RF";
+
+        // String stringEnergyAll = storageString + energyEUformatted + " / " + maxstorageEUformatted + " EU";
+
+        int nmPos1 = (this.xSize - this.fontRendererObj.getStringWidth(tileentityname)) / 2;
+        // int nmPos2 = (this.xSize - this.fontRendererObj.getStringWidth(stringEnergyAll)) / 2;
+
+        this.fontRendererObj.drawString(tileentityname, nmPos1, 5, 4210752);
+        // this.fontRendererObj.drawString(stringEnergyAll, nmPos2, 23, 4210752);
 
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, euAll, 18, 28, 29, 68);
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, rfAll, 144, 28, 155, 68);
 
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, StatCollector.translateToLocal("gui.wirind.tooltip.charger.switch.eu"), 63, 55, 80, 73);
         GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, StatCollector.translateToLocal("gui.wirind.tooltip.charger.switch.rf"), 96, 55, 113, 73);
-
-        GuiTooltipHelper.drawAreaTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, StatCollector.translateToLocal("gui.wirind.tooltip.charger.change.rate"), 60, 19, 113, 33);
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
@@ -79,8 +76,8 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
         }
     }
 
-    protected void mouseClicked(int i, int j, int button) {
-        super.mouseClicked(i, j, button); // LMB (button = 0), RMB (button = 1)
+    protected void mouseClicked(int i, int j, int k) {
+        super.mouseClicked(i, j, k);
         int xMin = (this.width - this.xSize) / 2;
         int yMin = (this.height - this.ySize) / 2;
         int x = i - xMin;
@@ -93,17 +90,6 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
         if(x >= 96 && x <= 113 && y >= 55 && y <= 73) {
             IC2.network.get().initiateClientTileEntityEvent(this.container.base, 1);
         }
-
-        if(x >= 60 && x <= 113 && y >= 19 && y <= 33) {
-            switch(button) {
-                case 0:
-                    IC2.network.get().initiateClientTileEntityEvent(this.container.base, 2);
-                    break;
-                case 1:
-                    IC2.network.get().initiateClientTileEntityEvent(this.container.base, 3);
-                    break;
-            }
-        }
     }
 
     @Override
@@ -113,6 +99,6 @@ public class GuiWirelessMachinesChargerNew extends GuiIC2 {
 
     @Override
     public ResourceLocation getResourceLocation() {
-        return new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiWirelessMachinesCharger3.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiWirelessMachinesCharger2.png");
     }
 }

@@ -246,7 +246,7 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     @Override
-    public ContainerBase<TileXPSenderElectric> getGuiContainer(EntityPlayer player) {
+    public ContainerBase<?> getGuiContainer(EntityPlayer player) {
         return new ContainerXPSenderNew(player, this);
     }
 

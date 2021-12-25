@@ -21,6 +21,7 @@ public class BlockXPSenderElectric extends BlockContainer {
         this.setCreativeTab(MainWI.tabwi);
         this.setHardness(3.0F);
         this.setResistance(5.0F);
+
     }
 
     public IIcon getIcon(int side, int metadata) {

@@ -6,7 +6,12 @@ import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public interface IWirelessSolarHandler {
 
-	void transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver);
+	/**
+	 * This method is used to transmit EU wirelessly from solar panel to storage.
+	 * 
+	 * @return transferred amount
+	 */
+	double transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver);
 	
 	void transmitEnergyWireleslyQGen(IWirelessStorage receiver, WirelessQuantumGeneratorBase qgen);
 

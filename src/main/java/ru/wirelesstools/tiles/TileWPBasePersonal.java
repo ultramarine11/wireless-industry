@@ -24,6 +24,7 @@ import ru.wirelesstools.container.ContainerWPPersonal;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 public class TileWPBasePersonal extends TileEntity implements IEnergySource, IInventory, IPersonalBlock,
@@ -89,6 +90,7 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToEnergyNet = true;
         }
+
         this.loaded = true;
     }
 
@@ -105,6 +107,27 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
         }
     }
 
+    /*
+     * protected void synchronizeData(int channel2) { if (!this.worldObj.isRemote) {
+     * if (!this.isInvalid()) { if
+     * (TileWirelessStorageBasePersonal.mapofThis.containsKey(true) &
+     * TileWirelessStorageBasePersonal.mapofThis
+     * .containsValue(TileWirelessStorageBasePersonal.listofstorages)) { if
+     * (!(TileWirelessStorageBasePersonal.mapofThis.get(true).isEmpty())) { for
+     * (TileWirelessStorageBasePersonal te :
+     * TileWirelessStorageBasePersonal.mapofThis.get(true)) {
+     *
+     * if (areSameChannel(channel2, te.channel, this.owner, te.owner)) {
+     * this.isconnected = true;
+     *
+     * tryWirelessTransmit(te); }
+     *
+     * // there was a checking... } } } }
+     *
+     * }
+     *
+     * }
+     */
     protected void operateWirelessTransfer() {
         if(!this.worldObj.isRemote) {
             if(!this.isInvalid()) {
@@ -115,6 +138,7 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
                             if(areSameChannel(this.channel, te.channel, this.owner, te.owner)) {
                                 this.isconnected = true;
                                 WirelessTransfer.transmithandler.transferEnergyWirelessly(this, te);
+                                this.markDirty();
                             }
                         }
                     }
@@ -123,9 +147,32 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
         }
     }
 
+    /*
+     * public void tryWirelessTransmit(TileWirelessStorageBasePersonal twsbp) { if
+     * (!this.worldObj.isRemote) {
+     *
+     * boolean needInvUpdate = false; int sentPacket = this.wirelesstransferlimit;
+     *
+     * if (this.storage > 0 & this.storage != 0) {
+     *
+     * if (twsbp.energy < twsbp.maxStorage) {
+     *
+     * twsbp.energy += sentPacket; this.storage -= sentPacket;
+     *
+     * if (this.storage < 0) {
+     *
+     * this.storage = 0; needInvUpdate = true; } } }
+     *
+     * if (needInvUpdate) { markDirty();
+     *
+     * }
+     *
+     * } }
+     */
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         if(nbttagcompound.hasKey("ownerGameProfile")) {
+
             this.owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("ownerGameProfile"));
         }
         this.storage = nbttagcompound.getDouble("energy");
@@ -143,6 +190,7 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
 
     public void onUnloaded() {
         if(!this.worldObj.isRemote && this.addedToEnergyNet) {
+
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
             this.addedToEnergyNet = false;
         }
@@ -153,19 +201,22 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
     public void updateEntity() {
         super.updateEntity();
 
-        if(this.worldObj.isRemote)
+        if(this.worldObj.isRemote) {
+
             return;
+        }
 
         if(!this.initialized) {
-            this.intialize();
+
+            intialize();
         }
 
         if(this.lastX != this.xCoord || this.lastZ != this.zCoord || this.lastY != this.yCoord) {
             this.lastX = this.xCoord;
             this.lastY = this.yCoord;
             this.lastZ = this.zCoord;
-            this.onUnloaded();
-            this.intialize();
+            onUnloaded();
+            intialize();
         }
 
         this.gainFuel();
@@ -176,23 +227,27 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
         // this.syncNumUsingPlayers();
 
         if(this.numUsingPlayers == 0 | this.numUsingPlayers > 0) {
+
             this.permitsAccess(this.owner);
         }
 
         if(this.generating > 0) {
+
             if(this.storage + this.generating <= this.maxStorage) {
+
                 this.storage += this.generating;
             } else {
+
                 this.storage = this.maxStorage;
             }
         }
 
         boolean needInvUpdate = false;
         double sentPacket;
-        for(ItemStack chargeSlot : this.chargeSlots) {
-            if(chargeSlot != null && chargeSlot.getItem() instanceof ic2.api.item.IElectricItem
+        for(int i = 0; i < this.chargeSlots.length; i++) {
+            if(this.chargeSlots[i] != null && this.chargeSlots[i].getItem() instanceof ic2.api.item.IElectricItem
                     && this.storage > 0) {
-                sentPacket = ElectricItem.manager.charge(chargeSlot, this.storage, 2147483647, false, false);
+                sentPacket = ElectricItem.manager.charge(this.chargeSlots[i], this.storage, 2147483647, false, false);
                 if(sentPacket > 0.0D) {
                     needInvUpdate = true;
                 }
@@ -200,7 +255,7 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
             }
         }
         if(needInvUpdate) {
-            this.markDirty();
+            markDirty();
         }
     }
 
@@ -217,26 +272,41 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
     }
 
     public void updateVisibility() {
-        boolean rainWeather = (this.wetBiome && (this.worldObj.isRaining() || this.worldObj.isThundering()));
-        this.sunIsUp = this.worldObj.isDaytime() && !rainWeather;
-        this.skyIsVisible = this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord + 1, this.zCoord) && !this.noSunWorld;
+        Boolean rainWeather = Boolean.valueOf((this.wetBiome && (this.worldObj.isRaining() || this.worldObj.isThundering())));
+        if(!this.worldObj.isDaytime() || rainWeather.booleanValue()) {
+
+            this.sunIsUp = false;
+        } else {
+
+            this.sunIsUp = true;
+        }
+
+        if(!this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord + 1, this.zCoord) || this.noSunWorld) {
+
+            this.skyIsVisible = false;
+        } else {
+
+            this.skyIsVisible = true;
+        }
     }
 
-    public void gainFuel() {
-        if(this.worldObj.getTotalWorldTime() % 20L == 0)
+    public int gainFuel() {
+        if(this.worldObj.getTotalWorldTime() % 20L == 0) {
+
             this.updateVisibility();
+        }
 
         if(this.sunIsUp && this.skyIsVisible) {
-            this.generating = this.genDay;
-            return;
+
+            return this.generating = this.genDay;
         }
 
         if(this.skyIsVisible) {
-            this.generating = this.genNight;
-            return;
+
+            return this.generating = this.genNight;
         }
 
-        this.generating = 0;
+        return this.generating = 0;
     }
 
     public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
@@ -259,8 +329,15 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
         return (channelwpp == channelwsb) && (((id1 != null) && (id1.equals(id2))) || (id1 == id2));
     }
 
-    public void changeChannel(int value) {
-        this.channel = Math.max(this.channel + value, 0);
+    public void setChannel(int value) {
+        int channel_local = this.channel;
+        if(value < 0) {
+            channel_local += value;
+            if(channel_local < 0) channel_local = 0;
+        } else {
+            channel_local += value;
+        }
+        this.channel = channel_local;
     }
 
     public int getChannel() {
@@ -407,16 +484,18 @@ public class TileWPBasePersonal extends TileEntity implements IEnergySource, IIn
     @Override
     public void extractEnergy(double amount) {
         this.storage -= Math.min(amount, this.storage);
+        if(this.storage < 0)
+            this.storage = 0;
     }
 
     @Override
     public void onNetworkEvent(EntityPlayer player, int id) {
         switch(id) {
             case 0:
-                this.changeChannel(1);
+                this.setChannel(1);
                 break;
             case 1:
-                this.changeChannel(-1);
+                this.setChannel(-1);
                 break;
         }
     }

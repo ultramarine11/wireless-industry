@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.network.INetworkClientTileEntityEventListener;
 import ic2.api.network.INetworkDataProvider;
 import ic2.api.network.INetworkUpdateListener;
+import ic2.api.tile.IEnergyStorage;
 import ic2.core.ContainerBase;
 import ic2.core.IC2;
 import ic2.core.IHasGui;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Vector;
 
 public class TileEntityWirelessCharger extends TileEntity
-        implements IEnergySink, IPersonalBlock, IWirelessCharger, IInventory, INetworkDataProvider,
+        implements IEnergySink, IEnergyStorage, IPersonalBlock, IWirelessCharger, IInventory, INetworkDataProvider,
         INetworkUpdateListener, IHasGui, INetworkClientTileEntityEventListener {
 
     public int maxStorage;
@@ -86,10 +87,12 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     public int gaugeEnergyScaled(int i) {
+
         return (int) (this.energy * i / this.maxStorage);
     }
 
     public int getRadiusOfCharge() {
+
         return this.radiusofcharge;
     }
 
@@ -139,10 +142,18 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     public void changeRadius(int value) {
-        if(value < 0)
-            this.radiusofcharge = Math.max(this.radiusofcharge + value, 1);
-        else
-            this.radiusofcharge = Math.min(this.radiusofcharge + value, 25);
+        int localradius = this.radiusofcharge;
+        if(value < 0) {
+            localradius += value;
+            if(localradius < 1)
+                localradius = 1;
+        } else {
+            localradius += value;
+            if(localradius > 25)
+                localradius = 25;
+        }
+
+        this.radiusofcharge = localradius;
     }
 
     @Override
@@ -176,6 +187,42 @@ public class TileEntityWirelessCharger extends TileEntity
         }
     }
 
+    @Override
+    public int getStored() {
+        return (int) this.energy;
+    }
+
+    @Override
+    public void setStored(int energy) {
+        this.energy = energy;
+    }
+
+    @Override
+    public int addEnergy(int amount) {
+        this.energy += amount;
+        return amount;
+    }
+
+    @Override
+    public int getCapacity() {
+        return this.maxStorage;
+    }
+
+    @Override
+    public int getOutput() {
+        return this.output;
+    }
+
+    @Override
+    public double getOutputEnergyUnitsPerTick() {
+        return this.output;
+    }
+
+    @Override
+    public boolean isTeleporterCompatible(ForgeDirection side) {
+        return false;
+    }
+
     public void setPlayerProfile(GameProfile profile) {
         this.owner = profile;
         IC2.network.get().updateTileEntityField(this, "owner");
@@ -202,7 +249,12 @@ public class TileEntityWirelessCharger extends TileEntity
 
     @Override
     public void decreaseEnergy(double amount) {
-        this.energy -= Math.min(this.energy, amount);
+        double energylocal = this.energy;
+        energylocal -= amount;
+        if(energylocal < 0)
+            energylocal = 0;
+
+        this.energy = energylocal;
     }
 
     @Override
@@ -316,7 +368,7 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     @Override
-    public ContainerBase<TileEntityWirelessCharger> getGuiContainer(EntityPlayer player) {
+    public ContainerBase<?> getGuiContainer(EntityPlayer player) {
         return new ContainerWChargerNew(player, this);
     }
 
