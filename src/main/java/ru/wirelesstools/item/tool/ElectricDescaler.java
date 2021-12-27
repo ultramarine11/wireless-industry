@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ElectricDescaler extends Item implements IElectricItem {
 
-    public double maxCharge;
+    protected double maxCharge;
     protected final int tier;
     protected final double transferLimit;
 

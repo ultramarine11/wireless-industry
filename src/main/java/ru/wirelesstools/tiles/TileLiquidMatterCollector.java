@@ -155,7 +155,7 @@ public class TileLiquidMatterCollector extends TileEntityInventory implements IF
     }
 
     @Override
-    public ContainerBase<?> getGuiContainer(EntityPlayer player) {
+    public ContainerBase<TileLiquidMatterCollector> getGuiContainer(EntityPlayer player) {
         return new ContainerLiquidMatterCollector(player, this);
     }
 

@@ -322,7 +322,7 @@ public class ConfigWI {
                     .getInt();
 
             ConfigWI.machinesChargerMaxEnergyDouble = config.get(categoryWIRELESSCHARGER, "MaxStorageMChEU", 10000000000.0, "Maximum storage of wireless machines charger (EU)").getDouble();
-            ConfigWI.machinesChargerMaxEnergyRF = config.get(categoryWIRELESSCHARGER, "MaxStorageMChRF", 2145000000, "Maximum storage of wireless machines charger (RF)")
+            ConfigWI.machinesChargerMaxEnergyRF = config.get(categoryWIRELESSCHARGER, "MaxStorageMChRF", Integer.MAX_VALUE, "Maximum storage of wireless machines charger (RF)")
                     .getInt();
             ConfigWI.machinesChargerTier = config.get(categoryWIRELESSCHARGER, "TierMCh", 14, "Tier of wireless machines charger")
                     .getInt();

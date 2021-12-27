@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerWirelessMachinesChargerNew;
@@ -31,6 +32,8 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     protected int tier;
     public String chargername;
     protected boolean addedToEnergyNet = false;
+    private double chargeRate;
+    private short mode;
 
     private boolean chargeEU;
     private boolean chargeRF;
@@ -44,6 +47,8 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
         this.tier = tier;
         this.chargeEU = true;
         this.chargeRF = true;
+        this.chargeRate = 512.0;
+        this.mode = 0;
     }
 
     public int gaugeEUScaled(int i) {
@@ -60,6 +65,78 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
 
     public boolean isChargingRF() {
         return this.chargeRF;
+    }
+
+    @Override
+    public double getChargeRate() {
+        return this.chargeRate;
+    }
+
+    @Override
+    public short getMode() {
+        return this.mode;
+    }
+
+    private void incrementChargeRate() {
+        if(++this.mode > 8) // 8 = automatic mode
+            this.mode = 0;
+        switch(this.mode) {
+            case 0:
+                this.chargeRate = 512.0;
+                break;
+            case 1:
+                this.chargeRate = 1024.0;
+                break;
+            case 2:
+                this.chargeRate = 2048.0;
+                break;
+            case 3:
+                this.chargeRate = 4096.0;
+                break;
+            case 4:
+                this.chargeRate = 8192.0;
+                break;
+            case 5:
+                this.chargeRate = 16384.0;
+                break;
+            case 6:
+                this.chargeRate = 32768.0;
+                break;
+            case 7:
+                this.chargeRate = 65536.0;
+                break;
+        }
+    }
+
+    private void decrementChargeRate() {
+        if(--this.mode < 0)
+            this.mode = 8; // 8 = automatic mode
+        switch(this.mode) {
+            case 0:
+                this.chargeRate = 512.0;
+                break;
+            case 1:
+                this.chargeRate = 1024.0;
+                break;
+            case 2:
+                this.chargeRate = 2048.0;
+                break;
+            case 3:
+                this.chargeRate = 4096.0;
+                break;
+            case 4:
+                this.chargeRate = 8192.0;
+                break;
+            case 5:
+                this.chargeRate = 16384.0;
+                break;
+            case 6:
+                this.chargeRate = 32768.0;
+                break;
+            case 7:
+                this.chargeRate = 65536.0;
+                break;
+        }
     }
 
     public void onLoaded() {
@@ -85,12 +162,14 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
-        super.writeToNBT(nbttagcompound);
-        nbttagcompound.setDouble("energyEU", this.energyEU);
-        nbttagcompound.setInteger("energyRF", this.energyRF);
-        nbttagcompound.setBoolean("chargeEU", this.chargeEU);
-        nbttagcompound.setBoolean("chargeRF", this.chargeRF);
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setDouble("energyEU", this.energyEU);
+        nbt.setInteger("energyRF", this.energyRF);
+        nbt.setBoolean("chargeEU", this.chargeEU);
+        nbt.setBoolean("chargeRF", this.chargeRF);
+        nbt.setDouble("chargeRate", this.chargeRate);
+        nbt.setShort("chargerMode", this.mode);
     }
 
     @Override
@@ -99,21 +178,38 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
-        super.readFromNBT(nbttagcompound);
-        this.energyEU = nbttagcompound.getDouble("energyEU");
-        this.energyRF = nbttagcompound.getInteger("energyRF");
-        this.chargeEU = nbttagcompound.getBoolean("chargeEU");
-        this.chargeRF = nbttagcompound.getBoolean("chargeRF");
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        this.energyEU = nbt.getDouble("energyEU");
+        this.energyRF = nbt.getInteger("energyRF");
+        this.chargeEU = nbt.getBoolean("chargeEU");
+        this.chargeRF = nbt.getBoolean("chargeRF");
+        this.chargeRate = nbt.getDouble("chargeRate");
+        this.mode = nbt.getShort("chargerMode");
     }
 
-    public void decreaseEnergy(double amountdecrease) {
-        this.energyEU -= Math.min(this.energyEU, amountdecrease);
+    public void decreaseEnergy(double amount) {
+        this.energyEU -= Math.min(this.energyEU, amount);
     }
 
     @Override
     public void decreaseEnergyRF(int amount) {
-        this.energyRF -= amount;
+        this.energyRF -= Math.min(this.energyRF, amount);
+    }
+
+    @Override
+    public World getChargerWorld() {
+        return this.worldObj;
+    }
+
+    @Override
+    public int getXCoord() {
+        return this.xCoord;
+    }
+
+    @Override
+    public int getZCoord() {
+        return this.zCoord;
     }
 
     @Override
@@ -148,7 +244,7 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
     }
 
     @Override
-    public double getChargerEnergy() {
+    public double getChargerEnergyEU() {
         return this.energyEU;
     }
 
@@ -197,12 +293,18 @@ public class TileWirelessMachinesChargerBase extends TileEntityInventory
             case 1:
                 this.chargeRF = !this.chargeRF;
                 break;
+            case 2:
+                this.incrementChargeRate();
+                break;
+            case 3:
+                this.decrementChargeRate();
+                break;
         }
     }
 
     @Override
-    public ContainerBase<?> getGuiContainer(EntityPlayer entityPlayer) {
-        return new ContainerWirelessMachinesChargerNew(entityPlayer, this);
+    public ContainerBase<TileWirelessMachinesChargerBase> getGuiContainer(EntityPlayer player) {
+        return new ContainerWirelessMachinesChargerNew(player, this);
     }
 
     @SideOnly(value = Side.CLIENT)

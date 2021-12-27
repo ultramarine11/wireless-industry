@@ -47,6 +47,7 @@ public class LuckyVajra extends ItemTool implements IElectricItem {
         this.setUnlocalizedName("wirelessvajra");
         this.setTextureName(Reference.PathTex + "itemVajraLucky");
         this.setCreativeTab(MainWI.tabwi);
+        this.setMaxDamage(27);
         this.tier = 3;
         this.maxCharge = ConfigWI.maxVajraCharge;
         this.transferLimit = 500000.0;

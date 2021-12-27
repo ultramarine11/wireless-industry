@@ -6,8 +6,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.network.INetworkClientTileEntityEventListener;
 import ic2.api.network.INetworkDataProvider;
-import ic2.api.network.INetworkUpdateListener;
-import ic2.api.tile.IEnergyStorage;
 import ic2.core.IC2;
 import ic2.core.block.personal.IPersonalBlock;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,10 +18,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.wirelesstools.container.ContainerWSBPersonal;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
-public class TileWirelessStorageBasePersonal extends TileEntity implements IEnergyStorage, IEnergySource,
-        IPersonalBlock, IWirelessStorage, INetworkDataProvider, INetworkUpdateListener, INetworkClientTileEntityEventListener {
+public class TileWirelessStorageBasePersonal extends TileEntity implements IEnergySource,
+        IPersonalBlock, IWirelessStorage, INetworkDataProvider, INetworkClientTileEntityEventListener {
 
     public int maxStorage;
     public double energy;
@@ -73,35 +74,25 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
         }
 
         if(!this.initialized) {
-            intialize();
+            this.intialize();
         }
 
         if((!this.worldObj.isRemote) & (!this.isAddedToMap)) {
             if(!listofstorages.contains(this)) {
-
                 listofstorages.add(this);
 
                 if(mapofThis.isEmpty() | (mapofThis.containsKey(false) & mapofThis.containsValue(listofstorages))) {
-
                     mapofThis.clear();
                     mapofThis.put(true, listofstorages);
                 }
             }
-
             this.isAddedToMap = true;
             this.isconnected = true;
-
-            this.markDirty();
         }
 
         if(this.energy > this.maxStorage) {
             this.energy = this.maxStorage;
-
-            this.markDirty();
         }
-
-        this.markDirty();
-
     }
 
     public void validate() {
@@ -116,7 +107,6 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
             this.addedToEnergyNet = true;
             this.isconnected = true;
         }
-
         this.loaded = true;
     }
 
@@ -124,7 +114,6 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
         if(this.loaded) {
             this.onUnloaded();
         }
-
         this.isconnected = false;
         super.invalidate();
     }
@@ -152,58 +141,13 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
     }
 
     @Override
-    public int getStored() {
-
-        return (int) this.energy;
-    }
-
-    @Override
-    public void setStored(int energy) {
-
-        this.energy = energy;
-    }
-
-    @Override
-    public int addEnergy(int amount) {
-        this.energy += amount;
-
-        return getStored();
-    }
-
-    @Override
-    public int getCapacity() {
-
-        return this.maxStorage;
-    }
-
-    @Override
-    public int getOutput() {
-
-        return this.output;
-    }
-
-    @Override
-    public double getOutputEnergyUnitsPerTick() {
-
-        return this.output;
-    }
-
-    @Override
-    public boolean isTeleporterCompatible(ForgeDirection nameForgeDirection) {
-
-        return false;
-    }
-
-    @Override
     public boolean emitsEnergyTo(TileEntity nameTileEntity, ForgeDirection nameForgeDirection) {
-
         return true;
     }
 
     @Override
     public double getOfferedEnergy() {
         if(this.energy >= this.output) {
-
             return Math.min(this.energy, this.output);
         }
         return 0;
@@ -211,13 +155,11 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
 
     @Override
     public void drawEnergy(double amount) {
-
         this.energy -= amount;
     }
 
     @Override
     public int getSourceTier() {
-
         return this.tier;
     }
 
@@ -247,16 +189,8 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
         this.channel = nbttagcompound.getInteger("channel");
     }
 
-    public void setChannel(int value) {
-        int channel_local = this.channel;
-        if(value < 0) {
-            channel_local += value;
-            if(channel_local < 0) channel_local = 0;
-        }
-        else {
-            channel_local += value;
-        }
-        this.channel = channel_local;
+    public void changeChannel(int value) {
+        this.channel = Math.max(this.channel + value, 0);
     }
 
     public Container getGuiContainer(InventoryPlayer inventory) {
@@ -299,13 +233,13 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
     }
 
     @Override
-    public void addEnergy(double amount) {
-        this.energy += amount;
+    public double getFreeEnergy() {
+        return this.getMaxCapacityOfStorage() - this.getCurrentEnergyInStorage();
     }
 
     @Override
-    public void onNetworkUpdate(String field) {
-
+    public void addEnergy(double amount) {
+        this.energy += amount;
     }
 
     @Override
@@ -319,10 +253,10 @@ public class TileWirelessStorageBasePersonal extends TileEntity implements IEner
     public void onNetworkEvent(EntityPlayer player, int id) {
         switch(id) {
             case 0:
-                this.setChannel(1);
+                this.changeChannel(1);
                 break;
             case 1:
-                this.setChannel(-1);
+                this.changeChannel(-1);
                 break;
         }
     }

@@ -39,15 +39,18 @@ public class WirelessUtil {
     private static void sendRFToReceiver(IWirelessMachineCharger charger, IEnergyReceiver receiver) {
         if((receiver.getMaxEnergyStored(ForgeDirection.UNKNOWN) - receiver.getEnergyStored(ForgeDirection.UNKNOWN)) > 0
                 && charger.getChargerEnergyRF() > 0) {
-            // int sentRF = receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false);
             charger.decreaseEnergyRF(receiver.receiveEnergy(ForgeDirection.UNKNOWN, charger.getChargerEnergyRF(), false));
         }
     }
 
     private static void sendEUToEnergySink(IWirelessMachineCharger charger, IEnergySink sink) {
         double demEnergy = sink.getDemandedEnergy();
+        double sentreal;
         if(demEnergy > 0.0) {
-            double sentreal = Math.min(demEnergy, charger.getChargerEnergy());
+            if(charger.getMode() == 8)
+                sentreal = Math.min(demEnergy, charger.getChargerEnergyEU());
+            else
+                sentreal = Math.min(demEnergy, charger.getChargeRate());
             sink.injectEnergy(ForgeDirection.UNKNOWN, sentreal, 1);
             charger.decreaseEnergy(sentreal);
         }
@@ -78,8 +81,9 @@ public class WirelessUtil {
         return ret;
     }
 
-    public static void iterateEnergyTiles(TileWirelessMachinesChargerBase charger, boolean chargeEU, boolean chargeRF) {
-        Map<ChunkPosition, TileEntity> teMap = charger.getWorldObj().getChunkFromBlockCoords(charger.xCoord, charger.zCoord).chunkTileEntityMap;
+    public static void iterateEnergyTiles(IWirelessMachineCharger charger, boolean chargeEU, boolean chargeRF) {
+        Map<ChunkPosition, TileEntity> teMap = charger.getChargerWorld().getChunkFromBlockCoords(charger.getXCoord(),
+                charger.getZCoord()).chunkTileEntityMap;
         if(!teMap.isEmpty()) {
             for(TileEntity tile : teMap.values()) {
                 if(tile instanceof IEnergySink && !(tile instanceof TileWirelessMachinesChargerBase)) {

@@ -6,38 +6,29 @@ import ru.wirelesstools.tiles.WirelessQuantumGeneratorBase;
 
 public class WirelessTransmitHandler implements IWirelessSolarHandler {
 
-	protected boolean isFreeEnergyInStorage(IWirelessStorage tile) {
+    protected boolean isFreeEnergyInStorage(IWirelessStorage tile) {
+        return tile.getFreeEnergy() > 0.0;
+    }
 
-		return this.getFreeEnergyInStorage(tile) > 0.0;
-	}
+    @Override
+    public void transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver) {
+        double freeEnergy = receiver.getFreeEnergy();
+        if(freeEnergy > 0.0) {
+            double real = Math.min(this.checkMinimumExtractedEnergy(sender), freeEnergy);
+            sender.extractEnergy(real);
+            receiver.addEnergy(real);
+        }
+    }
 
-	protected double getFreeEnergyInStorage(IWirelessStorage tile) {
+    protected double checkMinimumExtractedEnergy(IWirelessPanel sender) {
+        return Math.min(sender.getWirelessTransferLimit(), sender.getCurrentEnergyInPanel());
+    }
 
-		return (tile.getMaxCapacityOfStorage() - tile.getCurrentEnergyInStorage());
-	}
-
-	@Override
-	public double transferEnergyWirelessly(IWirelessPanel sender, IWirelessStorage receiver) {
-		if (this.isFreeEnergyInStorage(receiver)) {
-			double real = Math.min(this.checkMinimumExtractedEnergy(sender), this.getFreeEnergyInStorage(receiver));
-			sender.extractEnergy(real);
-			receiver.addEnergy(real);
-			return real;
-		}
-		return 0;
-	}
-
-	protected double checkMinimumExtractedEnergy(IWirelessPanel sender) {
-
-		return Math.min(sender.getWirelessTransferLimit(), sender.getCurrentEnergyInPanel());
-	}
-
-	@Override
-	public void transmitEnergyWireleslyQGen(IWirelessStorage receiver, WirelessQuantumGeneratorBase qgen) {
-		if (this.isFreeEnergyInStorage(receiver)) {
-
-			receiver.addEnergy(qgen.getWirelessTransferLimitQGen());
-		}
-	}
+    @Override
+    public void transmitEnergyWireleslyQGen(IWirelessStorage receiver, WirelessQuantumGeneratorBase qgen) {
+        if(this.isFreeEnergyInStorage(receiver)) {
+            receiver.addEnergy(qgen.getWirelessTransferLimitQGen());
+        }
+    }
 
 }
