@@ -19,24 +19,24 @@ public class HelperUtils {
 
     @Deprecated
     public static void chargeRFItemFromArmor(ItemStack currentarmorstack, ItemStack rfitemstack) {
-        IEnergyContainerItem item = (IEnergyContainerItem) rfitemstack.getItem();
+        IEnergyContainerItem item = (IEnergyContainerItem)rfitemstack.getItem();
         int amountRfCanBeReceivedIncludesLimit = item.receiveEnergy(rfitemstack, Integer.MAX_VALUE, true);
         if(amountRfCanBeReceivedIncludesLimit > 0) {
             double helmetChargeRF = ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EUToRF_Multiplier;
             double realSentEnergyRF = Math.min(amountRfCanBeReceivedIncludesLimit, helmetChargeRF);
             double realDischargedEUFromHelmet = realSentEnergyRF / ConfigWI.EUToRF_Multiplier;
 
-            item.receiveEnergy(rfitemstack, (int) realSentEnergyRF, false);
+            item.receiveEnergy(rfitemstack, (int)realSentEnergyRF, false);
             ElectricItem.manager.discharge(currentarmorstack, realDischargedEUFromHelmet, Integer.MAX_VALUE, true,
                     false, false);
         }
     }
 
     public static void chargeRFItemFromArmor2(ItemStack currentarmorstack, ItemStack rfitemstack) {
-        IEnergyContainerItem item = (IEnergyContainerItem) rfitemstack.getItem();
+        IEnergyContainerItem item = (IEnergyContainerItem)rfitemstack.getItem();
         if(item.receiveEnergy(rfitemstack, Integer.MAX_VALUE, true) > 0) {
             int chargedEUfinally = item.receiveEnergy(rfitemstack,
-                    (int) (ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EUToRF_Multiplier),
+                    (int)(ElectricItem.manager.getCharge(currentarmorstack) * ConfigWI.EUToRF_Multiplier),
                     false) / ConfigWI.EUToRF_Multiplier;
             ElectricItem.manager.discharge(currentarmorstack, chargedEUfinally, Integer.MAX_VALUE, true,
                     false, false);
@@ -88,8 +88,17 @@ public class HelperUtils {
 
     public static void sendChatMessageColoredMulti(EntityPlayer player, String text, EnumChatFormatting color, IChatComponent... extraComponents) {
         IChatComponent translate = new ChatComponentTranslation(text).setChatStyle(new ChatStyle().setColor(color));
-        for(int i = 0; i < extraComponents.length; i++) {
-            translate.appendSibling(extraComponents[i]);
+        for(IChatComponent extraComponent : extraComponents) {
+            translate.appendSibling(extraComponent);
+        }
+        player.addChatMessage(translate);
+    }
+
+    public static void sendChatMessageMultiUnicolored(EntityPlayer player, String text, EnumChatFormatting color, IChatComponent... extraComponents) {
+        IChatComponent translate = new ChatComponentTranslation(text).setChatStyle(new ChatStyle().setColor(color));
+        for(IChatComponent extraComponent : extraComponents) {
+            extraComponent.setChatStyle(new ChatStyle().setColor(color));
+            translate.appendSibling(extraComponent);
         }
         player.addChatMessage(translate);
     }
@@ -98,10 +107,6 @@ public class HelperUtils {
                                               int xoffset, int yoffset) {
         for(int i = 0; i <= partnumber; i++) {
             switch(i) {
-                // Всего 6 аргументов.
-                // Первые два - где нарисовать объект (x, y) начальные,
-                // Вторые два - где располагается сам объект (x, y) начальные,
-                // Последние два - ширина и высота объекта (x пикселей, y пикселей).
                 case 0:
                     break;
                 case 1:

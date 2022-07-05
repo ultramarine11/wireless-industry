@@ -6,6 +6,8 @@ public interface IWirelessStorage {
 
 	double getCurrentEnergyInStorage();
 
+	double getFreeEnergy();
+
 	void addEnergy(double amount);
 
 }

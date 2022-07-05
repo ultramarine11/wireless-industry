@@ -12,18 +12,18 @@ import ru.wirelesstools.Reference;
 import ru.wirelesstools.tiles.TileXPSender;
 
 public class BlockXPSenderElectric extends BlockContainer {
-
-    private IIcon[] icons;
-
+    
+    private final IIcon[] icons = new IIcon[3];
+    
     public BlockXPSenderElectric(String name) {
         super(Material.rock);
         this.setBlockName(name);
         this.setCreativeTab(MainWI.tabwi);
         this.setHardness(3.0F);
         this.setResistance(5.0F);
-
+        this.setLightLevel(0.5F);
     }
-
+    
     public IIcon getIcon(int side, int metadata) {
         // 0=bottom, 1=top, 2,3,4,5 = sides
         switch(side) {
@@ -36,23 +36,21 @@ public class BlockXPSenderElectric extends BlockContainer {
             case 5:
                 return this.icons[2];
         }
-
+        
         return this.icons[1];
     }
-
+    
     public void registerBlockIcons(IIconRegister reg) {
-        this.icons = new IIcon[3];
-        this.icons[0] = reg.registerIcon(Reference.PathTex + "blockXPMachine"); // bottom
-        this.icons[1] = reg.registerIcon(Reference.PathTex + "blockXPMachine"); // top
+        this.icons[0] = reg.registerIcon(Reference.PathTex + "xpsender_side_bottom"); // bottom
+        this.icons[1] = reg.registerIcon(Reference.PathTex + "xpsender_side_bottom"); // top
         this.icons[2] = reg.registerIcon(Reference.PathTex + "xpsender_side_all"); // sides
     }
-
+    
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-
         return new TileXPSender();
     }
-
+    
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
                                     float subY, float subZ) {
         if(!world.isRemote) {
@@ -61,5 +59,5 @@ public class BlockXPSenderElectric extends BlockContainer {
         }
         return true;
     }
-
+    
 }

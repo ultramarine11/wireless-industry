@@ -18,6 +18,8 @@ public class ContainerWirelessMachinesChargerNew extends ContainerFullInv<TileWi
         ret.add("energyRF");
         ret.add("chargeEU");
         ret.add("chargeRF");
+        ret.add("mode");
+        ret.add("chargeRate");
 
         return ret;
     }

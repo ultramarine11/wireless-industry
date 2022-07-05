@@ -8,4 +8,8 @@ public interface IWirelessPanel {
 
 	void extractEnergy(double amount);
 
+	int getChannel();
+
+	void setChannel(int channel);
+
 }

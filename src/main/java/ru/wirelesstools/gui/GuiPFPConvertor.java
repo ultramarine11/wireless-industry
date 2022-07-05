@@ -28,10 +28,6 @@ public class GuiPFPConvertor extends GuiIC2 {
         this.mc.getTextureManager().bindTexture(this.getResourceLocation());
         this.xoffset = (this.width - this.xSize) / 2;
         this.yoffset = (this.height - this.ySize) / 2;
-        // ����� 6 ����������.
-        // ������ ��� - ��� ���������� ������ (x, y) ���������,
-        // ������ ��� - ��� ������������� ��� ������ (x, y) ���������,
-        // ��������� ��� - ������ � ������ ������� (x ��������, y ��������).
         this.drawTexturedModalRect(this.xoffset, this.yoffset, 0, 0, this.xSize, this.ySize);
 
         if (this.container.base.energyEU > 0) {

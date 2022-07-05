@@ -29,11 +29,7 @@ public class GuiVajraCharger extends GuiContainer {
 		this.mc.renderEngine.bindTexture(tex);
 		int h = (this.width - this.xSize) / 2; // = 0 ?
 		int k = (this.height - this.ySize) / 2; // = 0 ?
-
-		// ����� 6 ����������.
-		// ������ ��� - ��� ���������� ������ (x, y) ���������,
-		// ������ ��� - ��� ������������� ��� ������ (x, y) ���������,
-		// ��������� ��� - ������ � ������ ������� (x ��������, y ��������).
+		
 		this.drawTexturedModalRect(h, k, 0, 0, this.xSize, this.ySize);
 		if (this.tileentity.energy > 0) {
 			int l = this.tileentity.gaugeEnergyScaled(77);

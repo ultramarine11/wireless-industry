@@ -19,7 +19,6 @@ public class ContainerPFPConverter extends ContainerFullInv<PFPConvertorTile> {
         List<String> ret = super.getNetworkedFields();
         ret.add("progress");
         ret.add("energyEU");
-
         return ret;
     }
 }

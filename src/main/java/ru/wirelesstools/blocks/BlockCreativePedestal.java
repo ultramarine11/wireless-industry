@@ -19,7 +19,6 @@ public class BlockCreativePedestal extends Block {
         this.setBlockTextureName(Reference.PathTex + "blockCreativePedestal2");
         this.setHardness(2.0F);
         this.setResistance(5.0F);
-
     }
 
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,

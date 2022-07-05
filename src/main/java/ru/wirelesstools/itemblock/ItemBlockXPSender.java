@@ -1,13 +1,13 @@
 package ru.wirelesstools.itemblock;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import ru.wirelesstools.config.ConfigWI;
+
+import java.util.List;
 
 public class ItemBlockXPSender extends ItemBlock {
 
@@ -18,7 +18,7 @@ public class ItemBlockXPSender extends ItemBlock {
 	
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
 
-		info.add(StatCollector.translateToLocal("info.tooltip.xpsender.tier") + ": " + String.valueOf(ConfigWI.tierXPSender));
+		info.add(StatCollector.translateToLocal("info.tooltip.xpsender.tier") + ": " + ConfigWI.tierXPSender);
 
 	}
 

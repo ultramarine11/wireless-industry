@@ -8,16 +8,12 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.network.INetworkClientTileEntityEventListener;
 import ic2.api.network.INetworkDataProvider;
-import ic2.api.network.INetworkUpdateListener;
-import ic2.api.tile.IEnergyStorage;
 import ic2.core.ContainerBase;
 import ic2.core.IC2;
 import ic2.core.IHasGui;
-import ic2.core.block.personal.IPersonalBlock;
+import ic2.core.block.TileEntityInventory;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
@@ -28,11 +24,9 @@ import ru.wirelesstools.gui.GuiWChargerNew;
 import ru.wirelesstools.handlerwireless.WirelessTransfer;
 
 import java.util.List;
-import java.util.Vector;
 
-public class TileEntityWirelessCharger extends TileEntity
-        implements IEnergySink, IEnergyStorage, IPersonalBlock, IWirelessCharger, IInventory, INetworkDataProvider,
-        INetworkUpdateListener, IHasGui, INetworkClientTileEntityEventListener {
+public class TileEntityWirelessCharger extends TileEntityInventory
+        implements IEnergySink, IWirelessCharger, INetworkDataProvider, IHasGui, INetworkClientTileEntityEventListener {
 
     public int maxStorage;
     public double energy;
@@ -48,7 +42,7 @@ public class TileEntityWirelessCharger extends TileEntity
     public String chargerName;
 
     public TileEntityWirelessCharger(String name, boolean isPrivate, int maxstorage, int tier) {
-        this.energy = 0.0D;
+        this.energy = 0.0;
         this.tier = tier;
         this.output = 128;
         this.maxStorage = maxstorage;
@@ -58,7 +52,6 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     public boolean getIsPrivate() {
-
         return this.isPrivate;
     }
 
@@ -75,6 +68,11 @@ public class TileEntityWirelessCharger extends TileEntity
         nbttagcompound.setBoolean("isPrivate", this.isPrivate);
     }
 
+    @Override
+    public String getInventoryName() {
+        return null;
+    }
+
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         if(nbttagcompound.hasKey("ownerGameProfileCharger")) {
@@ -87,22 +85,19 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     public int gaugeEnergyScaled(int i) {
-
-        return (int) (this.energy * i / this.maxStorage);
+        return (int)(this.energy * i / this.maxStorage);
     }
 
     public int getRadiusOfCharge() {
-
         return this.radiusofcharge;
     }
 
     public void onLoaded() {
-        if(!this.worldObj.isRemote) {
+        super.onLoaded();
+        if(IC2.platform.isSimulating()) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToEnergyNet = true;
         }
-
-        this.loaded = true;
     }
 
     public void onUnloaded() {
@@ -110,50 +105,19 @@ public class TileEntityWirelessCharger extends TileEntity
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
             this.addedToEnergyNet = false;
         }
-
-        this.loaded = false;
+        super.onUnloaded();
     }
 
-    public void validate() {
-        super.validate();
-        this.onLoaded();
-    }
-
-    public void invalidate() {
-        if(this.loaded) {
-            this.onUnloaded();
+    protected void updateEntityServer() {
+        if(this.energy > this.maxStorage) {
+            this.energy = this.maxStorage;
         }
-        super.invalidate();
-    }
-
-    public void updateEntity() {
-        super.updateEntity();
-        if(!this.worldObj.isRemote) {
-
-            if(this.energy > this.maxStorage) {
-                this.energy = this.maxStorage;
-            }
-
-            this.playercount = WirelessTransfer.chargeplayerhandler.checkPlayersAround(this.isPrivate, this,
-                    this.radiusofcharge, this.worldObj);
-
-            this.markDirty();
-        }
+        this.playercount = WirelessTransfer.chargeplayerhandler.checkPlayersAround(this.isPrivate, this,
+                this.radiusofcharge, this.worldObj);
     }
 
     public void changeRadius(int value) {
-        int localradius = this.radiusofcharge;
-        if(value < 0) {
-            localradius += value;
-            if(localradius < 1)
-                localradius = 1;
-        } else {
-            localradius += value;
-            if(localradius > 25)
-                localradius = 25;
-        }
-
-        this.radiusofcharge = localradius;
+        this.radiusofcharge = value < 0 ? Math.max(this.radiusofcharge + value, 1) : Math.min(this.radiusofcharge + value, 25);
     }
 
     @Override
@@ -163,7 +127,7 @@ public class TileEntityWirelessCharger extends TileEntity
 
     @Override
     public double getDemandedEnergy() {
-        return (double) this.maxStorage - this.energy;
+        return (double)this.maxStorage - this.energy;
     }
 
     @Override
@@ -176,51 +140,18 @@ public class TileEntityWirelessCharger extends TileEntity
         double de = this.getDemandedEnergy();
         if(amount == 0.0) {
             return 0.0;
-        } else if(de <= 0.0) {
+        }
+        else if(de <= 0.0) {
             return amount;
-        } else if(amount >= de) {
+        }
+        else if(amount >= de) {
             this.energy += de;
             return amount - de;
-        } else {
+        }
+        else {
             this.energy += amount;
             return 0.0;
         }
-    }
-
-    @Override
-    public int getStored() {
-        return (int) this.energy;
-    }
-
-    @Override
-    public void setStored(int energy) {
-        this.energy = energy;
-    }
-
-    @Override
-    public int addEnergy(int amount) {
-        this.energy += amount;
-        return amount;
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.maxStorage;
-    }
-
-    @Override
-    public int getOutput() {
-        return this.output;
-    }
-
-    @Override
-    public double getOutputEnergyUnitsPerTick() {
-        return this.output;
-    }
-
-    @Override
-    public boolean isTeleporterCompatible(ForgeDirection side) {
-        return false;
     }
 
     public void setPlayerProfile(GameProfile profile) {
@@ -228,7 +159,6 @@ public class TileEntityWirelessCharger extends TileEntity
         IC2.network.get().updateTileEntityField(this, "owner");
     }
 
-    @Override
     public boolean permitsAccess(GameProfile profile) {
         if(profile == null)
             return (this.owner == null);
@@ -242,19 +172,13 @@ public class TileEntityWirelessCharger extends TileEntity
         return this.owner.equals(profile);
     }
 
-    @Override
     public GameProfile getOwner() {
         return this.owner;
     }
 
     @Override
     public void decreaseEnergy(double amount) {
-        double energylocal = this.energy;
-        energylocal -= amount;
-        if(energylocal < 0)
-            energylocal = 0;
-
-        this.energy = energylocal;
+        this.energy -= Math.min(this.energy, amount);
     }
 
     @Override
@@ -283,69 +207,8 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     @Override
-    public int getSizeInventory() {
-        return 0;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int p_70301_1_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 0;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return (player.getDistance(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D);
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-        return true;
-    }
-
-    @Override
-    public void onNetworkUpdate(String field) {
-    }
-
-    @Override
     public List<String> getNetworkedFields() {
-        List<String> ret = new Vector<>(1);
+        List<String> ret = super.getNetworkedFields();
         ret.add("owner");
         return ret;
     }
@@ -368,7 +231,7 @@ public class TileEntityWirelessCharger extends TileEntity
     }
 
     @Override
-    public ContainerBase<?> getGuiContainer(EntityPlayer player) {
+    public ContainerBase<TileEntityWirelessCharger> getGuiContainer(EntityPlayer player) {
         return new ContainerWChargerNew(player, this);
     }
 

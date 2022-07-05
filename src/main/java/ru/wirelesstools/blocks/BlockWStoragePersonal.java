@@ -14,57 +14,44 @@ import ru.wirelesstools.tiles.TileWirelessStoragePersonal1;
 
 public class BlockWStoragePersonal extends BlockContainer {
 
-	public BlockWStoragePersonal(String name, Material mat) {
-		super(mat);
-		this.setBlockName(name);
-		this.setCreativeTab(MainWI.tabwi);
-		setBlockTextureName(Reference.PathTex + "wreceiverpersonal");
-		setHardness(3.0F);
-	}
+    public BlockWStoragePersonal(String name, Material mat) {
+        super(mat);
+        this.setBlockName(name);
+        this.setCreativeTab(MainWI.tabwi);
+        this.setBlockTextureName(Reference.PathTex + "wreceiverpersonal");
+        this.setHardness(3.0F);
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new TileWirelessStoragePersonal1();
+    }
 
-		return new TileWirelessStoragePersonal1();
-	}
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+        TileWirelessStoragePersonal1 tile = (TileWirelessStoragePersonal1)world.getTileEntity(x, y, z);
+        if(entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)entity;
+            tile.setPlayerProfile(player.getGameProfile());
+        }
+    }
 
-	public void onBlockPreDestroy(World world, int x, int y, int z, int p_149725_5_) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
+                                    float subY, float subZ) {
+        if(!world.isRemote) {
+            TileWirelessStoragePersonal1 te = (TileWirelessStoragePersonal1)world.getTileEntity(x, y, z);
+            boolean access = te.permitsAccess(player.getGameProfile());
 
-		TileWirelessStoragePersonal1 tile = (TileWirelessStoragePersonal1) world.getTileEntity(x, y, z);
+            if(access || player.capabilities.isCreativeMode) {
 
-	}
+                player.openGui(MainWI.instance, 1, world, x, y, z);
 
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-		TileWirelessStoragePersonal1 tile = (TileWirelessStoragePersonal1)world.getTileEntity(x, y, z);
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-			tile.setPlayerProfile(player.getGameProfile());
-		}
-	}
+            }
+            else {
+                player.addChatMessage(new ChatComponentTranslation("access.wsbp.not.allowed"));
+            }
 
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
-			float subY, float subZ) {
-		if (!world.isRemote) {
-			TileWirelessStoragePersonal1 te = (TileWirelessStoragePersonal1) world.getTileEntity(x, y, z);
-			boolean access = te.permitsAccess(player.getGameProfile());
-
-			if(access) {
-
-				player.openGui(MainWI.instance, 1, world, x, y, z);
-
-			}
-			else if(player.capabilities.isCreativeMode) {
-
-				player.openGui(MainWI.instance, 1, world, x, y, z);
-			}
-			else {
-				player.addChatMessage(new ChatComponentTranslation("access.wsbp.not.allowed"));
-
-			}
-
-		}
-		return true;
-
-	}
+        }
+        return true;
+    }
 
 }

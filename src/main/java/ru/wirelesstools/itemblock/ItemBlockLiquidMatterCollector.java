@@ -15,8 +15,7 @@ public class ItemBlockLiquidMatterCollector extends ItemBlock {
     }
 
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
-
         info.add(StatCollector.translateToLocal("info.tooltip.liquidmattercollector.about"));
-
+        info.add(StatCollector.translateToLocal("info.tooltip.liquidmattercollector.savecontents"));
     }
 }

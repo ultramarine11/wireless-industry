@@ -52,8 +52,8 @@ public class CommandChangeOwnerArmor extends CommandBase {
     }
 
     public boolean canCommandSenderUseCommand(ICommandSender commandSender) {
-        // ServerConfigurationManager.func_152596_g(GameProfile p_152596_1_) отвечает за
-        // то, может ли этот игрок использовать команды
+        // ServerConfigurationManager.func_152596_g(GameProfile p_152596_1_) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+        // пїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         return commandSender instanceof EntityPlayerMP && MinecraftServer.getServer().getConfigurationManager()
                 .func_152596_g(((EntityPlayerMP) commandSender).getGameProfile());
     }

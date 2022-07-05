@@ -78,7 +78,7 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     protected void consumeEnergyXPSender(double amount) {
-        this.energy = this.energy - amount < 0 ? 0 : this.energy - amount;
+        this.energy = Math.max(this.energy - amount, 0.0);
     }
 
     public int getTotalSpentEUValue() {
@@ -91,7 +91,8 @@ public class TileXPSenderElectric extends TileEntity
 
     protected void countPlayers(int radius) {
         AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord - radius, this.yCoord - radius,
-                this.zCoord - radius, this.xCoord + radius, this.yCoord + radius, this.zCoord + radius);
+                this.zCoord - radius, this.xCoord + radius + 1,
+                this.yCoord + radius + 1, this.zCoord + radius + 1);
         List<EntityPlayer> list = this.getWorldObj().getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
         if((this.worldObj.getTotalWorldTime() % (ConfigWI.secondsXPSender * 20L)) == 0)
             this.sendXPToPlayersAround(this.pointsxp, list);
@@ -111,20 +112,7 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     public void changeRadius(int value) {
-        int localradius = this.sendradius;
-        if(value < 0) {
-            localradius += value;
-            if(localradius < 1) {
-                localradius = 1;
-            }
-        } else if(value > 0) {
-            localradius += value;
-            if(localradius > 25) {
-                localradius = 25;
-            }
-        }
-
-        this.sendradius = localradius;
+        this.sendradius = value < 0 ? Math.max(this.sendradius + value, 1) : Math.min(this.sendradius + value, 25);
     }
 
     public int getSendRadius() {
@@ -173,7 +161,6 @@ public class TileXPSenderElectric extends TileEntity
 
     @Override
     public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-
         return null;
     }
 
@@ -246,7 +233,7 @@ public class TileXPSenderElectric extends TileEntity
     }
 
     @Override
-    public ContainerBase<?> getGuiContainer(EntityPlayer player) {
+    public ContainerBase<TileXPSenderElectric> getGuiContainer(EntityPlayer player) {
         return new ContainerXPSenderNew(player, this);
     }
 

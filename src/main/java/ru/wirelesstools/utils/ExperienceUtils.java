@@ -12,6 +12,10 @@ public class ExperienceUtils {
         return (int) ((float) getExperienceForLevelNew(player.experienceLevel)
                 + player.experience * (float) player.xpBarCap());
     }
+    
+    public static void consumeXPFromPlayer(EntityPlayer player, int amount) {
+        ExperienceUtils.addPlayerXP(player, -amount);
+    }
 
     public static void addPlayerXP(EntityPlayer player, int amount) {
         int experience = getPlayerXP(player) + amount;
@@ -26,8 +30,8 @@ public class ExperienceUtils {
         return level == 0 ? 0
                 : (level > 0 && level < 16 ? level * 17
                 : (level > 15 && level < 31
-                ? (int) (1.5D * Math.pow((double) level, 2.0D) - 29.5D * (double) level + 360.0D)
-                : (int) (3.5D * Math.pow((double) level, 2.0D) - 151.5D * (double) level + 2220.0D)));
+                ? (int) (1.5D * Math.pow(level, 2.0D) - 29.5D * (double) level + 360.0D)
+                : (int) (3.5D * Math.pow(level, 2.0D) - 151.5D * (double) level + 2220.0D)));
     }
 
     public static int getExperienceForLevelNew(int level) {
@@ -50,7 +54,6 @@ public class ExperienceUtils {
     public static int getLevelForExperience(int experience) {
         int i;
         for (i = 0; getExperienceForLevelNew(i) <= experience; ++i) {
-            ;
         }
 
         return i - 1;

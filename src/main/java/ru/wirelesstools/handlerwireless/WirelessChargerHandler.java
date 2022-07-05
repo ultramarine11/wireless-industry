@@ -15,12 +15,13 @@ public class WirelessChargerHandler implements IWirelessChargerHandler {
 
     @Override
     public int checkPlayersAround(boolean isPrivate, IWirelessCharger tile, int radius, World world) {
+        AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
+                tile.getYCoord() - radius, tile.getZCoord() - radius,
+                tile.getXCoord() + radius + 1, tile.getYCoord() + radius + 1,
+                tile.getZCoord() + radius + 1);
+        List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
         if (isPrivate) {
             if (tile.getOwnerCharger() != null) {
-                AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
-                        tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
-                        tile.getYCoord() + radius, tile.getZCoord() + radius);
-                List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
                 for (EntityPlayer localplayer : list) {
                     if (localplayer != null) {
                         if (!localplayer.getGameProfile().equals(tile.getOwnerCharger()))
@@ -32,10 +33,6 @@ public class WirelessChargerHandler implements IWirelessChargerHandler {
                 }
             }
         } else {
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(tile.getXCoord() - radius,
-                    tile.getYCoord() - radius, tile.getZCoord() - radius, tile.getXCoord() + radius,
-                    tile.getYCoord() + radius, tile.getZCoord() + radius);
-            List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
             for (EntityPlayer localplayer : list) {
                 if (localplayer != null)
                     this.checkPlayerInventory(localplayer, tile);
